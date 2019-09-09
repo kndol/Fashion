@@ -10,6 +10,12 @@ public class StartUI : MonoBehaviour
 {
 	[SerializeField]
 	UIBuilder uiCanvasPrefab = null;
+    [SerializeField]
+    Transform player = null;
+    [SerializeField]
+    Transform selectPos = null;
+    [SerializeField]
+    Transform originPos = null;
 
 	UIBuilder uiMenu;
 	UIBuilder uiTerm;
@@ -40,7 +46,22 @@ public class StartUI : MonoBehaviour
 			"<b>스티치선</b>\t스티치의 시작 부분과 끝부분을 나타낸다.\n" +
 			"<b>등분선</b>\t\t등분을 표시하며 부호를 붙이는 경우도 있음", TextAnchor.UpperLeft, 320);
 		uiTerm.AddButton("메뉴로", ButtonMenu);
-	}
+        //uiTerm.Show();
+
+        uiSelect = Instantiate<UIBuilder>(uiCanvas);
+
+        uiSelect.AddLabel("디자인을 선택하세요.");
+        uiSelect.AddDivider();
+        uiSelect.AddButton("확인", SelectButton);
+        //uiSelect.AddButton("확인", ButtonTutorial);
+
+        //uiSelect.Show();
+        uiOrigin = Instantiate<UIBuilder>(uiCanvas);
+
+        uiOrigin.AddLabel("패턴 제도 원형");
+        uiOrigin.AddDivider();
+        //uiOrigin.AddButton("확인", SelectButton);
+    }
 
 	public void ButtonMenu()
 	{
