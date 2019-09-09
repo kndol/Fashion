@@ -12,11 +12,19 @@ public class StartUI : MonoBehaviour
 	UIBuilder uiCanvas = null;
 	[SerializeField]
 	Camera worldCamera = null;
+    [SerializeField]
+    Transform player = null;
+    [SerializeField]
+    Transform selectPos = null;
+    [SerializeField]
+    Transform originPos = null;
 
-	UIBuilder uiMenu;
+    UIBuilder uiMenu;
 	UIBuilder uiTerm;
+    UIBuilder uiSelect;
+    UIBuilder uiOrigin;
 
-	void Start ()
+    void Start ()
     {
 		uiMenu = Instantiate<UIBuilder>(uiCanvas);
 
@@ -30,7 +38,7 @@ public class StartUI : MonoBehaviour
 		uiMenu.AddButton("튜토리얼", ButtonTutorial);
 		uiMenu.AddButton("테스트", ButtonTest);
 		uiMenu.AddButton("끝내기", ButtonExit);
-//		uiMenu.Show();
+		uiMenu.Show();
 
 		uiTerm = Instantiate<UIBuilder>(uiCanvas);
 
@@ -51,11 +59,32 @@ public class StartUI : MonoBehaviour
 			"등분선\t\t등분을 표시하며 부호를 붙이는 경우도 있음", TextAnchor.MiddleLeft);
 		uiTerm.AddButton("메뉴로", ButtonMenu);
 
-		uiTerm.Show();
-		//		StartCoroutine(AlignUI());
-	}
+        //uiTerm.Show();
+        //		StartCoroutine(AlignUI());
+        uiSelect = Instantiate<UIBuilder>(uiCanvas);
 
-	IEnumerator AlignUI()
+        Canvas cSelect = uiSelect.gameObject.GetComponent<Canvas>();
+        cSelect.renderMode = RenderMode.WorldSpace;
+        cSelect.worldCamera = worldCamera;
+
+        uiSelect.AddLabel("디자인을 선택하세요.");
+        uiSelect.AddDivider();
+        uiSelect.AddButton("확인", SelectButton);
+        //uiSelect.AddButton("확인", ButtonTutorial);
+
+        //uiSelect.Show();
+        uiOrigin = Instantiate<UIBuilder>(uiCanvas);
+
+        Canvas cOrigin = uiOrigin.gameObject.GetComponent<Canvas>();
+        cOrigin.renderMode = RenderMode.WorldSpace;
+        cOrigin.worldCamera = worldCamera;
+
+        uiOrigin.AddLabel("패턴 제도 원형");
+        uiOrigin.AddDivider();
+        //uiOrigin.AddButton("확인", SelectButton);
+    }
+
+    IEnumerator AlignUI()
 	{
 		uiTerm.Show();
 		yield return new WaitForSeconds(0.2f);
@@ -73,21 +102,37 @@ public class StartUI : MonoBehaviour
 		uiTerm.Hide();
 		uiMenu.Show();
 	}
-	public void ButtonTerms()
+	public void ButtonTerms()     //용어설명
     {
 		uiMenu.Hide();
 		uiTerm.Show();
     }
 
-	public void ButtonTutorial()
+	public void ButtonTutorial()  //튜토리얼
 	{
-		Debug.Log("튜토리얼");
+        player.transform.position = selectPos.transform.position;
+        player.transform.rotation = selectPos.transform.rotation;
+        uiMenu.Hide();
+        uiSelect.Show();
+        Debug.Log("튜토리얼");
 	}
 
-	public void ButtonTest()
+	public void ButtonTest()      //테스트
 	{
-		Debug.Log("테스트");
+        player.transform.position = selectPos.transform.position;
+        player.transform.rotation = selectPos.transform.rotation;
+        uiMenu.Hide();
+        uiSelect.Show();
+        Debug.Log("테스트");
 	}
+
+    public void SelectButton()
+    {
+        player.transform.position = originPos.transform.position;
+        player.transform.rotation = originPos.transform.rotation;
+        uiSelect.Hide();
+        uiOrigin.Show();
+    }
 
 	public void ButtonExit()
 	{
