@@ -1,0 +1,359 @@
+/************************************************************************************
+
+Copyright (c) Facebook Technologies, LLC and its affiliates. All rights reserved.  
+
+See SampleFramework license.txt for license terms.  Unless required by applicable law 
+or agreed to in writing, the sample code is provided “AS IS” WITHOUT WARRANTIES OR 
+CONDITIONS OF ANY KIND, either express or implied.  See the license for specific 
+language governing permissions and limitations under the license.
+
+************************************************************************************/
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+#if UNITY_EDITOR
+using UnityEngine.SceneManagement;
+#endif
+
+namespace Fashion.UIManager
+{
+	public class UIBuilder : MonoBehaviour
+	{
+		// room for extension:
+		// support update funcs
+		// fix bug where it seems to appear at a random offset
+		// support remove
+
+		// Convenience consts for clarity when using multiple panes. 
+		// But note that you can an arbitrary number of panes if you add them in the inspector.
+		public const int PANE_CENTER = 0;
+		public const int PANE_RIGHT = 1;
+		public const int PANE_LEFT = 2;
+
+		[SerializeField]
+		private RectTransform buttonPrefab;
+		[SerializeField]
+		private RectTransform labelPrefab;
+		[SerializeField]
+		private RectTransform sliderPrefab;
+		[SerializeField]
+		private RectTransform dividerPrefab;
+		[SerializeField]
+		private RectTransform togglePrefab;
+		[SerializeField]
+		private RectTransform radioPrefab;
+
+		[SerializeField]
+		private GameObject uiHelpersToInstantiate;
+
+		[SerializeField]
+		private Transform[] targetContentPanels;
+
+		[SerializeField]
+		private bool manuallyResizeContentPanels;
+
+		private bool[] reEnable;
+
+		[SerializeField]
+		private List<GameObject> toEnable;
+		[SerializeField]
+		private List<GameObject> toDisable;
+
+		public delegate void OnClick();
+		public delegate void OnToggleValueChange(Toggle t);
+		public delegate void OnSlider(float f);
+		public delegate bool ActiveUpdate();
+
+		private const float elementSpacing = 16.0f;
+		private const float marginH = 16.0f;
+		private const float marginV = 16.0f;
+		private Vector2[] insertPositions;
+		private List<RectTransform>[] insertedElements;
+		[SerializeField]
+		private Vector3 menuOffset = new Vector3(0, 1, 2.5f);
+
+		OVRCameraRig rig;
+		private Dictionary<string, ToggleGroup> radioGroups = new Dictionary<string, ToggleGroup>();
+		LaserPointer lp;
+		LineRenderer lr;
+
+		public LaserPointer.LaserBeamBehavior laserBeamBehavior;
+
+		public void Awake()
+		{
+//			menuOffset = transform.position; // TODO: this is unpredictable/busted
+			gameObject.SetActive(false);
+			rig = FindObjectOfType<OVRCameraRig>();
+			for (int i = 0; i < toEnable.Count; ++i)
+			{
+				toEnable[i].SetActive(false);
+			}
+
+			insertPositions = new Vector2[targetContentPanels.Length];
+			for (int i = 0; i < insertPositions.Length; ++i)
+			{
+				insertPositions[i].x = marginH;
+				insertPositions[i].y = -marginV;
+			}
+			insertedElements = new List<RectTransform>[targetContentPanels.Length];
+			for (int i = 0; i < insertedElements.Length; ++i)
+			{
+				insertedElements[i] = new List<RectTransform>();
+			}
+
+			lp = FindObjectOfType<LaserPointer>();
+			print(lp);
+			if (!lp)
+			{
+				if (uiHelpersToInstantiate)
+				{
+					GameObject.Instantiate(uiHelpersToInstantiate);
+				}
+				lp = FindObjectOfType<LaserPointer>();
+				if (!lp)
+				{
+					Debug.LogError("UIBuilder requires use of a LaserPointer and will not function without it. Add one to your scene, or assign the UIHelpers prefab to the UIBuilder in the inspector.");
+					return;
+				}
+			}
+			lp.laserBeamBehavior = laserBeamBehavior;
+			if (!toEnable.Contains(lp.gameObject))
+			{
+				toEnable.Add(lp.gameObject);
+			}
+			GetComponent<OVRRaycaster>().pointer = lp.gameObject;
+//			lp.gameObject.SetActive(false);
+#if UNITY_EDITOR
+			string scene = SceneManager.GetActiveScene().name;
+			OVRPlugin.SendEvent("ui_builder",
+			  ((scene == "Fashion shop") ||
+			   (scene == "UIManager") ||
+			   (scene == "DistanceGrab") ||
+			   (scene == "OVROverlay") ||
+			   (scene == "Locomotion")).ToString(),
+			  "fashion_framework");
+#endif
+		}
+
+		public void SetPaneWidth(int panelIdx, float width)
+		{
+			RectTransform canvasRect = targetContentPanels[panelIdx].GetComponent<RectTransform>();
+			canvasRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, width);
+			if (gameObject.activeInHierarchy)
+			{
+				Relayout();
+			}
+		}
+
+		public void Show()
+		{
+			Relayout();
+			gameObject.SetActive(true);
+			Vector3 pos = rig.transform.TransformPoint(menuOffset);
+			// KnDol - 위치가 이상하게 낮아지면 기본 위치로 복구
+			if (pos.y < menuOffset.y) pos.y = menuOffset.y;
+			transform.position = pos;
+			Vector3 newEulerRot = rig.transform.rotation.eulerAngles;
+			newEulerRot.x = 0.0f;
+			newEulerRot.z = 0.0f;
+			transform.eulerAngles = newEulerRot;
+
+			if (reEnable == null || reEnable.Length < toDisable.Count) reEnable = new bool[toDisable.Count];
+			reEnable.Initialize();
+			int len = toDisable.Count;
+			for (int i = 0; i < len; ++i)
+			{
+				if (toDisable[i])
+				{
+					reEnable[i] = toDisable[i].activeSelf;
+					toDisable[i].SetActive(false);
+				}
+			}
+			len = toEnable.Count;
+			for (int i = 0; i < len; ++i)
+			{
+				toEnable[i].SetActive(true);
+			}
+
+			int numPanels = targetContentPanels.Length;
+			for (int i = 0; i < numPanels; ++i)
+			{
+				targetContentPanels[i].gameObject.SetActive(insertedElements[i].Count > 0);
+			}
+		}
+
+		public void Hide()
+		{
+			gameObject.SetActive(false);
+
+			for (int i = 0; i < reEnable.Length; ++i)
+			{
+				if (toDisable[i] && reEnable[i])
+				{
+					toDisable[i].SetActive(true);
+				}
+			}
+
+			int len = toEnable.Count;
+			for (int i = 0; i < len; ++i)
+			{
+				toEnable[i].SetActive(false);
+			}
+		}
+
+		// Currently a slow brute-force method that lays out every element. 
+		// As this is intended as a UI manager, it might be fine, but there are many simple optimizations we can make.
+		private void Relayout()
+		{
+			for (int panelIdx = 0; panelIdx < targetContentPanels.Length; ++panelIdx)
+			{
+				RectTransform canvasRect = targetContentPanels[panelIdx].GetComponent<RectTransform>();
+				List<RectTransform> elems = insertedElements[panelIdx];
+				int elemCount = elems.Count;
+				float x = marginH;
+				float y = -marginV;
+				float maxWidth = (canvasRect.offsetMax.x - marginH) * 2f;
+				for (int elemIdx = 0; elemIdx < elemCount; ++elemIdx)
+				{
+					RectTransform r = elems[elemIdx];
+					r.anchoredPosition = new Vector2(x, y);
+					y -= (r.rect.height + elementSpacing);
+					//maxWidth = Mathf.Max(r.rect.width + 2 * marginH, maxWidth);
+					r.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, maxWidth);
+				}
+				//canvasRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, maxWidth);
+				canvasRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, -y + marginV);
+			}
+		}
+
+		private void AddRect(RectTransform r, int targetCanvas)
+		{
+			if (targetCanvas > targetContentPanels.Length)
+			{
+				Debug.LogError("Attempted to add panel to canvas " + targetCanvas + ", but only " + targetContentPanels.Length + " panels were provided. Fix in the inspector or pass a lower value for target canvas.");
+				return;
+			}
+
+			r.transform.SetParent(targetContentPanels[targetCanvas], false);
+			insertedElements[targetCanvas].Add(r);
+			if (gameObject.activeInHierarchy)
+			{
+				Relayout();
+			}
+		}
+
+		public RectTransform AddButton(string label, OnClick handler, int targetCanvas = 0)
+		{
+			RectTransform buttonRT = GameObject.Instantiate(buttonPrefab).GetComponent<RectTransform>();
+			Button button = buttonRT.GetComponentInChildren<Button>();
+			button.onClick.AddListener(delegate { handler(); });
+			((Text)(buttonRT.GetComponentsInChildren(typeof(Text), true)[0])).text = label;
+			AddRect(buttonRT, targetCanvas);
+			return buttonRT;
+		}
+
+		public RectTransform AddLabel(string label, TextAnchor txtAlign = TextAnchor.MiddleCenter, int targetCanvas = 0)
+		{
+			RectTransform rt = GameObject.Instantiate(labelPrefab).GetComponent<RectTransform>();
+			Text t = rt.GetComponent<Text>();
+			t.text = label;
+			t.alignment = txtAlign;
+			print(t.preferredWidth + " : " + t.preferredHeight);
+
+			TextGenerator textGen = new TextGenerator();
+			TextGenerationSettings generationSettings = t.GetGenerationSettings(t.rectTransform.rect.size);
+			float width = textGen.GetPreferredWidth(label, generationSettings);
+			float height = textGen.GetPreferredHeight(label, generationSettings);
+			float height2 = t.cachedTextGeneratorForLayout.GetPreferredHeight(t.text, generationSettings);
+
+			print(width + " : " + height + " : " + height2);
+			rt.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, t.preferredHeight);
+			AddRect(rt, targetCanvas);
+			return rt;
+		}
+
+		public RectTransform AddSlider(string label, float min, float max, OnSlider onValueChanged, bool wholeNumbersOnly = false, int targetCanvas = 0)
+		{
+			RectTransform rt = (RectTransform)GameObject.Instantiate(sliderPrefab);
+			Slider s = rt.GetComponentInChildren<Slider>();
+			s.minValue = min;
+			s.maxValue = max;
+			s.onValueChanged.AddListener(delegate (float f) { onValueChanged(f); });
+			s.wholeNumbers = wholeNumbersOnly;
+			AddRect(rt, targetCanvas);
+			return rt;
+		}
+
+		public RectTransform AddDivider(int targetCanvas = 0)
+		{
+			RectTransform rt = (RectTransform)GameObject.Instantiate(dividerPrefab);
+			AddRect(rt, targetCanvas);
+			return rt;
+		}
+
+		public RectTransform AddToggle(string label, OnToggleValueChange onValueChanged, int targetCanvas = 0)
+		{
+			RectTransform rt = (RectTransform)GameObject.Instantiate(togglePrefab);
+			AddRect(rt, targetCanvas);
+			Text buttonText = rt.GetComponentInChildren<Text>();
+			buttonText.text = label;
+			Toggle t = rt.GetComponentInChildren<Toggle>();
+			t.onValueChanged.AddListener(delegate { onValueChanged(t); });
+			return rt;
+		}
+
+		public RectTransform AddToggle(string label, OnToggleValueChange onValueChanged, bool defaultValue, int targetCanvas = 0)
+		{
+			RectTransform rt = (RectTransform)GameObject.Instantiate(togglePrefab);
+			AddRect(rt, targetCanvas);
+			Text buttonText = rt.GetComponentInChildren<Text>();
+			buttonText.text = label;
+			Toggle t = rt.GetComponentInChildren<Toggle>();
+			t.isOn = defaultValue;
+			t.onValueChanged.AddListener(delegate { onValueChanged(t); });
+			return rt;
+		}
+
+		public RectTransform AddRadio(string label, string group, OnToggleValueChange handler, int targetCanvas = 0)
+		{
+			RectTransform rt = (RectTransform)GameObject.Instantiate(radioPrefab);
+			AddRect(rt, targetCanvas);
+			Text buttonText = rt.GetComponentInChildren<Text>();
+			buttonText.text = label;
+			Toggle tb = rt.GetComponentInChildren<Toggle>();
+			if (group == null) group = "default";
+			ToggleGroup tg = null;
+			bool isFirst = false;
+			if (!radioGroups.ContainsKey(group))
+			{
+				tg = tb.gameObject.AddComponent<ToggleGroup>();
+				radioGroups[group] = tg;
+				isFirst = true;
+			}
+			else
+			{
+				tg = radioGroups[group];
+			}
+			tb.group = tg;
+			tb.isOn = isFirst;
+			tb.onValueChanged.AddListener(delegate { handler(tb); });
+			return rt;
+		}
+
+		public void ToggleLaserPointer(bool isOn)
+		{
+			if (lp)
+			{
+				if (isOn)
+				{
+					lp.enabled = true;
+				}
+				else
+				{
+					lp.enabled = false;
+				}
+			}
+		}
+	}
+}
