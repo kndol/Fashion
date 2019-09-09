@@ -36,6 +36,8 @@ namespace Fashion.UIManager
 		[SerializeField]
 		private RectTransform labelPrefab;
 		[SerializeField]
+		private RectTransform scrollViewPrefab;
+		[SerializeField]
 		private RectTransform sliderPrefab;
 		[SerializeField]
 		private RectTransform dividerPrefab;
@@ -70,8 +72,7 @@ namespace Fashion.UIManager
 		private const float marginV = 16.0f;
 		private Vector2[] insertPositions;
 		private List<RectTransform>[] insertedElements;
-		[SerializeField]
-		private Vector3 menuOffset = new Vector3(0, 1, 2.5f);
+		private Vector3 menuOffset;
 
 		OVRCameraRig rig;
 		private Dictionary<string, ToggleGroup> radioGroups = new Dictionary<string, ToggleGroup>();
@@ -82,7 +83,7 @@ namespace Fashion.UIManager
 
 		public void Awake()
 		{
-//			menuOffset = transform.position; // TODO: this is unpredictable/busted
+			menuOffset = transform.position; // TODO: this is unpredictable/busted
 			gameObject.SetActive(false);
 			rig = FindObjectOfType<OVRCameraRig>();
 			for (int i = 0; i < toEnable.Count; ++i)
@@ -136,7 +137,12 @@ namespace Fashion.UIManager
 #endif
 		}
 
-		public void SetPaneWidth(int panelIdx, float width)
+		/// <summary>
+		/// 패널의 너비 변경하기
+		/// </summary>
+		/// <param name="width">새로운 너비</param>
+		/// <param name="panelIdx">변경할 패널의 ID, 기본값은 0</param>
+		public void SetPaneWidth(float width, int panelIdx = 0)
 		{
 			RectTransform canvasRect = targetContentPanels[panelIdx].GetComponent<RectTransform>();
 			canvasRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, width);
@@ -146,6 +152,9 @@ namespace Fashion.UIManager
 			}
 		}
 
+		/// <summary>
+		/// UI 패널 표시
+		/// </summary>
 		public void Show()
 		{
 			Relayout();
@@ -183,6 +192,9 @@ namespace Fashion.UIManager
 			}
 		}
 
+		/// <summary>
+		/// UI 패널 감추기
+		/// </summary>
 		public void Hide()
 		{
 			gameObject.SetActive(false);
@@ -213,16 +225,16 @@ namespace Fashion.UIManager
 				int elemCount = elems.Count;
 				float x = marginH;
 				float y = -marginV;
-				float maxWidth = (canvasRect.offsetMax.x - marginH) * 2f;
+				float maxWidth = canvasRect.offsetMax.x - canvasRect.offsetMin.x - marginH * 2f;
 				for (int elemIdx = 0; elemIdx < elemCount; ++elemIdx)
 				{
 					RectTransform r = elems[elemIdx];
 					r.anchoredPosition = new Vector2(x, y);
 					y -= (r.rect.height + elementSpacing);
-					//maxWidth = Mathf.Max(r.rect.width + 2 * marginH, maxWidth);
-					r.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, maxWidth);
+					maxWidth = Mathf.Max(r.rect.width + 2 * marginH, maxWidth);
+					r.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, maxWidth - 2 * marginH);
 				}
-				//canvasRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, maxWidth);
+				canvasRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, maxWidth);
 				canvasRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, -y + marginV);
 			}
 		}
@@ -243,6 +255,13 @@ namespace Fashion.UIManager
 			}
 		}
 
+		/// <summary>
+		/// 버튼 만들기
+		/// </summary>
+		/// <param name="label">표시할 텍스트</param>
+		/// <param name="handler">버튼을 클릭했을 때 호출할 콜백 함수</param>
+		/// <param name="targetCanvas">표시할 패널의 ID, 기본값은 0</param>
+		/// <returns>생성된 객체의 RectTransform</returns>
 		public RectTransform AddButton(string label, OnClick handler, int targetCanvas = 0)
 		{
 			RectTransform buttonRT = GameObject.Instantiate(buttonPrefab).GetComponent<RectTransform>();
@@ -253,26 +272,59 @@ namespace Fashion.UIManager
 			return buttonRT;
 		}
 
+		/// <summary>
+		/// 텍스트 레이블 만들기
+		/// </summary>
+		/// <param name="label">표시할 텍스트</param>
+		/// <param name="txtAlign">텍스트 정렬 방식, 기본값은 왼쪽, 위 정렬</param>
+		/// <param name="targetCanvas">표시할 패널의 ID, 기본값은 0</param>
+		/// <returns>생성된 객체의 RectTransform</returns>
 		public RectTransform AddLabel(string label, TextAnchor txtAlign = TextAnchor.MiddleCenter, int targetCanvas = 0)
 		{
 			RectTransform rt = GameObject.Instantiate(labelPrefab).GetComponent<RectTransform>();
 			Text t = rt.GetComponent<Text>();
+
 			t.text = label;
 			t.alignment = txtAlign;
-			print(t.preferredWidth + " : " + t.preferredHeight);
 
-			TextGenerator textGen = new TextGenerator();
-			TextGenerationSettings generationSettings = t.GetGenerationSettings(t.rectTransform.rect.size);
-			float width = textGen.GetPreferredWidth(label, generationSettings);
-			float height = textGen.GetPreferredHeight(label, generationSettings);
-			float height2 = t.cachedTextGeneratorForLayout.GetPreferredHeight(t.text, generationSettings);
-
-			print(width + " : " + height + " : " + height2);
 			rt.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, t.preferredHeight);
 			AddRect(rt, targetCanvas);
+
 			return rt;
 		}
 
+		/// <summary>
+		/// 텍스트 스크롤 뷰 만들기
+		/// </summary>
+		/// <param name="txtContent">표시할 내용</param>
+		/// <param name="txtAlign">텍스트 정렬 방식, 기본값은 왼쪽, 위 정렬</param>
+		/// <param name="height">스크롤 뷰의 높이, 기본값은 300</param>
+		/// <param name="targetCanvas">표시할 패널의 ID, 기본값은 0</param>
+		/// <returns>생성된 객체의 RectTransform</returns>
+		public RectTransform AddScrollView(string txtContent, TextAnchor txtAlign = TextAnchor.UpperLeft, int height = 300, int targetCanvas = 0)
+		{
+			RectTransform rt = GameObject.Instantiate(scrollViewPrefab).GetComponent<RectTransform>();
+			Text t = rt.GetComponentInChildren<Text>();
+
+			t.text = txtContent;
+			t.alignment = txtAlign;
+
+			rt.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, height);
+			AddRect(rt, targetCanvas);
+
+			return rt;
+		}
+
+		/// <summary>
+		/// 슬라이더바 만들기
+		/// </summary>
+		/// <param name="label">표시할 텍스트</param>
+		/// <param name="min">최소값</param>
+		/// <param name="max">최대값</param>
+		/// <param name="onValueChanged">값이 변경될 때 호출할 콜백 함수</param>
+		/// <param name="wholeNumbersOnly">true이면 정수만 사용</param>
+		/// <param name="targetCanvas">표시할 패널의 ID, 기본값은 0</param>
+		/// <returns>생성된 객체의 RectTransform</returns>
 		public RectTransform AddSlider(string label, float min, float max, OnSlider onValueChanged, bool wholeNumbersOnly = false, int targetCanvas = 0)
 		{
 			RectTransform rt = (RectTransform)GameObject.Instantiate(sliderPrefab);
@@ -285,6 +337,11 @@ namespace Fashion.UIManager
 			return rt;
 		}
 
+		/// <summary>
+		/// 구분선 만들기
+		/// </summary>
+		/// <param name="targetCanvas"></param>
+		/// <returns>생성된 객체의 RectTransform</returns>
 		public RectTransform AddDivider(int targetCanvas = 0)
 		{
 			RectTransform rt = (RectTransform)GameObject.Instantiate(dividerPrefab);
@@ -292,6 +349,13 @@ namespace Fashion.UIManager
 			return rt;
 		}
 
+		/// <summary>
+		/// 토글 버튼 만들기
+		/// </summary>
+		/// <param name="label">표시할 텍스트</param>
+		/// <param name="onValueChanged">값이 변경될 때 호출할 콜백 함수</param>
+		/// <param name="targetCanvas">표시할 패널의 ID, 기본값은 0</param>
+		/// <returns>생성된 객체의 RectTransform</returns>
 		public RectTransform AddToggle(string label, OnToggleValueChange onValueChanged, int targetCanvas = 0)
 		{
 			RectTransform rt = (RectTransform)GameObject.Instantiate(togglePrefab);
@@ -303,6 +367,14 @@ namespace Fashion.UIManager
 			return rt;
 		}
 
+		/// <summary>
+		/// 토글 버튼 만들기
+		/// </summary>
+		/// <param name="label">표시할 텍스트</param>
+		/// <param name="onValueChanged">값이 변경될 때 호출할 콜백 함수</param>
+		/// <param name="defaultValue">기본으로 선택된 버튼일 때 true</param>
+		/// <param name="targetCanvas">표시할 패널의 ID, 기본값은 0</param>
+		/// <returns>생성된 객체의 RectTransform</returns>
 		public RectTransform AddToggle(string label, OnToggleValueChange onValueChanged, bool defaultValue, int targetCanvas = 0)
 		{
 			RectTransform rt = (RectTransform)GameObject.Instantiate(togglePrefab);
@@ -315,6 +387,14 @@ namespace Fashion.UIManager
 			return rt;
 		}
 
+		/// <summary>
+		/// 라디오 버튼 만들기
+		/// </summary>
+		/// <param name="label">표시할 텍스트</param>
+		/// <param name="group">라디오 버튼 그룹의 이름</param>
+		/// <param name="handler">값이 변경될 때 호출할 콜백 함수</param>
+		/// <param name="targetCanvas">표시할 패널의 ID, 기본값은 0</param>
+		/// <returns>생성된 객체의 RectTransform</returns>
 		public RectTransform AddRadio(string label, string group, OnToggleValueChange handler, int targetCanvas = 0)
 		{
 			RectTransform rt = (RectTransform)GameObject.Instantiate(radioPrefab);
@@ -341,6 +421,10 @@ namespace Fashion.UIManager
 			return rt;
 		}
 
+		/// <summary>
+		/// 레이저 포인터 켜고 끄기
+		/// </summary>
+		/// <param name="isOn">true이면 켜기</param>
 		public void ToggleLaserPointer(bool isOn)
 		{
 			if (lp)

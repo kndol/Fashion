@@ -13,10 +13,14 @@ public class UISample : MonoBehaviour
 	private Text labelText;
 	private Text labelTextLeft;
 	[SerializeField]
+	UIBuilder uiCanvasPrefab = null;
+
 	UIBuilder uIBuilder;
 
 	void Start ()
     {
+		uIBuilder = Instantiate<UIBuilder>(uiCanvasPrefab);
+
 		uIBuilder.AddButton("버튼", LogButtonPressed);
         var labelPrefab = uIBuilder.AddLabel("레이블");
         var sliderPrefab = uIBuilder.AddSlider("슬라이더", 1.0f, 10.0f, SliderPressed, true);
@@ -39,6 +43,7 @@ public class UISample : MonoBehaviour
 		uIBuilder.AddButton("왼쪽 패널 버튼", LeftButtonPressed, UIBuilder.PANE_LEFT);
 		var labelPrefabLeft = uIBuilder.AddLabel("왼쪽 레이블", TextAnchor.MiddleCenter, UIBuilder.PANE_LEFT);
 		labelTextLeft = labelPrefabLeft.GetComponentInChildren<Text>();
+
 
 		uIBuilder.Show();
         inMenu = true;

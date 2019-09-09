@@ -34,7 +34,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -550, y: 0}
+  m_AnchoredPosition: {x: -560, y: 0}
   m_SizeDelta: {x: 16, y: 16}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &222017705189266216
@@ -182,7 +182,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 550, y: 0}
+  m_AnchoredPosition: {x: 560, y: 0}
   m_SizeDelta: {x: 16, y: 16}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &222126391987179884
@@ -340,6 +340,8 @@ MonoBehaviour:
   buttonPrefab: {fileID: 224949956480874824, guid: 056f4fc4df326b64a9455518f625072b,
     type: 3}
   labelPrefab: {fileID: 224113878955223432, guid: 1da724640a912844d88204bd7427069b,
+    type: 3}
+  scrollViewPrefab: {fileID: 3318681880995655962, guid: 00e5b7f9f211a2446afda0054a90dd8a,
     type: 3}
   sliderPrefab: {fileID: 224231512797991306, guid: 9ac552915638cc146b27e1425696e4de,
     type: 3}
