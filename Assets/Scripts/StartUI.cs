@@ -10,11 +10,21 @@ public class StartUI : MonoBehaviour
 {
 	[SerializeField]
 	UIBuilder uiCanvasPrefab = null;
+	[SerializeField]
+	Camera worldCamera = null;
+    [SerializeField]
+    Transform player = null;
+    [SerializeField]
+    Transform selectPos = null;
+    [SerializeField]
+    Transform originPos = null;
 
-	UIBuilder uiMenu;
+    UIBuilder uiMenu;
 	UIBuilder uiTerm;
+    UIBuilder uiSelect;
+    UIBuilder uiOrigin;
 
-	void Start ()
+    void Start ()
     {
 		uiMenu = Instantiate<UIBuilder>(uiCanvasPrefab);
 
@@ -40,28 +50,60 @@ public class StartUI : MonoBehaviour
 			"<b>스티치선</b>\t스티치의 시작 부분과 끝부분을 나타낸다.\n" +
 			"<b>등분선</b>\t\t등분을 표시하며 부호를 붙이는 경우도 있음", TextAnchor.UpperLeft, 320);
 		uiTerm.AddButton("메뉴로", ButtonMenu);
-	}
+
+        //uiTerm.Show();
+
+        uiSelect = Instantiate<UIBuilder>(uiCanvas);
+
+        uiSelect.AddLabel("디자인을 선택하세요.");
+        uiSelect.AddDivider();
+        uiSelect.AddButton("확인", SelectButton);
+        //uiSelect.AddButton("확인", ButtonTutorial);
+
+        //uiSelect.Show();
+        uiOrigin = Instantiate<UIBuilder>(uiCanvas);
+
+        uiOrigin.AddLabel("패턴 제도 원형");
+        uiOrigin.AddDivider();
+        //uiOrigin.AddButton("확인", SelectButton);
+    }
 
 	public void ButtonMenu()
 	{
 		uiTerm.Hide();
 		uiMenu.Show();
 	}
-	public void ButtonTerms()
+	public void ButtonTerms()     //용어설명
     {
 		uiMenu.Hide();
 		uiTerm.Show();
     }
 
-	public void ButtonTutorial()
+	public void ButtonTutorial()  //튜토리얼
 	{
-		Debug.Log("튜토리얼");
+        player.transform.position = selectPos.transform.position;
+        player.transform.rotation = selectPos.transform.rotation;
+        uiMenu.Hide();
+        uiSelect.Show();
+        Debug.Log("튜토리얼");
 	}
 
-	public void ButtonTest()
+	public void ButtonTest()      //테스트
 	{
-		Debug.Log("테스트");
+        player.transform.position = selectPos.transform.position;
+        player.transform.rotation = selectPos.transform.rotation;
+        uiMenu.Hide();
+        uiSelect.Show();
+        Debug.Log("테스트");
 	}
+
+    public void SelectButton()
+    {
+        player.transform.position = originPos.transform.position;
+        player.transform.rotation = originPos.transform.rotation;
+        uiSelect.Hide();
+        uiOrigin.Show();
+    }
 
 	public void ButtonExit()
 	{
