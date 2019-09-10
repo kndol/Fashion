@@ -53,7 +53,7 @@ public class StartUI : MonoBehaviour
 
         //uiTerm.Show();
 
-        uiSelect = Instantiate<UIBuilder>(uiCanvas);
+        uiSelect = Instantiate<UIBuilder>(uiCanvasPrefab);
 
         uiSelect.AddLabel("디자인을 선택하세요.");
         uiSelect.AddDivider();
@@ -61,7 +61,7 @@ public class StartUI : MonoBehaviour
         //uiSelect.AddButton("확인", ButtonTutorial);
 
         //uiSelect.Show();
-        uiOrigin = Instantiate<UIBuilder>(uiCanvas);
+        uiOrigin = Instantiate<UIBuilder>(uiCanvasPrefab);
 
         uiOrigin.AddLabel("패턴 제도 원형");
         uiOrigin.AddDivider();
