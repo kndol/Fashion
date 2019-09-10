@@ -152,6 +152,10 @@ namespace Fashion.UIManager
 			}
 		}
 
+		/// <summary>
+		/// 플레이어와 메뉴 사이의 거리 조절
+		/// </summary>
+		/// <param name="distance">거리(m 단위)</param>
 		public void SetDistanceFromPlayer(float distance)
 		{
 			menuOffset.z = distance;
