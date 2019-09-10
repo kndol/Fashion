@@ -72,7 +72,7 @@ namespace Fashion.UIManager
 		private const float marginV = 16.0f;
 		private Vector2[] insertPositions;
 		private List<RectTransform>[] insertedElements;
-		private Vector3 menuOffset;
+		public Vector3 menuOffset { get; set; }
 
 		OVRCameraRig rig;
 		private Dictionary<string, ToggleGroup> radioGroups = new Dictionary<string, ToggleGroup>();
