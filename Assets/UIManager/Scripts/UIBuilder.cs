@@ -72,7 +72,7 @@ namespace Fashion.UIManager
 		private const float marginV = 16.0f;
 		private Vector2[] insertPositions;
 		private List<RectTransform>[] insertedElements;
-		public Vector3 menuOffset { get; set; }
+		private Vector3 menuOffset;
 
 		OVRCameraRig rig;
 		private Dictionary<string, ToggleGroup> radioGroups = new Dictionary<string, ToggleGroup>();
@@ -149,6 +149,18 @@ namespace Fashion.UIManager
 			if (gameObject.activeInHierarchy)
 			{
 				Relayout();
+			}
+		}
+
+		public void SetDistanceFromPlayer(float distance)
+		{
+			menuOffset.z = distance;
+			if (gameObject.activeInHierarchy)
+			{
+				Vector3 pos = rig.transform.TransformPoint(menuOffset);
+				// KnDol - 위치가 이상하게 낮아지면 기본 위치로 복구
+				if (pos.y < menuOffset.y) pos.y = menuOffset.y;
+				transform.position = pos;
 			}
 		}
 
