@@ -264,7 +264,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 8354974}
   m_PrefabAsset: {fileID: 0}
-  m_ObjectHideFlags: 0
 --- !u!1 &16588082
 GameObject:
   m_ObjectHideFlags: 0
