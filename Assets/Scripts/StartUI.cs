@@ -3,64 +3,51 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.UI;
+using Fashion;
 using Fashion.UIManager;
 
 // Show off all the Debug UI components.
 public class StartUI : MonoBehaviour
 {
-	[SerializeField]
-	UIBuilder uiCanvasPrefab = null;
+    [SerializeField]
+    UIBuilder uiCanvasPrefab = null;
     [SerializeField]
     Transform player = null;
     [SerializeField]
     Transform selectPos = null;
-    [SerializeField]
-    Transform originPos = null;
 
-	UIBuilder uiMenu;
+    UIBuilder uiMenu;
 	UIBuilder uiTerm;
 
 	void Start ()
     {
-		uiMenu = Instantiate<UIBuilder>(uiCanvasPrefab);
+        if (MS == Making_State.start)
+        {
+            uiMenu = Instantiate<UIBuilder>(uiCanvasPrefab);
 
-		uiMenu.AddLabel("<B>패션 디자이너</B>");
-		uiMenu.AddDivider();
-		uiMenu.AddButton("용어 설명", ButtonTerms);
-		uiMenu.AddButton("튜토리얼", ButtonTutorial);
-		uiMenu.AddButton("테스트", ButtonTest);
-		uiMenu.AddButton("끝내기", ButtonExit);
-		uiMenu.Show();
+            uiMenu.AddLabel("<B>패션 디자이너</B>");
+            uiMenu.AddDivider();
+            uiMenu.AddButton("용어 설명", ButtonTerms);
+            uiMenu.AddButton("튜토리얼", ButtonTutorial);
+            uiMenu.AddButton("테스트", ButtonTest);
+            uiMenu.AddButton("끝내기", ButtonExit);
+            uiMenu.Show();
 
-		uiTerm = Instantiate<UIBuilder>(uiCanvasPrefab);
+            uiTerm = Instantiate<UIBuilder>(uiCanvasPrefab);
 
-		uiTerm.SetPaneWidth(980);
-		uiTerm.AddLabel("<b>용어 설명</b>");
-		uiTerm.AddDivider();
-		uiTerm.AddLabel("항목\t\t내용", TextAnchor.MiddleLeft);
-		uiTerm.AddScrollView("<b>완성선</b>\t\t패턴의 완성선\n" +
-			"<b>안내선</b>\t\t완성선을 그리기 위한 보조선\n" +
-			"<b>안단선</b>\t\t안단 패턴을 표시하기 위한 선\n" +
-			"<b>절개선</b>\t\t가위질을 해야함을 나타내는 표시\n" +
-			"<b>꺾임선</b>\t\t접는 선 표시\n" +
-			"<b>스티치선</b>\t스티치의 시작 부분과 끝부분을 나타낸다.\n" +
-			"<b>등분선</b>\t\t등분을 표시하며 부호를 붙이는 경우도 있음", TextAnchor.UpperLeft, 320);
-		uiTerm.AddButton("메뉴로", ButtonMenu);
-        //uiTerm.Show();
-
-        uiSelect = Instantiate<UIBuilder>(uiCanvas);
-
-        uiSelect.AddLabel("디자인을 선택하세요.");
-        uiSelect.AddDivider();
-        uiSelect.AddButton("확인", SelectButton);
-        //uiSelect.AddButton("확인", ButtonTutorial);
-
-        //uiSelect.Show();
-        uiOrigin = Instantiate<UIBuilder>(uiCanvas);
-
-        uiOrigin.AddLabel("패턴 제도 원형");
-        uiOrigin.AddDivider();
-        //uiOrigin.AddButton("확인", SelectButton);
+            uiTerm.SetPaneWidth(980);
+            uiTerm.AddLabel("<b>용어 설명</b>");
+            uiTerm.AddDivider();
+            uiTerm.AddLabel("항목\t\t내용", TextAnchor.MiddleLeft);
+            uiTerm.AddScrollView("<b>완성선</b>\t\t패턴의 완성선\n" +
+                "<b>안내선</b>\t\t완성선을 그리기 위한 보조선\n" +
+                "<b>안단선</b>\t\t안단 패턴을 표시하기 위한 선\n" +
+                "<b>절개선</b>\t\t가위질을 해야함을 나타내는 표시\n" +
+                "<b>꺾임선</b>\t\t접는 선 표시\n" +
+                "<b>스티치선</b>\t스티치의 시작 부분과 끝부분을 나타낸다.\n" +
+                "<b>등분선</b>\t\t등분을 표시하며 부호를 붙이는 경우도 있음", TextAnchor.UpperLeft, 320);
+            uiTerm.AddButton("메뉴로", ButtonMenu);
+        }
     }
 
 	public void ButtonMenu()
@@ -74,15 +61,23 @@ public class StartUI : MonoBehaviour
 		uiTerm.Show();
     }
 
-	public void ButtonTutorial()
+	public void ButtonTutorial()    //튜토리얼 버튼
 	{
-		Debug.Log("튜토리얼");
-	}
+        player.transform.position = selectPos.transform.position;
+        player.transform.rotation = selectPos.transform.rotation;
+        uiMenu.Hide();
+		Data.MS = Making_State.Design_Select;
+        Data.isCheck = true;
+    }
 
-	public void ButtonTest()
+	public void ButtonTest()        //테스트 버튼
 	{
-		Debug.Log("테스트");
-	}
+        player.transform.position = selectPos.transform.position;
+        player.transform.rotation = selectPos.transform.rotation;
+        uiMenu.Hide();
+        Data.MS = Making_State.Design_Select;
+        Data.isCheck = true;
+    }
 
 	public void ButtonExit()
 	{
