@@ -290,23 +290,46 @@ namespace Fashion.UIManager
             return buttonRT;
         }
 
+		/// <summary>
+		/// 이미지 버튼 만들기 - 크기는 이미지의 원래 크기
+		/// </summary>
+		/// <param name="sprite">버튼에 사용할 이미지</param>
+		/// <param name="handler">버튼을 클릭했을 때 호출할 콜백 함수</param>
+		/// <param name="targetCanvas">표시할 패널의 ID, 기본값은 0</param>
+		/// <returns>생성된 객체의 RectTransform</returns>
 		public RectTransform AddImageButton(Sprite sprite, OnClick handler, int targetCanvas = 0)
 		{
 			return AddImageButton(sprite, sprite.textureRect, handler, targetCanvas);
 		}
 
+		/// <summary>
+		/// 이미지 버튼 만들기
+		/// </summary>
+		/// <param name="sprite">버튼에 사용할 이미지</param>
+		/// <param name="size">명시적으로 버튼의 크기를 지정</param>
+		/// <param name="handler">버튼을 클릭했을 때 호출할 콜백 함수</param>
+		/// <param name="targetCanvas">표시할 패널의 ID, 기본값은 0</param>
+		/// <returns>생성된 객체의 RectTransform</returns>
 		public RectTransform AddImageButton(Sprite sprite, Vector2 size, OnClick handler, int targetCanvas = 0)
 		{
 			return AddImageButton(sprite, new Rect(0, 0, size.x, size.y), handler, targetCanvas);
 		}
 
+		/// <summary>
+		/// 이미지 버튼 만들기
+		/// </summary>
+		/// <param name="sprite">버튼에 사용할 이미지</param>
+		/// <param name="rect">명시적으로 버튼의 크기를 지정</param>
+		/// <param name="handler">버튼을 클릭했을 때 호출할 콜백 함수</param>
+		/// <param name="targetCanvas">표시할 패널의 ID, 기본값은 0</param>
+		/// <returns>생성된 객체의 RectTransform</returns>
 		public RectTransform AddImageButton(Sprite sprite, Rect rect, OnClick handler, int targetCanvas = 0)
         {
             RectTransform buttonRT = GameObject.Instantiate(buttonPrefab).GetComponent<RectTransform>();
             Button button = buttonRT.GetComponentInChildren<Button>();
 			Image img = buttonRT.GetComponentInChildren<Image>();
-			buttonRT.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, rect.width == 0 ? sprite.textureRect.width : rect.width);
-			buttonRT.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, rect.height == 0 ? sprite.textureRect.height : rect.height);
+			buttonRT.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, rect.width);
+			buttonRT.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, rect.height);
 			buttonRT.GetComponentInChildren<Text>().gameObject.SetActive(false);
 
 			img.sprite = sprite;
@@ -317,16 +340,36 @@ namespace Fashion.UIManager
             return buttonRT;
         }
 
+		/// <summary>
+		/// 이미지 만들기 - 크기는 이미지의 원래 크기
+		/// </summary>
+		/// <param name="sprite">사용할 이미지</param>
+		/// <param name="targetCanvas">표시할 패널의 ID, 기본값은 0</param>
+		/// <returns>생성된 객체의 RectTransform</returns>
 		public RectTransform AddImage(Sprite sprite, int targetCanvas = 0)
 		{
 			return AddImage(sprite, sprite.textureRect, targetCanvas);
 		}
 
+		/// <summary>
+		/// 이미지 만들기
+		/// </summary>
+		/// <param name="sprite">사용할 이미지</param>
+		/// <param name="size">명시적으로 이미지의 크기를 지정</param>
+		/// <param name="targetCanvas">표시할 패널의 ID, 기본값은 0</param>
+		/// <returns>생성된 객체의 RectTransform</returns>
 		public RectTransform AddImage(Sprite sprite, Vector2 size, int targetCanvas = 0)
 		{
 			return AddImage(sprite, new Rect(0, 0, size.x, size.y), targetCanvas);
 		}
 
+		/// <summary>
+		/// 이미지 만들기
+		/// </summary>
+		/// <param name="sprite">사용할 이미지</param>
+		/// <param name="rect">명시적으로 이미지의 크기를 지정</param>
+		/// <param name="targetCanvas">표시할 패널의 ID, 기본값은 0</param>
+		/// <returns>생성된 객체의 RectTransform</returns>
 		public RectTransform AddImage(Sprite sprite, Rect rect, int targetCanvas = 0)
 		{
 			RectTransform rt = GameObject.Instantiate(imagePrefab).GetComponent<RectTransform>();
