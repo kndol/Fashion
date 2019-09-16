@@ -170,7 +170,8 @@ public class OVRCameraRig : MonoBehaviour
 
 		trackerAnchor.localRotation = tracker.orientation;
 
-		Quaternion emulatedRotation = Quaternion.Euler(-OVRManager.instance.headPoseRelativeOffsetRotation.x, -OVRManager.instance.headPoseRelativeOffsetRotation.y, OVRManager.instance.headPoseRelativeOffsetRotation.z);
+		Quaternion emulatedRotation = Quaternion.Euler(-OVRManager.instance.
+            headPoseRelativeOffsetRotation.x, -OVRManager.instance.headPoseRelativeOffsetRotation.y, OVRManager.instance.headPoseRelativeOffsetRotation.z);
 
 		//Note: in the below code, when using UnityEngine's API, we only update anchor transforms if we have a new, fresh value this frame.
 		//If we don't, it could mean that tracking is lost, etc. so the pose should not change in the virtual world.

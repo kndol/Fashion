@@ -24,15 +24,18 @@ public class Bundle_Cut_UI : MonoBehaviour
 
     void Start()
     {
-        uiBundle = Instantiate<UIBuilder>(uiCanvasPrefab);
-      
-        uiBundle.AddLabel("마름질");
-        uiBundle.AddDivider();
+        if (Data.MS == Making_State.start)
+        {
+            uiBundle = Instantiate<UIBuilder>(uiCanvasPrefab);
 
-        uiCutting = Instantiate<UIBuilder>(uiCanvasPrefab);
-        
-        uiCutting.AddLabel("재단");
-        uiCutting.AddDivider();
+            uiBundle.AddLabel("마름질");
+            uiBundle.AddDivider();
+
+            uiCutting = Instantiate<UIBuilder>(uiCanvasPrefab);
+
+            uiCutting.AddLabel("재단");
+            uiCutting.AddDivider();
+        }
     }
 
     public void BundleButton()
@@ -69,8 +72,6 @@ public class Bundle_Cut_UI : MonoBehaviour
                             break;
                         case Cloth_State.skirt:
                             break;
-                        case Cloth_State.onepiece:
-                            break;
                     }
                     uiBundle.AddButton("확인", BundleButton);
                     uiBundle.Show();
@@ -88,8 +89,6 @@ public class Bundle_Cut_UI : MonoBehaviour
                         case Cloth_State.pants:
                             break;
                         case Cloth_State.skirt:
-                            break;
-                        case Cloth_State.onepiece:
                             break;
                     }
                     uiCutting.AddButton("확인", CutButton);

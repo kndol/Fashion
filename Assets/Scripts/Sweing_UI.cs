@@ -24,15 +24,18 @@ public class Sweing_UI : MonoBehaviour
 
     void Start()
     {
-        uiSweing_sheet = Instantiate<UIBuilder>(uiCanvasPrefab);
+        if (Data.MS == Making_State.start)
+        {
+            uiSweing_sheet = Instantiate<UIBuilder>(uiCanvasPrefab);
 
-        uiSweing_sheet.AddLabel("낱장 재봉");
-        uiSweing_sheet.AddDivider();
+            uiSweing_sheet.AddLabel("낱장 재봉");
+            uiSweing_sheet.AddDivider();
 
-        uiSweing_fabrication = Instantiate<UIBuilder>(uiCanvasPrefab);
+            uiSweing_fabrication = Instantiate<UIBuilder>(uiCanvasPrefab);
 
-        uiSweing_fabrication.AddLabel("합봉");
-        uiSweing_fabrication.AddDivider();
+            uiSweing_fabrication.AddLabel("합봉");
+            uiSweing_fabrication.AddDivider();
+        }
     }
 
     public void Sweing_Sheet_Button()
@@ -69,8 +72,6 @@ public class Sweing_UI : MonoBehaviour
                             break;
                         case Cloth_State.skirt:
                             break;
-                        case Cloth_State.onepiece:
-                            break;
                     }
                     uiSweing_sheet.AddButton("확인", Sweing_Sheet_Button);
                     uiSweing_sheet.Show();
@@ -88,8 +89,6 @@ public class Sweing_UI : MonoBehaviour
                         case Cloth_State.pants:
                             break;
                         case Cloth_State.skirt:
-                            break;
-                        case Cloth_State.onepiece:
                             break;
                     }
                     uiSweing_fabrication.AddButton("확인", Sweing_Fab_Button);

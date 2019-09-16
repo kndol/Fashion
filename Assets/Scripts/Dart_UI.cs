@@ -21,10 +21,13 @@ public class Dart_UI : MonoBehaviour
 
     void Start()
     {
-        uiDart = Instantiate<UIBuilder>(uiCanvasPrefab);
+        if (Data.MS == Making_State.start)
+        {
+            uiDart = Instantiate<UIBuilder>(uiCanvasPrefab);
 
-        uiDart.AddLabel("위치지정");
-        uiDart.AddDivider();
+            uiDart.AddLabel("위치지정");
+            uiDart.AddDivider();
+        }
     }
 
     public void DartButton()
@@ -50,8 +53,6 @@ public class Dart_UI : MonoBehaviour
                 case Cloth_State.pants:
                     break;
                 case Cloth_State.skirt:
-                    break;
-                case Cloth_State.onepiece:
                     break;
             }
             uiDart.AddButton("확인", DartButton);

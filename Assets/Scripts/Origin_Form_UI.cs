@@ -15,16 +15,19 @@ public class Origin_Form_UI : MonoBehaviour
     [SerializeField]
     Transform dartPos = null;
     [SerializeField]
-    Sprite[] originSpite = null;  //원형 이미지
+    Sprite[] originSpite = null;  //원형 이미지 0 : 티셔츠, 1 : 셔츠, 2 : 바지, 3 : 치마
 
     UIBuilder uiOrigin;
 
     void Start()
     {
-        uiOrigin = Instantiate<UIBuilder>(uiCanvasPrefab);
+        if (Data.MS == Making_State.start)
+        {
+            uiOrigin = Instantiate<UIBuilder>(uiCanvasPrefab);
 
-        uiOrigin.AddLabel("패턴 제도 원형");
-        uiOrigin.AddDivider();
+            uiOrigin.AddLabel("패턴 제도 원형");
+            uiOrigin.AddDivider();
+        }
     }
 
     public void OriginButton()
@@ -50,8 +53,6 @@ public class Origin_Form_UI : MonoBehaviour
                 case Cloth_State.pants:
                     break;
                 case Cloth_State.skirt:
-                    break;
-                case Cloth_State.onepiece:
                     break;
             }
             uiOrigin.AddButton("확인", OriginButton);

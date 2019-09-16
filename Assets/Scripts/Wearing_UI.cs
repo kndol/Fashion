@@ -5,6 +5,7 @@ using UnityEngine.Assertions;
 using UnityEngine.UI;
 using Fashion;
 using Fashion.UIManager;
+using UnityEngine.SceneManagement;
 
 public class Wearing_UI : MonoBehaviour
 {
@@ -12,23 +13,32 @@ public class Wearing_UI : MonoBehaviour
     UIBuilder uiCanvasPrefab = null;
     [SerializeField]
     Transform player = null;
-
+    //[SerializeField]
+    //Sprite dd;
 
     UIBuilder uiWearing;
 
     void Start()
     {
-        uiWearing = Instantiate<UIBuilder>(uiCanvasPrefab);
+        if (Data.MS == Making_State.start)
+        {
+            uiWearing = Instantiate<UIBuilder>(uiCanvasPrefab);
 
-        uiWearing.AddLabel("착장");
-        uiWearing.AddDivider();
-        uiWearing.AddButton("확인", WearingButton);
+            uiWearing.AddLabel("착장");
+            uiWearing.AddDivider();
+            uiWearing.AddButton("확인", WearingButton);
+        }
     }
 
     public void WearingButton()
     {
         uiWearing.Hide();
         Data.isCheck = true;
+    }
+
+    public void Restart_Button()
+    {
+        SceneManager.LoadScene("Fashion_Shop");
     }
 
     void Update()

@@ -6,8 +6,8 @@ namespace Fashion
 {
     // 플레이 모드          시작   튜토리얼  테스트
     public enum Play_Mode { start, tutorial, test };
-    //옷
-    public enum Cloth_State { start, t_shirts, shirts, pants, skirt, onepiece };
+    //옷                      시작    티셔츠    셔츠    바지   치마
+    public enum Cloth_State { start, t_shirts, shirts, pants, skirt};
     // 제작 상태                                  
     public enum Making_State
 	{
@@ -24,9 +24,7 @@ namespace Fashion
 		public static int Score = 100;            //점수
 		public static float Size;                 //치수
 		public static float Result_Size;          //결과치수
-		public static string[,] Cloth_List;       //옷 리스트
 		public static bool isCheck = false;       //버튼 확인용 자료형
-        public static int Count = 1;
         public static Play_Mode PM = Play_Mode.start;
         public static Cloth_State CS = Cloth_State.start;
         public static Making_State MS = Making_State.start;     

@@ -21,6 +21,7 @@ public class StartUI : MonoBehaviour
 
     void Start ()
     {
+        Init_Data();
         if (Data.MS == Making_State.start)
         {
             uiMenu = Instantiate<UIBuilder>(uiCanvasPrefab);
@@ -87,6 +88,14 @@ public class StartUI : MonoBehaviour
 		Application.Quit();
 #endif
 	}
+
+    public void Init_Data()    //초기화 함수
+    {   
+         Data.isCheck = false;       //버튼 확인용 자료형
+         Data.PM = Play_Mode.start;
+         Data.CS = Cloth_State.start;
+         Data.MS = Making_State.start;
+    }
 
     void Update()
     {

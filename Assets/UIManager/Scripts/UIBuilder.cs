@@ -271,7 +271,7 @@ namespace Fashion.UIManager
 			{
 				Relayout();
 			}
-		}
+        }
 
         /// <summary>
         /// 버튼 만들기
@@ -336,7 +336,6 @@ namespace Fashion.UIManager
 			button.onClick.AddListener(delegate { handler(); });
 			
             AddRect(buttonRT, targetCanvas);
-            Data.Count++;
             return buttonRT;
         }
 

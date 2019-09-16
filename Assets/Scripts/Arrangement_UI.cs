@@ -21,10 +21,13 @@ public class Arrangement_UI : MonoBehaviour
 
     void Start()
     {
-        uiArrangement = Instantiate<UIBuilder>(uiCanvasPrefab);
+        if (Data.MS == Making_State.start)
+        {
+            uiArrangement = Instantiate<UIBuilder>(uiCanvasPrefab);
 
-        uiArrangement.AddLabel("배치");
-        uiArrangement.AddDivider();
+            uiArrangement.AddLabel("배치");
+            uiArrangement.AddDivider();
+        }
     }
 
     public void ArrangeButton()
@@ -50,8 +53,6 @@ public class Arrangement_UI : MonoBehaviour
                 case Cloth_State.pants:
                     break;
                 case Cloth_State.skirt:
-                    break;
-                case Cloth_State.onepiece:
                     break;
             }
             uiArrangement.AddButton("확인", ArrangeButton);
