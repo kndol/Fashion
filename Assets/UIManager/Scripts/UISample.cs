@@ -23,6 +23,7 @@ public class UISample : MonoBehaviour
     {
 		uIBuilder = Instantiate<UIBuilder>(uiCanvasPrefab);
 
+		uIBuilder.SetPaneWidth(880);
 		uIBuilder.AddButton("버튼", LogButtonPressed);
         var labelPrefab = uIBuilder.AddLabel("레이블");
         var sliderPrefab = uIBuilder.AddSlider("슬라이더", 1.0f, 10.0f, SliderPressed, true);
@@ -33,14 +34,15 @@ public class UISample : MonoBehaviour
         Assert.IsNotNull(sliderText, "No text component on slider prefab");
         sliderText.text = sliderPrefab.GetComponentInChildren<Slider>().value.ToString();
         uIBuilder.AddDivider();
-        uIBuilder.AddToggle("토글", TogglePressed);
+		uIBuilder.StartHorizontalSection(5);
+		Rect rc = new Rect(0, 0, 200, 350);
+		for (int i = 0; i < sprites.Length; i++)
+			uIBuilder.AddImageButton(sprites[i], rc, delegate () { OnClickHor(i); });
+		uIBuilder.EndHorizontalSection();
+		uIBuilder.AddDivider();
+		uIBuilder.AddToggle("토글", TogglePressed);
 		uIBuilder.AddRadio("라디오1", "group", delegate(Toggle t) { RadioPressed("라디오1", "group", t); }) ;
 		uIBuilder.AddRadio("라디오2", "group", delegate(Toggle t) { RadioPressed("라디오2", "group", t); }) ;
-
-		uIBuilder.StartHorizontalSection(5);
-		for (int i = 0; i < sprites.Length; i++)
-			uIBuilder.AddImageButton(sprites[i], new Rect(0, 0, 100, 200), delegate () { OnClickHor(i); });
-		uIBuilder.EndHorizontalSection();
 
 		//====================================================
 		uIBuilder.AddLabel("오른쪽 탭", TextAnchor.MiddleCenter, UIBuilder.PANE_RIGHT);
