@@ -34,6 +34,8 @@ public class StartUI : MonoBehaviour
             uiMenu.AddButton("³¡³»±â", ButtonExit);
             uiMenu.Show();
 
+
+
             uiTerm = Instantiate<UIBuilder>(uiCanvasPrefab);
 
             uiTerm.SetPaneWidth(980);

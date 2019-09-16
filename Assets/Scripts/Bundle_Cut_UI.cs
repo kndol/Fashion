@@ -28,11 +28,14 @@ public class Bundle_Cut_UI : MonoBehaviour
         {
             uiBundle = Instantiate<UIBuilder>(uiCanvasPrefab);
 
+            uiBundle.SetPaneWidth(900);
+
             uiBundle.AddLabel("마름질");
             uiBundle.AddDivider();
 
             uiCutting = Instantiate<UIBuilder>(uiCanvasPrefab);
 
+            uiCutting.SetPaneWidth(900);
             uiCutting.AddLabel("재단");
             uiCutting.AddDivider();
         }
@@ -64,7 +67,7 @@ public class Bundle_Cut_UI : MonoBehaviour
                     switch (Data.CS)
                     {
                         case Cloth_State.t_shirts:
-                            uiBundle.AddImage(bundleSpite[0]);
+                            uiBundle.AddImage(bundleSpite[0], new Rect(0, 0, 400, 250));
                             break;
                         case Cloth_State.shirts:
                             break;
@@ -82,7 +85,7 @@ public class Bundle_Cut_UI : MonoBehaviour
                     switch (Data.CS)
                     {
                         case Cloth_State.t_shirts:
-                            uiCutting.AddImage(cutSpite[0]);
+                            uiCutting.AddImage(cutSpite[0], new Rect(0, 0, 400, 250));
                             break;
                         case Cloth_State.shirts:
                             break;
@@ -96,7 +99,6 @@ public class Bundle_Cut_UI : MonoBehaviour
                     Data.isCheck = false;
                     break;
             }
-
         }
     }
 }

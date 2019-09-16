@@ -25,6 +25,7 @@ public class Origin_Form_UI : MonoBehaviour
         {
             uiOrigin = Instantiate<UIBuilder>(uiCanvasPrefab);
 
+            uiOrigin.SetPaneWidth(900);
             uiOrigin.AddLabel("패턴 제도 원형");
             uiOrigin.AddDivider();
         }
@@ -38,6 +39,11 @@ public class Origin_Form_UI : MonoBehaviour
         Data.MS = Making_State.dart_pos;
         Data.isCheck = true;
     }
+
+    void Input_Value()
+    {
+
+    }
     
     void Update()
     {
@@ -46,7 +52,7 @@ public class Origin_Form_UI : MonoBehaviour
             switch (Data.CS)
             {
                 case Cloth_State.t_shirts:
-                    uiOrigin.AddImage(originSpite[0]);
+                    uiOrigin.AddImage(originSpite[0], new Rect(0, 0, 400, 250));
                     break;
                 case Cloth_State.shirts:
                     break;

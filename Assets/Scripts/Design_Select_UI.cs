@@ -14,16 +14,10 @@ public class Design_Select_UI : MonoBehaviour
     Transform player = null;
     [SerializeField]
     Transform originPos = null;
-	[SerializeField]
-	Sprite spriteTshirt;
-	[SerializeField]
-	Sprite spriteShirt;
-	[SerializeField]
-	Sprite spritePants;
-	[SerializeField]
-	Sprite spriteSkirt;
+    [SerializeField]
+    Sprite[] sprites = null;       // 0 : 티셔츠   1 : 셔츠   2 : 바지   3 : 치마
 
-	UIBuilder uiCloths;
+    UIBuilder uiCloths;
     UIBuilder uiSelect;
 
     void Start()
@@ -32,12 +26,15 @@ public class Design_Select_UI : MonoBehaviour
         {
             uiCloths = Instantiate<UIBuilder>(uiCanvasPrefab);
 
+            uiCloths.SetPaneWidth(900);
             uiCloths.AddLabel("디자인을 선택하세요.");
             uiCloths.AddDivider();
-            uiCloths.AddImageButton(spriteTshirt, Tshirt_Button);
-            uiCloths.AddImageButton(spriteShirt, Shirts_Button);
-            uiCloths.AddImageButton(spritePants, Pants_Button);
-            uiCloths.AddImageButton(spriteSkirt, Skirt_Button);
+            uiCloths.StartHorizontalSection(5);
+            uiCloths.AddImageButton(sprites[0], new Rect(0, 0, 300, 150), delegate () { Tshirt_Button(); });
+            uiCloths.AddImageButton(sprites[1], new Rect(0, 0, 300, 150), delegate () { Shirts_Button(); });
+            uiCloths.AddImageButton(sprites[2], new Rect(0, 0, 300, 150), delegate () { Pants_Button(); });
+            uiCloths.AddImageButton(sprites[3], new Rect(0, 0, 300, 150), delegate () { Skirt_Button(); });
+            uiCloths.EndHorizontalSection();
 
             uiSelect = Instantiate<UIBuilder>(uiCanvasPrefab);
 

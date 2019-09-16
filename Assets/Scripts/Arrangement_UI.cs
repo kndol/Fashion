@@ -25,6 +25,7 @@ public class Arrangement_UI : MonoBehaviour
         {
             uiArrangement = Instantiate<UIBuilder>(uiCanvasPrefab);
 
+            uiArrangement.SetPaneWidth(900);
             uiArrangement.AddLabel("배치");
             uiArrangement.AddDivider();
         }
@@ -46,7 +47,7 @@ public class Arrangement_UI : MonoBehaviour
             switch (Data.CS)
             {
                 case Cloth_State.t_shirts:
-                    uiArrangement.AddImage(arrangeSpite[0]);
+                    uiArrangement.AddImage(arrangeSpite[0], new Rect(0, 0, 400, 250));
                     break;
                 case Cloth_State.shirts:
                     break;

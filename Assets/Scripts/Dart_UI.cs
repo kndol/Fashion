@@ -25,6 +25,7 @@ public class Dart_UI : MonoBehaviour
         {
             uiDart = Instantiate<UIBuilder>(uiCanvasPrefab);
 
+            uiDart.SetPaneWidth(900);
             uiDart.AddLabel("위치지정");
             uiDart.AddDivider();
         }
@@ -46,7 +47,7 @@ public class Dart_UI : MonoBehaviour
             switch (Data.CS)
             {
                 case Cloth_State.t_shirts:
-                    uiDart.AddImage(dartSpite[0]);
+                    uiDart.AddImage(dartSpite[0], new Rect(0, 0, 400, 250));
                     break;
                 case Cloth_State.shirts:
                     break;

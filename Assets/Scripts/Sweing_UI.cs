@@ -28,11 +28,13 @@ public class Sweing_UI : MonoBehaviour
         {
             uiSweing_sheet = Instantiate<UIBuilder>(uiCanvasPrefab);
 
+            uiSweing_sheet.SetPaneWidth(900);
             uiSweing_sheet.AddLabel("낱장 재봉");
             uiSweing_sheet.AddDivider();
 
             uiSweing_fabrication = Instantiate<UIBuilder>(uiCanvasPrefab);
 
+            uiSweing_fabrication.SetPaneWidth(900);
             uiSweing_fabrication.AddLabel("합봉");
             uiSweing_fabrication.AddDivider();
         }
@@ -64,7 +66,7 @@ public class Sweing_UI : MonoBehaviour
                     switch (Data.CS)
                     {
                         case Cloth_State.t_shirts:
-                            uiSweing_sheet.AddImage(s_sheetSpite[0]);
+                            uiSweing_sheet.AddImage(s_sheetSpite[0], 400);
                             break;
                         case Cloth_State.shirts:
                             break;
@@ -82,7 +84,7 @@ public class Sweing_UI : MonoBehaviour
                     switch (Data.CS)
                     {
                         case Cloth_State.t_shirts:
-                            uiSweing_fabrication.AddImage(s_fabSpite[0]);
+                            uiSweing_fabrication.AddImage(s_fabSpite[0], new Rect(0, 0, 400, 250));
                             break;
                         case Cloth_State.shirts:
                             break;
