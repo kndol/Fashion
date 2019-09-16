@@ -15,26 +15,34 @@ public class Design_Select_UI : MonoBehaviour
     [SerializeField]
     Transform originPos = null;
     [SerializeField]
-    Sprite[] sprites = null;       // 0 : 티셔츠   1 : 셔츠   2 : 바지   3 : 치마
+    Sprite spriteTshirt = null;
+    [SerializeField]
+    Sprite spriteShirt = null;
+    [SerializeField]
+    Sprite spritePants = null;
+    [SerializeField]
+    Sprite spriteSkirt = null;
 
-    UIBuilder uiCloths;
+    UIBuilder uiClothes;
     UIBuilder uiSelect;
 
     void Start()
     {
         if (Data.MS == Making_State.start)
         {
-            uiCloths = Instantiate<UIBuilder>(uiCanvasPrefab);
+			Rect rc = new Rect(0, 0, 200, 350);
+            uiClothes = Instantiate<UIBuilder>(uiCanvasPrefab);
 
-            uiCloths.SetPaneWidth(900);
-            uiCloths.AddLabel("디자인을 선택하세요.");
-            uiCloths.AddDivider();
-            uiCloths.StartHorizontalSection(5);
-            uiCloths.AddImageButton(sprites[0], new Rect(0, 0, 300, 150), delegate () { Tshirt_Button(); });
-            uiCloths.AddImageButton(sprites[1], new Rect(0, 0, 300, 150), delegate () { Shirts_Button(); });
-            uiCloths.AddImageButton(sprites[2], new Rect(0, 0, 300, 150), delegate () { Pants_Button(); });
-            uiCloths.AddImageButton(sprites[3], new Rect(0, 0, 300, 150), delegate () { Skirt_Button(); });
-            uiCloths.EndHorizontalSection();
+			uiClothes.SetPaneWidth(880);
+			uiClothes.AddLabel("디자인을 선택하세요.");
+            uiClothes.AddDivider();
+			uiClothes.StartHorizontalSection(5);
+			uiClothes.AddImageButton(spriteTshirt, rc,Tshirt_Button);
+            uiClothes.AddImageButton(spriteShirt, rc, Shirts_Button);
+            uiClothes.AddImageButton(spritePants, rc, Pants_Button);
+            uiClothes.AddImageButton(spriteSkirt, rc, Skirt_Button);
+
+			uiClothes.EndHorizontalSection();
 
             uiSelect = Instantiate<UIBuilder>(uiCanvasPrefab);
 
@@ -47,28 +55,28 @@ public class Design_Select_UI : MonoBehaviour
 
     public void Tshirt_Button()    //티셔트 버튼
     {
-        uiCloths.Hide();
+        uiClothes.Hide();
         uiSelect.Show();
         Data.CS = Cloth_State.t_shirts;
     }
 
     public void Shirts_Button()      //셔츠 버튼
     {
-        uiCloths.Hide();
+        uiClothes.Hide();
         uiSelect.Show();
         Data.CS = Cloth_State.shirts;
     }
 
     public void Pants_Button()       //바지 버튼
     {
-        uiCloths.Hide();
+        uiClothes.Hide();
         uiSelect.Show();
         Data.CS = Cloth_State.pants;
     }
 
     public void Skirt_Button()       //치마 버튼
     {
-        uiCloths.Hide();
+        uiClothes.Hide();
         uiSelect.Show();
         Data.CS = Cloth_State.skirt;
     }
@@ -77,7 +85,7 @@ public class Design_Select_UI : MonoBehaviour
     {
         player.transform.position = originPos.transform.position;
         player.transform.rotation = originPos.transform.rotation;
-        uiCloths.Hide();
+        uiClothes.Hide();
         uiSelect.Hide();
         Data.MS = Making_State.original_form;
         Data.isCheck = true;
@@ -86,7 +94,7 @@ public class Design_Select_UI : MonoBehaviour
     public void No_Button()
     {
         uiSelect.Hide();
-        uiCloths.Show();
+        uiClothes.Show();
         Data.CS = Cloth_State.start;
     }
 
@@ -94,7 +102,7 @@ public class Design_Select_UI : MonoBehaviour
     {
         if (Data.MS == Making_State.Design_Select && Data.isCheck == true)
         {
-            uiCloths.Show();
+            uiClothes.Show();
             Data.isCheck = false;
         }
     }

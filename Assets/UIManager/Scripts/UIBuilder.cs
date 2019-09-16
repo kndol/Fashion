@@ -265,6 +265,15 @@ namespace Fashion.UIManager
 			}
 		}
 
+		private float GetWidth(Transform transform)
+		{
+			return Mathf.Abs(transform.GetComponent<RectTransform>().offsetMax.x - transform.GetComponent<RectTransform>().offsetMin.x);
+		}
+		private float GetHeight(Transform transform)
+		{
+			return Mathf.Abs(transform.GetComponent<RectTransform>().offsetMax.y - transform.GetComponent<RectTransform>().offsetMin.y);
+		}
+
 		private void AddRect(RectTransform r, int targetCanvas)
 		{
 			if (targetCanvas > targetContentPanels.Length)
@@ -275,6 +284,8 @@ namespace Fashion.UIManager
 			bool isHorizontalSection = HorizontalSections[targetCanvas] != null;
 			Transform parent = isHorizontalSection ? HorizontalSections[targetCanvas] : targetContentPanels[targetCanvas];
 			r.transform.SetParent(parent, false);
+			if (isHorizontalSection && GetHeight(parent) < GetHeight(r))
+				parent.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, GetHeight(r));
 			if (!isHorizontalSection) insertedElements[targetCanvas].Add(r);
 			if (gameObject.activeInHierarchy)
 			{
