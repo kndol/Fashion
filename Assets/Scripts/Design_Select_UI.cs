@@ -14,8 +14,16 @@ public class Design_Select_UI : MonoBehaviour
     Transform player = null;
     [SerializeField]
     Transform originPos = null;
+	[SerializeField]
+	Sprite spriteTshirt;
+	[SerializeField]
+	Sprite spriteShirt;
+	[SerializeField]
+	Sprite spritePants;
+	[SerializeField]
+	Sprite spriteSkirt;
 
-    UIBuilder uiCloths;
+	UIBuilder uiCloths;
     UIBuilder uiSelect;
 
     void Start()
@@ -24,11 +32,10 @@ public class Design_Select_UI : MonoBehaviour
 
         uiCloths.AddLabel("디자인을 선택하세요.");
         uiCloths.AddDivider();
-        uiCloths.AddButton_Cloth(Tshirts_Button);
-        uiCloths.AddButton_Cloth(Shirts_Button);
-        uiCloths.AddButton_Cloth(Pants_Button);
-        uiCloths.AddButton_Cloth(Shirts_Button);
-        uiCloths.AddButton_Cloth(Onepiece_Button);
+        uiCloths.AddImageButton(spriteTshirt, Tshirt_Button);
+        uiCloths.AddImageButton(spriteShirt, Shirt_Button);
+        uiCloths.AddImageButton(spriteTshirt, Pants_Button);
+        uiCloths.AddImageButton(spriteTshirt, Skirt_Button);
 
         uiSelect = Instantiate<UIBuilder>(uiCanvasPrefab);
 
@@ -38,14 +45,14 @@ public class Design_Select_UI : MonoBehaviour
         uiSelect.AddButton("No", No_Button);
     }
 
-    public void Tshirts_Button()    //티셔트 버튼
+    public void Tshirt_Button()    //티셔트 버튼
     {
         uiCloths.Hide();
         uiSelect.Show();
         Data.CS = Cloth_State.t_shirts;
     }
 
-    public void Shirts_Button()      //셔츠 버튼
+    public void Shirt_Button()      //셔츠 버튼
     {
         uiCloths.Hide();
         uiSelect.Show();

@@ -32,7 +32,7 @@ namespace Fashion.UIManager
 		public const int PANE_LEFT = 2;
 
 		[SerializeField]
-		private RectTransform []buttonPrefab;
+		private RectTransform buttonPrefab;
         [SerializeField]
 		private RectTransform labelPrefab;
 		[SerializeField]
@@ -282,7 +282,7 @@ namespace Fashion.UIManager
         /// <returns>생성된 객체의 RectTransform</returns>
         public RectTransform AddButton(string label, OnClick handler, int targetCanvas = 0)
         {
-            RectTransform buttonRT = GameObject.Instantiate(buttonPrefab[0]).GetComponent<RectTransform>();
+            RectTransform buttonRT = GameObject.Instantiate(buttonPrefab).GetComponent<RectTransform>();
             Button button = buttonRT.GetComponentInChildren<Button>();
             button.onClick.AddListener(delegate { handler(); });
             ((Text)(buttonRT.GetComponentsInChildren(typeof(Text), true)[0])).text = label;
@@ -290,30 +290,62 @@ namespace Fashion.UIManager
             return buttonRT;
         }
 
-        /// <summary>
-        /// 옷 버튼 만들기(티셔츠, 셔츠, 바지, 치마, 원피스)
-        /// </summary>
-        /// <param name="handler"></param>
-        /// <param name="targetCanvas"></param>
-        /// <returns></returns>
-        public RectTransform AddButton_Cloth(OnClick handler, int targetCanvas = 0)
+		public RectTransform AddImageButton(Sprite sprite, OnClick handler, int targetCanvas = 0)
+		{
+			return AddImageButton(sprite, sprite.textureRect, handler, targetCanvas);
+		}
+
+		public RectTransform AddImageButton(Sprite sprite, Vector2 size, OnClick handler, int targetCanvas = 0)
+		{
+			return AddImageButton(sprite, new Rect(0, 0, size.x, size.y), handler, targetCanvas);
+		}
+
+		public RectTransform AddImageButton(Sprite sprite, Rect rect, OnClick handler, int targetCanvas = 0)
         {
-            RectTransform buttonRT = GameObject.Instantiate(buttonPrefab[Data.Count]).GetComponent<RectTransform>();
+            RectTransform buttonRT = GameObject.Instantiate(buttonPrefab).GetComponent<RectTransform>();
             Button button = buttonRT.GetComponentInChildren<Button>();
-            button.onClick.AddListener(delegate { handler(); });
+			Image img = buttonRT.GetComponentInChildren<Image>();
+			buttonRT.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, rect.width == 0 ? sprite.textureRect.width : rect.width);
+			buttonRT.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, rect.height == 0 ? sprite.textureRect.height : rect.height);
+			buttonRT.GetComponentInChildren<Text>().gameObject.SetActive(false);
+
+			img.sprite = sprite;
+			button.onClick.AddListener(delegate { handler(); });
+			
             AddRect(buttonRT, targetCanvas);
             Data.Count++;
             return buttonRT;
         }
 
-        /// <summary>
-        /// 텍스트 레이블 만들기
-        /// </summary>
-        /// <param name="label">표시할 텍스트</param>
-        /// <param name="txtAlign">텍스트 정렬 방식, 기본값은 왼쪽, 위 정렬</param>
-        /// <param name="targetCanvas">표시할 패널의 ID, 기본값은 0</param>
-        /// <returns>생성된 객체의 RectTransform</returns>
-        public RectTransform AddLabel(string label, TextAnchor txtAlign = TextAnchor.MiddleCenter, int targetCanvas = 0)
+		public RectTransform AddImage(Sprite sprite, int targetCanvas = 0)
+		{
+			return AddImage(sprite, sprite.textureRect, targetCanvas);
+		}
+
+		public RectTransform AddImage(Sprite sprite, Vector2 size, int targetCanvas = 0)
+		{
+			return AddImage(sprite, new Rect(0, 0, size.x, size.y), targetCanvas);
+		}
+
+		public RectTransform AddImage(Sprite sprite, Rect rect, int targetCanvas = 0)
+		{
+			RectTransform rt = GameObject.Instantiate(imagePrefab).GetComponent<RectTransform>();
+			Image t = rt.GetComponent<Image>();
+			t.sprite = sprite;
+			rt.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, rect.width == 0 ? sprite.textureRect.width : rect.width);
+			rt.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, rect.height == 0 ? sprite.textureRect.height : rect.height);
+			AddRect(rt, targetCanvas);
+			return rt;
+		}
+
+		/// <summary>
+		/// 텍스트 레이블 만들기
+		/// </summary>
+		/// <param name="label">표시할 텍스트</param>
+		/// <param name="txtAlign">텍스트 정렬 방식, 기본값은 왼쪽, 위 정렬</param>
+		/// <param name="targetCanvas">표시할 패널의 ID, 기본값은 0</param>
+		/// <returns>생성된 객체의 RectTransform</returns>
+		public RectTransform AddLabel(string label, TextAnchor txtAlign = TextAnchor.MiddleCenter, int targetCanvas = 0)
 		{
 			RectTransform rt = GameObject.Instantiate(labelPrefab).GetComponent<RectTransform>();
 			Text t = rt.GetComponent<Text>();
@@ -326,21 +358,6 @@ namespace Fashion.UIManager
 
 			return rt;
 		}
-
-        /// <summary>
-        /// 이미지 만들기
-        /// </summary>
-        /// <param name="image">표시할 이미지</param>
-        /// <param name="targetCanvas"></param>
-        /// <returns></returns>
-        public RectTransform AddImage(Sprite sprite, int targetCanvas = 0)
-        {
-            RectTransform rt = GameObject.Instantiate(imagePrefab).GetComponent<RectTransform>();
-            Image t = rt.GetComponent<Image>();
-            t.sprite = sprite;
-            AddRect(rt, targetCanvas);
-            return rt;
-        }
 
         /// <summary>
         /// 텍스트 스크롤 뷰 만들기
