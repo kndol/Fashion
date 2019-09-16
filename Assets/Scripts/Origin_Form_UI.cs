@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.UI;
+using Fashion;
 using Fashion.UIManager;
 
 public class Origin_Form_UI : MonoBehaviour
@@ -13,6 +14,8 @@ public class Origin_Form_UI : MonoBehaviour
     Transform player = null;
     [SerializeField]
     Transform dartPos = null;
+    [SerializeField]
+    Sprite[] originSpite = null;  //원형 이미지
 
     UIBuilder uiOrigin;
 
@@ -22,7 +25,6 @@ public class Origin_Form_UI : MonoBehaviour
 
         uiOrigin.AddLabel("패턴 제도 원형");
         uiOrigin.AddDivider();
-        uiOrigin.AddButton("확인", OriginButton);
     }
 
     public void OriginButton()
@@ -30,14 +32,29 @@ public class Origin_Form_UI : MonoBehaviour
         player.transform.position = dartPos.transform.position;
         player.transform.rotation = dartPos.transform.rotation;
         uiOrigin.Hide();
-        StartUI.instance.MS = Making_State.dart_pos;
+        Data.MS = Making_State.dart_pos;
         Data.isCheck = true;
     }
-
+    
     void Update()
     {
-        if (StartUI.instance.MS == Making_State.original_form && Data.isCheck == true)
+        if (Data.MS == Making_State.original_form && Data.isCheck == true)
         {
+            switch (Data.CS)
+            {
+                case Cloth_State.t_shirts:
+                    uiOrigin.AddImage(originSpite[0]);
+                    break;
+                case Cloth_State.shirts:
+                    break;
+                case Cloth_State.pants:
+                    break;
+                case Cloth_State.skirt:
+                    break;
+                case Cloth_State.onepiece:
+                    break;
+            }
+            uiOrigin.AddButton("확인", OriginButton);
             uiOrigin.Show();
             Data.isCheck = false;
         }

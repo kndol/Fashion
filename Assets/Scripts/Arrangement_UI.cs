@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.UI;
+using Fashion;
 using Fashion.UIManager;
 
 public class Arrangement_UI : MonoBehaviour
@@ -13,6 +14,8 @@ public class Arrangement_UI : MonoBehaviour
     Transform player = null;
     [SerializeField]
     Transform bundlePos = null;
+    [SerializeField]
+    Sprite[] arrangeSpite = null;  //배치 이미지
 
     UIBuilder uiArrangement;
 
@@ -22,7 +25,6 @@ public class Arrangement_UI : MonoBehaviour
 
         uiArrangement.AddLabel("배치");
         uiArrangement.AddDivider();
-        uiArrangement.AddButton("확인", ArrangeButton);
     }
 
     public void ArrangeButton()
@@ -30,14 +32,29 @@ public class Arrangement_UI : MonoBehaviour
         player.transform.position = bundlePos.transform.position;
         player.transform.rotation = bundlePos.transform.rotation;
         uiArrangement.Hide();
-        StartUI.instance.MS = Making_State.bundle;
+        Data.MS = Making_State.bundle;
         Data.isCheck = true;
     }
 
     void Update()
     {
-        if (StartUI.instance.MS == Making_State.arrangement && Data.isCheck == true)
+        if (Data.MS == Making_State.arrangement && Data.isCheck == true)
         {
+            switch (Data.CS)
+            {
+                case Cloth_State.t_shirts:
+                    uiArrangement.AddImage(arrangeSpite[0]);
+                    break;
+                case Cloth_State.shirts:
+                    break;
+                case Cloth_State.pants:
+                    break;
+                case Cloth_State.skirt:
+                    break;
+                case Cloth_State.onepiece:
+                    break;
+            }
+            uiArrangement.AddButton("확인", ArrangeButton);
             uiArrangement.Show();
             Data.isCheck = false;
         }

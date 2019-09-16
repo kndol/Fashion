@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.UI;
+using Fashion;
 using Fashion.UIManager;
 
 public class Dart_UI : MonoBehaviour
@@ -13,6 +14,8 @@ public class Dart_UI : MonoBehaviour
     Transform player = null;
     [SerializeField]
     Transform arrangePos = null;
+    [SerializeField]
+    Sprite[] dartSpite = null;  //dart 이미지
 
     UIBuilder uiDart;
 
@@ -22,7 +25,6 @@ public class Dart_UI : MonoBehaviour
 
         uiDart.AddLabel("위치지정");
         uiDart.AddDivider();
-        uiDart.AddButton("확인", DartButton);
     }
 
     public void DartButton()
@@ -30,14 +32,29 @@ public class Dart_UI : MonoBehaviour
         player.transform.position = arrangePos.transform.position;
         player.transform.rotation = arrangePos.transform.rotation;
         uiDart.Hide();
-        StartUI.instance.MS = Making_State.arrangement;
+        Data.MS = Making_State.arrangement;
         Data.isCheck = true;
     }
 
     void Update()
     {
-        if (StartUI.instance.MS == Making_State.dart_pos && Data.isCheck == true)
+        if (Data.MS == Making_State.dart_pos && Data.isCheck == true)
         {
+            switch (Data.CS)
+            {
+                case Cloth_State.t_shirts:
+                    uiDart.AddImage(dartSpite[0]);
+                    break;
+                case Cloth_State.shirts:
+                    break;
+                case Cloth_State.pants:
+                    break;
+                case Cloth_State.skirt:
+                    break;
+                case Cloth_State.onepiece:
+                    break;
+            }
+            uiDart.AddButton("확인", DartButton);
             uiDart.Show();
             Data.isCheck = false;
         }

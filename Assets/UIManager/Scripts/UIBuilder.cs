@@ -32,8 +32,8 @@ namespace Fashion.UIManager
 		public const int PANE_LEFT = 2;
 
 		[SerializeField]
-		private RectTransform buttonPrefab;
-		[SerializeField]
+		private RectTransform []buttonPrefab;
+        [SerializeField]
 		private RectTransform labelPrefab;
 		[SerializeField]
 		private RectTransform scrollViewPrefab;
@@ -45,8 +45,10 @@ namespace Fashion.UIManager
 		private RectTransform togglePrefab;
 		[SerializeField]
 		private RectTransform radioPrefab;
+        [SerializeField]
+        private RectTransform imagePrefab;
 
-		[SerializeField]
+        [SerializeField]
 		private GameObject uiHelpersToInstantiate;
 
 		[SerializeField]
@@ -62,7 +64,7 @@ namespace Fashion.UIManager
 		[SerializeField]
 		private List<GameObject> toDisable;
 
-		public delegate void OnClick();
+        public delegate void OnClick();
 		public delegate void OnToggleValueChange(Toggle t);
 		public delegate void OnSlider(float f);
 		public delegate bool ActiveUpdate();
@@ -255,7 +257,7 @@ namespace Fashion.UIManager
 			}
 		}
 
-		private void AddRect(RectTransform r, int targetCanvas)
+        private void AddRect(RectTransform r, int targetCanvas)
 		{
 			if (targetCanvas > targetContentPanels.Length)
 			{
@@ -271,31 +273,47 @@ namespace Fashion.UIManager
 			}
 		}
 
-		/// <summary>
-		/// 버튼 만들기
-		/// </summary>
-		/// <param name="label">표시할 텍스트</param>
-		/// <param name="handler">버튼을 클릭했을 때 호출할 콜백 함수</param>
-		/// <param name="targetCanvas">표시할 패널의 ID, 기본값은 0</param>
-		/// <returns>생성된 객체의 RectTransform</returns>
-		public RectTransform AddButton(string label, OnClick handler, int targetCanvas = 0)
-		{
-			RectTransform buttonRT = GameObject.Instantiate(buttonPrefab).GetComponent<RectTransform>();
-			Button button = buttonRT.GetComponentInChildren<Button>();
-			button.onClick.AddListener(delegate { handler(); });
-			((Text)(buttonRT.GetComponentsInChildren(typeof(Text), true)[0])).text = label;
-			AddRect(buttonRT, targetCanvas);
-			return buttonRT;
-		}
+        /// <summary>
+        /// 버튼 만들기
+        /// </summary>
+        /// <param name="label">표시할 텍스트</param>
+        /// <param name="handler">버튼을 클릭했을 때 호출할 콜백 함수</param>
+        /// <param name="targetCanvas">표시할 패널의 ID, 기본값은 0</param>
+        /// <returns>생성된 객체의 RectTransform</returns>
+        public RectTransform AddButton(string label, OnClick handler, int targetCanvas = 0)
+        {
+            RectTransform buttonRT = GameObject.Instantiate(buttonPrefab[0]).GetComponent<RectTransform>();
+            Button button = buttonRT.GetComponentInChildren<Button>();
+            button.onClick.AddListener(delegate { handler(); });
+            ((Text)(buttonRT.GetComponentsInChildren(typeof(Text), true)[0])).text = label;
+            AddRect(buttonRT, targetCanvas);
+            return buttonRT;
+        }
 
-		/// <summary>
-		/// 텍스트 레이블 만들기
-		/// </summary>
-		/// <param name="label">표시할 텍스트</param>
-		/// <param name="txtAlign">텍스트 정렬 방식, 기본값은 왼쪽, 위 정렬</param>
-		/// <param name="targetCanvas">표시할 패널의 ID, 기본값은 0</param>
-		/// <returns>생성된 객체의 RectTransform</returns>
-		public RectTransform AddLabel(string label, TextAnchor txtAlign = TextAnchor.MiddleCenter, int targetCanvas = 0)
+        /// <summary>
+        /// 옷 버튼 만들기(티셔츠, 셔츠, 바지, 치마, 원피스)
+        /// </summary>
+        /// <param name="handler"></param>
+        /// <param name="targetCanvas"></param>
+        /// <returns></returns>
+        public RectTransform AddButton_Cloth(OnClick handler, int targetCanvas = 0)
+        {
+            RectTransform buttonRT = GameObject.Instantiate(buttonPrefab[Data.Count]).GetComponent<RectTransform>();
+            Button button = buttonRT.GetComponentInChildren<Button>();
+            button.onClick.AddListener(delegate { handler(); });
+            AddRect(buttonRT, targetCanvas);
+            Data.Count++;
+            return buttonRT;
+        }
+
+        /// <summary>
+        /// 텍스트 레이블 만들기
+        /// </summary>
+        /// <param name="label">표시할 텍스트</param>
+        /// <param name="txtAlign">텍스트 정렬 방식, 기본값은 왼쪽, 위 정렬</param>
+        /// <param name="targetCanvas">표시할 패널의 ID, 기본값은 0</param>
+        /// <returns>생성된 객체의 RectTransform</returns>
+        public RectTransform AddLabel(string label, TextAnchor txtAlign = TextAnchor.MiddleCenter, int targetCanvas = 0)
 		{
 			RectTransform rt = GameObject.Instantiate(labelPrefab).GetComponent<RectTransform>();
 			Text t = rt.GetComponent<Text>();
@@ -309,15 +327,30 @@ namespace Fashion.UIManager
 			return rt;
 		}
 
-		/// <summary>
-		/// 텍스트 스크롤 뷰 만들기
-		/// </summary>
-		/// <param name="txtContent">표시할 내용</param>
-		/// <param name="txtAlign">텍스트 정렬 방식, 기본값은 왼쪽, 위 정렬</param>
-		/// <param name="height">스크롤 뷰의 높이, 기본값은 300</param>
-		/// <param name="targetCanvas">표시할 패널의 ID, 기본값은 0</param>
-		/// <returns>생성된 객체의 RectTransform</returns>
-		public RectTransform AddScrollView(string txtContent, TextAnchor txtAlign = TextAnchor.UpperLeft, int height = 300, int targetCanvas = 0)
+        /// <summary>
+        /// 이미지 만들기
+        /// </summary>
+        /// <param name="image">표시할 이미지</param>
+        /// <param name="targetCanvas"></param>
+        /// <returns></returns>
+        public RectTransform AddImage(Sprite sprite, int targetCanvas = 0)
+        {
+            RectTransform rt = GameObject.Instantiate(imagePrefab).GetComponent<RectTransform>();
+            Image t = rt.GetComponent<Image>();
+            t.sprite = sprite;
+            AddRect(rt, targetCanvas);
+            return rt;
+        }
+
+        /// <summary>
+        /// 텍스트 스크롤 뷰 만들기
+        /// </summary>
+        /// <param name="txtContent">표시할 내용</param>
+        /// <param name="txtAlign">텍스트 정렬 방식, 기본값은 왼쪽, 위 정렬</param>
+        /// <param name="height">스크롤 뷰의 높이, 기본값은 300</param>
+        /// <param name="targetCanvas">표시할 패널의 ID, 기본값은 0</param>
+        /// <returns>생성된 객체의 RectTransform</returns>
+        public RectTransform AddScrollView(string txtContent, TextAnchor txtAlign = TextAnchor.UpperLeft, int height = 300, int targetCanvas = 0)
 		{
 			RectTransform rt = GameObject.Instantiate(scrollViewPrefab).GetComponent<RectTransform>();
 			Text t = rt.GetComponentInChildren<Text>();

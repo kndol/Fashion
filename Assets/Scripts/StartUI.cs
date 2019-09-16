@@ -19,15 +19,15 @@ public class StartUI : MonoBehaviour
     UIBuilder uiMenu;
 	UIBuilder uiTerm;
 
-	void Start ()
+    void Start ()
     {
-        if (MS == Making_State.start)
+        if (Data.MS == Making_State.start)
         {
             uiMenu = Instantiate<UIBuilder>(uiCanvasPrefab);
 
-            uiMenu.AddLabel("<B>패션 디자이너</B>");
+            uiMenu.AddLabel("메뉴");
             uiMenu.AddDivider();
-            uiMenu.AddButton("용어 설명", ButtonTerms);
+            uiMenu.AddButton("용어설명", ButtonTerms);
             uiMenu.AddButton("튜토리얼", ButtonTutorial);
             uiMenu.AddButton("테스트", ButtonTest);
             uiMenu.AddButton("끝내기", ButtonExit);
@@ -88,15 +88,15 @@ public class StartUI : MonoBehaviour
 #endif
 	}
 
-	void Update()
+    void Update()
     {
-/*
-		if (OVRInput.GetDown(OVRInput.Button.Two) || OVRInput.GetDown(OVRInput.Button.Start))
-		{
-			if (inMenu) uIBuilder.Hide();
-			else uIBuilder.Show();
-			inMenu = !inMenu;
-		}
-*/
-	}
+        /*
+                if (OVRInput.GetDown(OVRInput.Button.Two) || OVRInput.GetDown(OVRInput.Button.Start))
+                {
+                    if (inMenu) uIBuilder.Hide();
+                    else uIBuilder.Show();
+                    inMenu = !inMenu;
+                }
+        */
+    }
 }

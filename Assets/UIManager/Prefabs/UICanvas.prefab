@@ -337,9 +337,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 283346d3f4b9dbe43958aa0987efceb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buttonPrefab: {fileID: 224949956480874824, guid: 056f4fc4df326b64a9455518f625072b,
-    type: 3}
-  labelPrefab: {fileID: 224113878955223432, guid: 1da724640a912844d88204bd7427069b,
+  buttonPrefab:
+  - {fileID: 224949956480874824, guid: 056f4fc4df326b64a9455518f625072b, type: 3}
+  - {fileID: 1718029458688032687, guid: 44b8b689de2e128408d95510a76d3d1f, type: 3}
+  - {fileID: 4656439909585287454, guid: 50e02b46181aae84f8702de334385d01, type: 3}
+  - {fileID: 2645121440672283139, guid: 096e11805c7a187479ef0f32a930425c, type: 3}
+  - {fileID: 3532403395765666483, guid: 2ab9024e02a1def40b05258ed3c8029c, type: 3}
+  - {fileID: 780122915936637616, guid: 977eb2f00225941469a0a1370887f49f, type: 3}
+  labelPrefab: {fileID: 224113878955223432, guid: 6b29b8b1a79e4b04faf91a90cbc6ccb4,
     type: 3}
   scrollViewPrefab: {fileID: 3318681880995655962, guid: 00e5b7f9f211a2446afda0054a90dd8a,
     type: 3}
@@ -350,6 +355,8 @@ MonoBehaviour:
   togglePrefab: {fileID: 224432059304816160, guid: 2ab307cf64189af45bf70c755b431bd1,
     type: 3}
   radioPrefab: {fileID: 224432059304816160, guid: 90d432b4f761729419daa76b3d5365f7,
+    type: 3}
+  imagePrefab: {fileID: 1709789092193966514, guid: e3a03d42ab75ddc49aa473331ee9351c,
     type: 3}
   uiHelpersToInstantiate: {fileID: 1732808951507650, guid: d2bc36393bc3ebc40886ce8f58792a7e,
     type: 3}
