@@ -14,6 +14,8 @@ public class UISample : MonoBehaviour
 	private Text labelTextLeft;
 	[SerializeField]
 	UIBuilder uiCanvasPrefab = null;
+	[SerializeField]
+	Sprite[] sprites;
 
 	UIBuilder uIBuilder;
 
@@ -34,22 +36,29 @@ public class UISample : MonoBehaviour
         uIBuilder.AddToggle("토글", TogglePressed);
 		uIBuilder.AddRadio("라디오1", "group", delegate(Toggle t) { RadioPressed("라디오1", "group", t); }) ;
 		uIBuilder.AddRadio("라디오2", "group", delegate(Toggle t) { RadioPressed("라디오2", "group", t); }) ;
+
+		uIBuilder.StartHorizontalSection(5);
+		for (int i = 0; i < sprites.Length; i++)
+			uIBuilder.AddImageButton(sprites[i], new Rect(0, 0, 100, 200), delegate () { OnClickHor(i); });
+		uIBuilder.EndHorizontalSection();
+
+		//====================================================
 		uIBuilder.AddLabel("오른쪽 탭", TextAnchor.MiddleCenter, UIBuilder.PANE_RIGHT);
 		uIBuilder.AddDivider(UIBuilder.PANE_RIGHT);
 		uIBuilder.AddRadio("사이드 라디오 1", "group2", delegate(Toggle t) { RadioPressed("사이드 라디오 1", "group2", t); }, UIBuilder.PANE_RIGHT);
 		uIBuilder.AddRadio("사이드 라디오 2", "group2", delegate(Toggle t) { RadioPressed("사이드 라디오 2", "group2", t); }, UIBuilder.PANE_RIGHT);
+		//====================================================
 		uIBuilder.AddLabel("왼쪽 탭", TextAnchor.MiddleCenter, UIBuilder.PANE_LEFT);
 		uIBuilder.AddDivider(UIBuilder.PANE_LEFT);
 		uIBuilder.AddButton("왼쪽 패널 버튼", LeftButtonPressed, UIBuilder.PANE_LEFT);
 		var labelPrefabLeft = uIBuilder.AddLabel("왼쪽 레이블", TextAnchor.MiddleCenter, UIBuilder.PANE_LEFT);
 		labelTextLeft = labelPrefabLeft.GetComponentInChildren<Text>();
 
-
 		uIBuilder.Show();
         inMenu = true;
 	}
 
-    public void TogglePressed(Toggle t)
+	public void TogglePressed(Toggle t)
     {
         Debug.Log("Toggle pressed. Is on? "+t.isOn);
     }
@@ -98,5 +107,10 @@ public class UISample : MonoBehaviour
 	{
 		labelTextLeft.text = "왼쪽 버튼 누름";
 		StartCoroutine(ChangeLabel(false));
+	}
+
+	public void OnClickHor(int num)
+	{
+
 	}
 }

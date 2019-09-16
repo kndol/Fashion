@@ -12,6 +12,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Assertions;
 #if UNITY_EDITOR
 using UnityEngine.SceneManagement;
 #endif
@@ -33,7 +34,7 @@ namespace Fashion.UIManager
 
 		[SerializeField]
 		private RectTransform buttonPrefab;
-        [SerializeField]
+		[SerializeField]
 		private RectTransform labelPrefab;
 		[SerializeField]
 		private RectTransform scrollViewPrefab;
@@ -45,10 +46,14 @@ namespace Fashion.UIManager
 		private RectTransform togglePrefab;
 		[SerializeField]
 		private RectTransform radioPrefab;
-        [SerializeField]
-        private RectTransform imagePrefab;
+		[SerializeField]
+		private RectTransform imagePrefab;
+		[SerializeField]
+		private RectTransform HorizontalSectionPrefab;
 
-        [SerializeField]
+		private RectTransform []HorizontalSections;
+
+		[SerializeField]
 		private GameObject uiHelpersToInstantiate;
 
 		[SerializeField]
@@ -64,7 +69,7 @@ namespace Fashion.UIManager
 		[SerializeField]
 		private List<GameObject> toDisable;
 
-        public delegate void OnClick();
+		public delegate void OnClick();
 		public delegate void OnToggleValueChange(Toggle t);
 		public delegate void OnSlider(float f);
 		public delegate bool ActiveUpdate();
@@ -126,7 +131,10 @@ namespace Fashion.UIManager
 				toEnable.Add(lp.gameObject);
 			}
 			GetComponent<OVRRaycaster>().pointer = lp.gameObject;
-//			lp.gameObject.SetActive(false);
+			HorizontalSections = new RectTransform[targetContentPanels.Length];
+			for(int i=0; i< HorizontalSections.Length; i++)
+				HorizontalSections[i] = null;
+
 #if UNITY_EDITOR
 			string scene = SceneManager.GetActiveScene().name;
 			OVRPlugin.SendEvent("ui_builder",
@@ -257,38 +265,39 @@ namespace Fashion.UIManager
 			}
 		}
 
-        private void AddRect(RectTransform r, int targetCanvas)
+		private void AddRect(RectTransform r, int targetCanvas)
 		{
 			if (targetCanvas > targetContentPanels.Length)
 			{
 				Debug.LogError("Attempted to add panel to canvas " + targetCanvas + ", but only " + targetContentPanels.Length + " panels were provided. Fix in the inspector or pass a lower value for target canvas.");
 				return;
 			}
-
-			r.transform.SetParent(targetContentPanels[targetCanvas], false);
-			insertedElements[targetCanvas].Add(r);
+			bool isHorizontalSection = HorizontalSections[targetCanvas] != null;
+			Transform parent = isHorizontalSection ? HorizontalSections[targetCanvas] : targetContentPanels[targetCanvas];
+			r.transform.SetParent(parent, false);
+			if (!isHorizontalSection) insertedElements[targetCanvas].Add(r);
 			if (gameObject.activeInHierarchy)
 			{
 				Relayout();
 			}
 		}
 
-        /// <summary>
-        /// 버튼 만들기
-        /// </summary>
-        /// <param name="label">표시할 텍스트</param>
-        /// <param name="handler">버튼을 클릭했을 때 호출할 콜백 함수</param>
-        /// <param name="targetCanvas">표시할 패널의 ID, 기본값은 0</param>
-        /// <returns>생성된 객체의 RectTransform</returns>
-        public RectTransform AddButton(string label, OnClick handler, int targetCanvas = 0)
-        {
-            RectTransform buttonRT = GameObject.Instantiate(buttonPrefab).GetComponent<RectTransform>();
-            Button button = buttonRT.GetComponentInChildren<Button>();
-            button.onClick.AddListener(delegate { handler(); });
-            ((Text)(buttonRT.GetComponentsInChildren(typeof(Text), true)[0])).text = label;
-            AddRect(buttonRT, targetCanvas);
-            return buttonRT;
-        }
+		/// <summary>
+		/// 버튼 만들기
+		/// </summary>
+		/// <param name="label">표시할 텍스트</param>
+		/// <param name="handler">버튼을 클릭했을 때 호출할 콜백 함수</param>
+		/// <param name="targetCanvas">표시할 패널의 ID, 기본값은 0</param>
+		/// <returns>생성된 객체의 RectTransform</returns>
+		public RectTransform AddButton(string label, OnClick handler, int targetCanvas = 0)
+		{
+			RectTransform buttonRT = GameObject.Instantiate(buttonPrefab).GetComponent<RectTransform>();
+			Button button = buttonRT.GetComponentInChildren<Button>();
+			button.onClick.AddListener(delegate { handler(); });
+			((Text)(buttonRT.GetComponentsInChildren(typeof(Text), true)[0])).text = label;
+			AddRect(buttonRT, targetCanvas);
+			return buttonRT;
+		}
 
 		/// <summary>
 		/// 이미지 버튼 만들기 - 크기는 이미지의 원래 크기
@@ -324,9 +333,9 @@ namespace Fashion.UIManager
 		/// <param name="targetCanvas">표시할 패널의 ID, 기본값은 0</param>
 		/// <returns>생성된 객체의 RectTransform</returns>
 		public RectTransform AddImageButton(Sprite sprite, Rect rect, OnClick handler, int targetCanvas = 0)
-        {
-            RectTransform buttonRT = GameObject.Instantiate(buttonPrefab).GetComponent<RectTransform>();
-            Button button = buttonRT.GetComponentInChildren<Button>();
+		{
+			RectTransform buttonRT = GameObject.Instantiate(buttonPrefab).GetComponent<RectTransform>();
+			Button button = buttonRT.GetComponentInChildren<Button>();
 			Image img = buttonRT.GetComponentInChildren<Image>();
 			buttonRT.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, rect.width);
 			buttonRT.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, rect.height);
@@ -334,11 +343,11 @@ namespace Fashion.UIManager
 
 			img.sprite = sprite;
 			button.onClick.AddListener(delegate { handler(); });
-			
-            AddRect(buttonRT, targetCanvas);
-            Data.Count++;
-            return buttonRT;
-        }
+
+			AddRect(buttonRT, targetCanvas);
+			Data.Count++;
+			return buttonRT;
+		}
 
 		/// <summary>
 		/// 이미지 만들기 - 크기는 이미지의 원래 크기
@@ -402,15 +411,15 @@ namespace Fashion.UIManager
 			return rt;
 		}
 
-        /// <summary>
-        /// 텍스트 스크롤 뷰 만들기
-        /// </summary>
-        /// <param name="txtContent">표시할 내용</param>
-        /// <param name="txtAlign">텍스트 정렬 방식, 기본값은 왼쪽, 위 정렬</param>
-        /// <param name="height">스크롤 뷰의 높이, 기본값은 300</param>
-        /// <param name="targetCanvas">표시할 패널의 ID, 기본값은 0</param>
-        /// <returns>생성된 객체의 RectTransform</returns>
-        public RectTransform AddScrollView(string txtContent, TextAnchor txtAlign = TextAnchor.UpperLeft, int height = 300, int targetCanvas = 0)
+		/// <summary>
+		/// 텍스트 스크롤 뷰 만들기
+		/// </summary>
+		/// <param name="txtContent">표시할 내용</param>
+		/// <param name="txtAlign">텍스트 정렬 방식, 기본값은 왼쪽, 위 정렬</param>
+		/// <param name="height">스크롤 뷰의 높이, 기본값은 300</param>
+		/// <param name="targetCanvas">표시할 패널의 ID, 기본값은 0</param>
+		/// <returns>생성된 객체의 RectTransform</returns>
+		public RectTransform AddScrollView(string txtContent, TextAnchor txtAlign = TextAnchor.UpperLeft, int height = 300, int targetCanvas = 0)
 		{
 			RectTransform rt = GameObject.Instantiate(scrollViewPrefab).GetComponent<RectTransform>();
 			Text t = rt.GetComponentInChildren<Text>();
@@ -547,6 +556,21 @@ namespace Fashion.UIManager
 					lp.enabled = false;
 				}
 			}
+		}
+
+		public void StartHorizontalSection(float Spacing = 0, int targetCanvas = 0)
+		{
+			RectTransform rt = (RectTransform)GameObject.Instantiate(HorizontalSectionPrefab);
+			HorizontalLayoutGroup hl = rt.GetComponent<HorizontalLayoutGroup>();
+			hl.spacing = Spacing;
+			AddRect(rt, targetCanvas);
+			HorizontalSections[targetCanvas] = rt;
+		}
+
+		public void EndHorizontalSection(int targetCanvas = 0)
+		{
+			Assert.IsNotNull(HorizontalSections[targetCanvas]);
+			HorizontalSections[targetCanvas] = null;
 		}
 	}
 }
