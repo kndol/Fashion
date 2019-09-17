@@ -70,6 +70,7 @@ public class StartUI : MonoBehaviour
         player.transform.rotation = selectPos.transform.rotation;
         uiMenu.Hide();
 		Data.MS = Making_State.Design_Select;
+        Data.PM = Play_Mode.tutorial;
         Data.isCheck = true;
     }
 
@@ -79,6 +80,7 @@ public class StartUI : MonoBehaviour
         player.transform.rotation = selectPos.transform.rotation;
         uiMenu.Hide();
         Data.MS = Making_State.Design_Select;
+        Data.PM = Play_Mode.test;
         Data.isCheck = true;
     }
 
@@ -92,11 +94,12 @@ public class StartUI : MonoBehaviour
 	}
 
     public void Init_Data()    //초기화 함수
-    {   
-         Data.isCheck = false;       //버튼 확인용 자료형
-         Data.PM = Play_Mode.start;
-         Data.CS = Cloth_State.start;
-         Data.MS = Making_State.start;
+    {
+        Data.Score = 100;
+        Data.isCheck = false;       //버튼 확인용 자료형
+        Data.PM = Play_Mode.start;
+        Data.CS = Cloth_State.start;
+        Data.MS = Making_State.start;
     }
 
     void Update()

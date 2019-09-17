@@ -52,7 +52,7 @@ public class Origin_Form_UI : MonoBehaviour
             switch (Data.CS)
             {
                 case Cloth_State.t_shirts:
-                    uiOrigin.AddImage(originSpite[0], new Rect(0, 0, 400, 250));
+                    uiOrigin.AddImage(originSpite[0], new Rect(0, 0, 450, 350));
                     break;
                 case Cloth_State.shirts:
                     break;

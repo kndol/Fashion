@@ -67,7 +67,7 @@ public class Bundle_Cut_UI : MonoBehaviour
                     switch (Data.CS)
                     {
                         case Cloth_State.t_shirts:
-                            uiBundle.AddImage(bundleSpite[0], new Rect(0, 0, 400, 250));
+                            uiBundle.AddImage(bundleSpite[0], new Rect(0, 0, 450, 350));
                             break;
                         case Cloth_State.shirts:
                             break;
@@ -85,7 +85,7 @@ public class Bundle_Cut_UI : MonoBehaviour
                     switch (Data.CS)
                     {
                         case Cloth_State.t_shirts:
-                            uiCutting.AddImage(cutSpite[0], new Rect(0, 0, 400, 250));
+                            uiCutting.AddImage(cutSpite[0], new Rect(0, 0, 450, 350));
                             break;
                         case Cloth_State.shirts:
                             break;

@@ -27,6 +27,7 @@ public class Wearing_UI : MonoBehaviour
             uiWearing.AddLabel("착장");
             uiWearing.AddDivider();
             uiWearing.AddButton("확인", WearingButton);
+            uiWearing.AddButton("재시작", Restart_Button);
         }
     }
 

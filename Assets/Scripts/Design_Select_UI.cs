@@ -37,48 +37,42 @@ public class Design_Select_UI : MonoBehaviour
 			uiClothes.AddLabel("디자인을 선택하세요.");
             uiClothes.AddDivider();
 			uiClothes.StartHorizontalSection(5);
-			uiClothes.AddImageButton(spriteTshirt, rc,Tshirt_Button);
+			uiClothes.AddImageButton(spriteTshirt, rc, Tshirt_Button);
             uiClothes.AddImageButton(spriteShirt, rc, Shirts_Button);
             uiClothes.AddImageButton(spritePants, rc, Pants_Button);
             uiClothes.AddImageButton(spriteSkirt, rc, Skirt_Button);
-
-			uiClothes.EndHorizontalSection();
+            uiClothes.EndHorizontalSection();
 
             uiSelect = Instantiate<UIBuilder>(uiCanvasPrefab);
-
-            uiSelect.AddLabel("선택한 옷을 만드시겠습니까?");
-            uiSelect.AddDivider();
-            uiSelect.AddButton("Yes", Yes_Button);
-            uiSelect.AddButton("No", No_Button);
         }
     }
 
     public void Tshirt_Button()    //티셔트 버튼
     {
-        uiClothes.Hide();
-        uiSelect.Show();
         Data.CS = Cloth_State.t_shirts;
+        uiClothes.Hide();
+        Show_confirm();
     }
 
     public void Shirts_Button()      //셔츠 버튼
     {
-        uiClothes.Hide();
-        uiSelect.Show();
         Data.CS = Cloth_State.shirts;
+        uiClothes.Hide();
+        Show_confirm();
     }
 
     public void Pants_Button()       //바지 버튼
     {
-        uiClothes.Hide();
-        uiSelect.Show();
         Data.CS = Cloth_State.pants;
+        uiClothes.Hide();
+        Show_confirm();
     }
 
     public void Skirt_Button()       //치마 버튼
     {
-        uiClothes.Hide();
-        uiSelect.Show();
         Data.CS = Cloth_State.skirt;
+        uiClothes.Hide();
+        Show_confirm();
     }
 
     public void Yes_Button()
@@ -87,6 +81,7 @@ public class Design_Select_UI : MonoBehaviour
         player.transform.rotation = originPos.transform.rotation;
         uiClothes.Hide();
         uiSelect.Hide();
+        Destroy(uiSelect.gameObject);
         Data.MS = Making_State.original_form;
         Data.isCheck = true;
     }
@@ -94,8 +89,37 @@ public class Design_Select_UI : MonoBehaviour
     public void No_Button()
     {
         uiSelect.Hide();
+        Destroy(uiSelect.gameObject);
         uiClothes.Show();
         Data.CS = Cloth_State.start;
+        uiSelect = Instantiate<UIBuilder>(uiCanvasPrefab);
+    }
+
+    void Show_confirm()
+    {
+        uiSelect.AddLabel("선택한 옷을 만드시겠습니까?");
+        uiSelect.AddDivider();
+        Sprite selectSprite;
+        switch (Data.CS)
+        {
+            case Cloth_State.t_shirts:
+                selectSprite = spriteTshirt;
+                break;
+            case Cloth_State.shirts:
+                selectSprite = spriteShirt;
+                break;
+            case Cloth_State.pants:
+                selectSprite = spritePants;
+                break;
+            default:
+                selectSprite = spriteSkirt;
+                break;  
+        }
+        uiSelect.AddImage(selectSprite, new Rect(0, 0, 450, 350));
+        uiSelect.AddDivider();
+        uiSelect.AddButton("Yes", Yes_Button);
+        uiSelect.AddButton("No", No_Button);
+        uiSelect.Show();
     }
 
     void Update()
