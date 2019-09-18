@@ -8,10 +8,12 @@ CONDITIONS OF ANY KIND, either express or implied.  See the license for specific
 language governing permissions and limitations under the license.
 
 ************************************************************************************/
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Events;
 using UnityEngine.Assertions;
 #if UNITY_EDITOR
 using UnityEngine.SceneManagement;
@@ -49,6 +51,10 @@ namespace Fashion.UIManager
 		[SerializeField]
 		private RectTransform imagePrefab;
 		[SerializeField]
+		private RectTransform inputFieldPrefab;
+		[SerializeField]
+		private RectTransform inputNumberFieldPrefab;
+		[SerializeField]
 		private RectTransform HorizontalSectionPrefab;
 
 		private RectTransform []HorizontalSections;
@@ -70,9 +76,11 @@ namespace Fashion.UIManager
 		private List<GameObject> toDisable;
 
 		public delegate void OnClick();
-		public delegate void OnToggleValueChange(Toggle t);
+		public delegate void OnToggleValueChanged(Toggle t);
 		public delegate void OnSlider(float f);
 		public delegate bool ActiveUpdate();
+		public delegate void OnInputFieldValueChanged(string s);
+		public delegate void OnInputFieldEndEdit(string s);
 
 		private const float elementSpacing = 16.0f;
 		private const float marginH = 16.0f;
@@ -154,6 +162,7 @@ namespace Fashion.UIManager
 		/// <param name="panelIdx">변경할 패널의 ID, 기본값은 0</param>
 		public void SetPaneWidth(float width, int panelIdx = 0)
 		{
+			Assert.IsTrue(width >= 20, "패널 너비는 20보다 커야 합니다.");
 			RectTransform canvasRect = targetContentPanels[panelIdx].GetComponent<RectTransform>();
 			canvasRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, width);
 			if (gameObject.activeInHierarchy)
@@ -244,6 +253,10 @@ namespace Fashion.UIManager
 		// As this is intended as a UI manager, it might be fine, but there are many simple optimizations we can make.
 		private void Relayout()
 		{
+			Vector2 pos;
+			float centerPanelWidth = 0, panelWidth;
+			float centerPanelX = targetContentPanels[0].GetComponent<RectTransform>().anchoredPosition.x;
+			float mostLeft = 0, mostRight = 0;
 			for (int panelIdx = 0; panelIdx < targetContentPanels.Length; ++panelIdx)
 			{
 				RectTransform canvasRect = targetContentPanels[panelIdx].GetComponent<RectTransform>();
@@ -257,10 +270,38 @@ namespace Fashion.UIManager
 					RectTransform r = elems[elemIdx];
 					r.anchoredPosition = new Vector2(x, y);
 					y -= (r.rect.height + elementSpacing);
-					maxWidth = Mathf.Max(r.rect.width + 2 * marginH, maxWidth);
-					r.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, maxWidth - 2 * marginH);
+					if (maxWidth < 20)
+						maxWidth = Mathf.Max(r.rect.width + 2 * marginH, maxWidth);
+					r.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, maxWidth);
 				}
-				canvasRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, maxWidth);
+				panelWidth = maxWidth + 2 * marginH;
+				// 패널 위치 재조정
+				switch (panelIdx)
+				{
+					case PANE_CENTER:
+						centerPanelX = canvasRect.anchoredPosition.x;
+						centerPanelWidth = panelWidth;
+						mostLeft = centerPanelX - panelWidth / 2;
+						mostRight = centerPanelX + panelWidth / 2;
+						break;
+					default:
+						if (panelIdx % 2 == 0) // 왼쪽
+						{
+							pos = canvasRect.anchoredPosition;
+							pos.x = mostLeft - panelWidth / 2;
+							mostLeft -= panelWidth;
+						}
+						else // 오른쪽
+						{
+							pos = canvasRect.anchoredPosition;
+							pos.x = mostRight + panelWidth / 2;
+							mostRight += panelWidth;
+						}
+						canvasRect.anchoredPosition = pos;
+						break;
+				}
+				// 패널 크기 재조정
+				canvasRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, maxWidth + 2 * marginH);
 				canvasRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, -y + marginV);
 			}
 		}
@@ -484,7 +525,7 @@ namespace Fashion.UIManager
 		/// <param name="onValueChanged">값이 변경될 때 호출할 콜백 함수</param>
 		/// <param name="targetCanvas">표시할 패널의 ID, 기본값은 0</param>
 		/// <returns>생성된 객체의 RectTransform</returns>
-		public RectTransform AddToggle(string label, OnToggleValueChange onValueChanged, int targetCanvas = 0)
+		public RectTransform AddToggle(string label, OnToggleValueChanged onValueChanged, int targetCanvas = 0)
 		{
 			RectTransform rt = (RectTransform)GameObject.Instantiate(togglePrefab);
 			AddRect(rt, targetCanvas);
@@ -503,7 +544,7 @@ namespace Fashion.UIManager
 		/// <param name="defaultValue">기본으로 선택된 버튼일 때 true</param>
 		/// <param name="targetCanvas">표시할 패널의 ID, 기본값은 0</param>
 		/// <returns>생성된 객체의 RectTransform</returns>
-		public RectTransform AddToggle(string label, OnToggleValueChange onValueChanged, bool defaultValue, int targetCanvas = 0)
+		public RectTransform AddToggle(string label, OnToggleValueChanged onValueChanged, bool defaultValue, int targetCanvas = 0)
 		{
 			RectTransform rt = (RectTransform)GameObject.Instantiate(togglePrefab);
 			AddRect(rt, targetCanvas);
@@ -523,7 +564,7 @@ namespace Fashion.UIManager
 		/// <param name="handler">값이 변경될 때 호출할 콜백 함수</param>
 		/// <param name="targetCanvas">표시할 패널의 ID, 기본값은 0</param>
 		/// <returns>생성된 객체의 RectTransform</returns>
-		public RectTransform AddRadio(string label, string group, OnToggleValueChange handler, int targetCanvas = 0)
+		public RectTransform AddRadio(string label, string group, OnToggleValueChanged handler, int targetCanvas = 0)
 		{
 			RectTransform rt = (RectTransform)GameObject.Instantiate(radioPrefab);
 			AddRect(rt, targetCanvas);
@@ -546,6 +587,32 @@ namespace Fashion.UIManager
 			tb.group = tg;
 			tb.isOn = isFirst;
 			tb.onValueChanged.AddListener(delegate { handler(tb); });
+			return rt;
+		}
+
+		public RectTransform AddInputField(string defaultText, string placeHolderText, UnityAction<string> onEndEdit, UnityAction<string> onValueChanged = null, int targetCanvas = 0)
+		{
+			RectTransform rt = (RectTransform)GameObject.Instantiate(inputFieldPrefab);
+			AddRect(rt, targetCanvas);
+			InputField inputField = rt.GetComponent<InputField>();
+			if (!string.IsNullOrEmpty(defaultText))
+				inputField.text = defaultText;
+			if (!string.IsNullOrEmpty(placeHolderText))
+				inputField.placeholder.gameObject.GetComponent<Text>().text = placeHolderText;
+			inputField.onValueChanged.AddListener(onValueChanged);
+			inputField.onEndEdit.AddListener(onEndEdit);
+			return rt;
+		}
+
+		public RectTransform AddInputNumberField(InputNumberFieldParams param, string placeHolderText, UnityAction<int> onEndEdit, UnityAction<int> onValueChanged = null, int targetCanvas = 0)
+		{
+			RectTransform rt = (RectTransform)GameObject.Instantiate(inputNumberFieldPrefab);
+			AddRect(rt, targetCanvas);
+			InputNumberField inputNumberField = rt.GetComponent<InputNumberField>();
+			inputNumberField.DefaultValues = param;
+			inputNumberField.placeHolderText = placeHolderText;
+			inputNumberField.onValueChanged += onValueChanged;
+			inputNumberField.onEndEdit += onEndEdit;
 			return rt;
 		}
 
