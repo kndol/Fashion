@@ -353,6 +353,10 @@ MonoBehaviour:
     type: 3}
   imagePrefab: {fileID: 1487967421189026156, guid: e3a03d42ab75ddc49aa473331ee9351c,
     type: 3}
+  inputFieldPrefab: {fileID: 1012182217472479279, guid: b1ba346bd6aa618498aa2eb70de3c7f0,
+    type: 3}
+  inputNumberFieldPrefab: {fileID: 355873041606572694, guid: 3ca40939aed83e24d878c3fc94c74610,
+    type: 3}
   HorizontalSectionPrefab: {fileID: 640667539827623596, guid: d379694a31cc08746970b1ca5df1cef2,
     type: 3}
   uiHelpersToInstantiate: {fileID: 1732808951507650, guid: d2bc36393bc3ebc40886ce8f58792a7e,
