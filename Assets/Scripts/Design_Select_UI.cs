@@ -51,28 +51,28 @@ public class Design_Select_UI : MonoBehaviour
     {
         Data.CS = Cloth_State.t_shirts;
         uiClothes.Hide();
-        Show_confirm();
+        Show_Confirm();
     }
 
     public void Shirts_Button()      //셔츠 버튼
     {
         Data.CS = Cloth_State.shirts;
         uiClothes.Hide();
-        Show_confirm();
+        Show_Confirm();
     }
 
     public void Pants_Button()       //바지 버튼
     {
         Data.CS = Cloth_State.pants;
         uiClothes.Hide();
-        Show_confirm();
+        Show_Confirm();
     }
 
     public void Skirt_Button()       //치마 버튼
     {
         Data.CS = Cloth_State.skirt;
         uiClothes.Hide();
-        Show_confirm();
+        Show_Confirm();
     }
 
     public void Yes_Button()
@@ -91,11 +91,10 @@ public class Design_Select_UI : MonoBehaviour
         uiSelect.Hide();
         Destroy(uiSelect.gameObject);
         uiClothes.Show();
-        Data.CS = Cloth_State.start;
         uiSelect = Instantiate<UIBuilder>(uiCanvasPrefab);
     }
 
-    void Show_confirm()
+    void Show_Confirm()
     {
         uiSelect.AddLabel("선택한 옷을 만드시겠습니까?");
         uiSelect.AddDivider();
@@ -128,6 +127,13 @@ public class Design_Select_UI : MonoBehaviour
         {
             uiClothes.Show();
             Data.isCheck = false;
+            switch(Data.PM)
+            {
+                case Play_Mode.tutorial:
+                    break;
+                case Play_Mode.test:
+                    break;
+            }
         }
     }
 }

@@ -24,10 +24,6 @@ public class Origin_Form_UI : MonoBehaviour
         if (Data.MS == Making_State.start)
         {
             uiOrigin = Instantiate<UIBuilder>(uiCanvasPrefab);
-
-            uiOrigin.SetPaneWidth(900);
-            uiOrigin.AddLabel("패턴 제도 원형");
-            uiOrigin.AddDivider();
         }
     }
 
@@ -39,31 +35,38 @@ public class Origin_Form_UI : MonoBehaviour
         Data.MS = Making_State.dart_pos;
         Data.isCheck = true;
     }
-
-    void Input_Value()
-    {
-
-    }
     
+    
+
     void Update()
     {
         if (Data.MS == Making_State.original_form && Data.isCheck == true)
         {
-            switch (Data.CS)
-            {
-                case Cloth_State.t_shirts:
-                    uiOrigin.AddImage(originSpite[0], new Rect(0, 0, 450, 350));
-                    break;
-                case Cloth_State.shirts:
-                    break;
-                case Cloth_State.pants:
-                    break;
-                case Cloth_State.skirt:
-                    break;
-            }
-            uiOrigin.AddButton("확인", OriginButton);
-            uiOrigin.Show();
+
             Data.isCheck = false;
         }
     }
 }
+
+/*
+    void Input_Value()
+    {
+        uiOrigin.AddLabel("");
+        uiOrigin.AddLabel("");
+        uiOrigin.AddLabel("");
+    }
+
+    void Tshirts_Calculate()
+    {
+        float A = 0;  
+        float B = 0;  //입력값
+        float C = 0;
+        float D = 0;
+        float E = 0;
+
+        A = B / 4;
+        C = B / 4 + 4;
+        D = C - 1;
+        E = B / 2 + 3;
+    }
+*/

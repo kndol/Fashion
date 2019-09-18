@@ -34,8 +34,6 @@ public class StartUI : MonoBehaviour
             uiMenu.AddButton("끝내기", ButtonExit);
             uiMenu.Show();
 
-
-
             uiTerm = Instantiate<UIBuilder>(uiCanvasPrefab);
 
             uiTerm.SetPaneWidth(980);
@@ -58,6 +56,7 @@ public class StartUI : MonoBehaviour
 		uiTerm.Hide();
 		uiMenu.Show();
 	}
+
 	public void ButtonTerms()
     {
 		uiMenu.Hide();
@@ -96,7 +95,7 @@ public class StartUI : MonoBehaviour
     public void Init_Data()    //초기화 함수
     {
         Data.Score = 100;
-        Data.isCheck = false;       //버튼 확인용 자료형
+        Data.isCheck = false;
         Data.PM = Play_Mode.start;
         Data.CS = Cloth_State.start;
         Data.MS = Making_State.start;

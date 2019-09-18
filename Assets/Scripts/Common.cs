@@ -27,6 +27,6 @@ namespace Fashion
 		public static bool isCheck = false;       //버튼 확인용 자료형
         public static Play_Mode PM = Play_Mode.start;
         public static Cloth_State CS = Cloth_State.start;
-        public static Making_State MS = Making_State.start;     
+        public static Making_State MS = Making_State.start;  
 	}
 }
