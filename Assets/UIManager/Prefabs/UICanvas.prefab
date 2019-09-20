@@ -357,6 +357,8 @@ MonoBehaviour:
     type: 3}
   inputNumberFieldPrefab: {fileID: 355873041606572694, guid: 3ca40939aed83e24d878c3fc94c74610,
     type: 3}
+  keyboardPrefab: {fileID: 263933292127531751, guid: 6332cefa0c3c02049842fbed64b35e5b,
+    type: 3}
   HorizontalSectionPrefab: {fileID: 640667539827623596, guid: d379694a31cc08746970b1ca5df1cef2,
     type: 3}
   uiHelpersToInstantiate: {fileID: 1732808951507650, guid: d2bc36393bc3ebc40886ce8f58792a7e,

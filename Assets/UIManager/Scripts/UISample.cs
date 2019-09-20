@@ -57,7 +57,7 @@ public class UISample : MonoBehaviour
 		param.interval = 2;
 		param.minNumber = -10;
 		param.maxNumber = 40;
-		uIBuilder.AddInputNumberField(param, "숫자 넣어", OnEndNumberEdit, null, UIBuilder.PANE_RIGHT);
+		uIBuilder.AddInputNumberField(param, "숫자 넣어", OnEndEditNumber, OnEndEditNumber, UIBuilder.PANE_RIGHT);
 
 		var labelPrefabRight = uIBuilder.AddLabel("오른쪽 레이블", TextAnchor.MiddleCenter, UIBuilder.PANE_RIGHT);
 		labelTextRight = labelPrefabRight.GetComponentInChildren<Text>();
@@ -129,7 +129,7 @@ public class UISample : MonoBehaviour
 		labelTextRight.text = s;
 	}
 
-	void OnEndNumberEdit(int i)
+	void OnEndEditNumber(int i)
 	{
 		labelTextRight.text = i.ToString();
 	}

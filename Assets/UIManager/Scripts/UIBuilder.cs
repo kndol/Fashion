@@ -14,10 +14,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
 using UnityEngine.Assertions;
 #if UNITY_EDITOR
 using UnityEngine.SceneManagement;
 #endif
+using VRKeyboard.Utils;
 
 namespace Fashion.UIManager
 {
@@ -55,6 +57,12 @@ namespace Fashion.UIManager
 		[SerializeField]
 		private RectTransform inputNumberFieldPrefab;
 		[SerializeField]
+		private RectTransform keyboardPrefab;
+
+		private RectTransform keyboardRT;
+		private KeyboardManager keyboardManager;
+
+		[SerializeField]
 		private RectTransform HorizontalSectionPrefab;
 
 		private RectTransform []HorizontalSections;
@@ -88,6 +96,7 @@ namespace Fashion.UIManager
 		private Vector2[] insertPositions;
 		private List<RectTransform>[] insertedElements;
 		private Vector3 menuOffset;
+		public Camera worldCamera { get; set; }
 
 		OVRCameraRig rig;
 		private Dictionary<string, ToggleGroup> radioGroups = new Dictionary<string, ToggleGroup>();
@@ -96,6 +105,7 @@ namespace Fashion.UIManager
 
 		public LaserPointer.LaserBeamBehavior laserBeamBehavior;
 
+		#region MonoBehaviour handler
 		public void Awake()
 		{
 			menuOffset = transform.position; // TODO: this is unpredictable/busted
@@ -129,9 +139,12 @@ namespace Fashion.UIManager
 				lp = FindObjectOfType<LaserPointer>();
 				if (!lp)
 				{
-					Debug.LogError("UIBuilder requires use of a LaserPointer and will not function without it. Add one to your scene, or assign the UIHelpers prefab to the UIBuilder in the inspector.");
+					Debug.LogError("UIBuilder가 제대로 동작하려면 LaserPointer가 필요합니다. 씬에 LaserPointer를 추가하거나, UIBuilder의 inspector에 UIHelpers 프리펩을 지정하세요.");
 					return;
 				}
+				OVRInputModule ovrInput = FindObjectOfType<OVRInputModule>();
+				if (ovrInput != null && ovrInput.m_Cursor == null)
+					ovrInput.m_Cursor = lp;
 			}
 			lp.laserBeamBehavior = laserBeamBehavior;
 			if (!toEnable.Contains(lp.gameObject))
@@ -147,14 +160,127 @@ namespace Fashion.UIManager
 			string scene = SceneManager.GetActiveScene().name;
 			OVRPlugin.SendEvent("ui_builder",
 			  ((scene == "Fashion shop") ||
-			   (scene == "UIManager") ||
-			   (scene == "DistanceGrab") ||
-			   (scene == "OVROverlay") ||
-			   (scene == "Locomotion")).ToString(),
-			  "fashion_framework");
+				(scene == "UIManagerSample") ||
+				(scene == "UIManager") ||
+				(scene == "DistanceGrab") ||
+				(scene == "OVROverlay") ||
+				(scene == "Locomotion")).ToString(),
+			  "uimanager_framework");
 #endif
 		}
 
+		private void Start()
+		{
+			worldCamera = GetComponent<Canvas>().worldCamera;
+		}
+
+		private void Update()
+		{
+			OVRInput.Update();
+		}
+		#endregion
+
+		#region Private Functions
+		private void AddKeyboard()
+		{
+			if (keyboardRT == null)
+			{
+				keyboardRT = GameObject.Instantiate(keyboardPrefab);
+				keyboardRT.gameObject.SetActive(false);
+				keyboardManager = keyboardRT.GetComponent<KeyboardManager>();
+				keyboardRT.transform.SetParent(this.transform);
+				keyboardRT.localScale = Vector3.one * 2;
+				keyboardRT.localEulerAngles = new Vector3(30, 0, 0);
+				keyboardRT.localPosition = new Vector3(0, -500, -500);
+			}
+		}
+
+		// 패널과 구성 요소들의 크기와 위치 재계산
+		private void Relayout()
+		{
+			Vector2 pos;
+			float centerPanelWidth = 0, panelWidth;
+			float centerPanelX = targetContentPanels[0].GetComponent<RectTransform>().anchoredPosition.x;
+			float leftmost = 0, rightmost = 0;
+			for (int panelIdx = 0; panelIdx < targetContentPanels.Length; ++panelIdx)
+			{
+				RectTransform canvasRect = targetContentPanels[panelIdx].GetComponent<RectTransform>();
+				List<RectTransform> elems = insertedElements[panelIdx];
+				int elemCount = elems.Count;
+				float x = marginH;
+				float y = -marginV;
+				float maxWidth = canvasRect.offsetMax.x - canvasRect.offsetMin.x - marginH * 2f;
+				for (int elemIdx = 0; elemIdx < elemCount; ++elemIdx)
+				{
+					RectTransform r = elems[elemIdx];
+					r.anchoredPosition = new Vector2(x, y);
+					y -= (r.rect.height + elementSpacing);
+					if (maxWidth < 20)
+						maxWidth = Mathf.Max(r.rect.width + 2 * marginH, maxWidth);
+					r.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, maxWidth);
+				}
+				panelWidth = maxWidth + 2 * marginH;
+				// 패널 위치 재조정
+				switch (panelIdx)
+				{
+					case PANE_CENTER:
+						centerPanelX = canvasRect.anchoredPosition.x;
+						centerPanelWidth = panelWidth;
+						leftmost = centerPanelX - panelWidth / 2;
+						rightmost = centerPanelX + panelWidth / 2;
+						break;
+					default:
+						if (panelIdx % 2 == 0) // 왼쪽
+						{
+							pos = canvasRect.anchoredPosition;
+							pos.x = leftmost - panelWidth / 2;
+							leftmost -= panelWidth;
+						}
+						else // 오른쪽
+						{
+							pos = canvasRect.anchoredPosition;
+							pos.x = rightmost + panelWidth / 2;
+							rightmost += panelWidth;
+						}
+						canvasRect.anchoredPosition = pos;
+						break;
+				}
+				// 패널 크기 재조정
+				canvasRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, maxWidth + 2 * marginH);
+				canvasRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, -y + marginV);
+			}
+		}
+
+		private float GetWidth(Transform transform)
+		{
+			return Mathf.Abs(transform.GetComponent<RectTransform>().offsetMax.x - transform.GetComponent<RectTransform>().offsetMin.x);
+		}
+		private float GetHeight(Transform transform)
+		{
+			return Mathf.Abs(transform.GetComponent<RectTransform>().offsetMax.y - transform.GetComponent<RectTransform>().offsetMin.y);
+		}
+
+		private void AddRect(RectTransform r, int targetCanvas)
+		{
+			if (targetCanvas > targetContentPanels.Length)
+			{
+				Debug.LogError("Attempted to add panel to canvas " + targetCanvas + ", but only " + targetContentPanels.Length + " panels were provided. Fix in the inspector or pass a lower value for target canvas.");
+				return;
+			}
+			bool isHorizontalSection = HorizontalSections[targetCanvas] != null;
+			Transform parent = isHorizontalSection ? HorizontalSections[targetCanvas] : targetContentPanels[targetCanvas];
+			r.transform.SetParent(parent, false);
+			if (isHorizontalSection && GetHeight(parent) < GetHeight(r))
+				parent.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, GetHeight(r));
+			if (!isHorizontalSection) insertedElements[targetCanvas].Add(r);
+			if (gameObject.activeInHierarchy)
+			{
+				Relayout();
+			}
+		}
+		#endregion
+
+		#region Public Functions
 		/// <summary>
 		/// 패널의 너비 변경하기
 		/// </summary>
@@ -249,90 +375,29 @@ namespace Fashion.UIManager
 			}
 		}
 
-		// Currently a slow brute-force method that lays out every element. 
-		// As this is intended as a UI manager, it might be fine, but there are many simple optimizations we can make.
-		private void Relayout()
+		/// <summary>
+		/// 가로 배치 영역 시작. 반드시 EndHorizontalSection()와 짝을 이뤄야 한다.
+		/// </summary>
+		/// <param name="Spacing">구성 요소들 사이의 간격</param>
+		/// <param name="targetCanvas">표시할 패널의 ID, 기본값은 0</param>
+		public void StartHorizontalSection(float Spacing = 0, int targetCanvas = 0)
 		{
-			Vector2 pos;
-			float centerPanelWidth = 0, panelWidth;
-			float centerPanelX = targetContentPanels[0].GetComponent<RectTransform>().anchoredPosition.x;
-			float mostLeft = 0, mostRight = 0;
-			for (int panelIdx = 0; panelIdx < targetContentPanels.Length; ++panelIdx)
-			{
-				RectTransform canvasRect = targetContentPanels[panelIdx].GetComponent<RectTransform>();
-				List<RectTransform> elems = insertedElements[panelIdx];
-				int elemCount = elems.Count;
-				float x = marginH;
-				float y = -marginV;
-				float maxWidth = canvasRect.offsetMax.x - canvasRect.offsetMin.x - marginH * 2f;
-				for (int elemIdx = 0; elemIdx < elemCount; ++elemIdx)
-				{
-					RectTransform r = elems[elemIdx];
-					r.anchoredPosition = new Vector2(x, y);
-					y -= (r.rect.height + elementSpacing);
-					if (maxWidth < 20)
-						maxWidth = Mathf.Max(r.rect.width + 2 * marginH, maxWidth);
-					r.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, maxWidth);
-				}
-				panelWidth = maxWidth + 2 * marginH;
-				// 패널 위치 재조정
-				switch (panelIdx)
-				{
-					case PANE_CENTER:
-						centerPanelX = canvasRect.anchoredPosition.x;
-						centerPanelWidth = panelWidth;
-						mostLeft = centerPanelX - panelWidth / 2;
-						mostRight = centerPanelX + panelWidth / 2;
-						break;
-					default:
-						if (panelIdx % 2 == 0) // 왼쪽
-						{
-							pos = canvasRect.anchoredPosition;
-							pos.x = mostLeft - panelWidth / 2;
-							mostLeft -= panelWidth;
-						}
-						else // 오른쪽
-						{
-							pos = canvasRect.anchoredPosition;
-							pos.x = mostRight + panelWidth / 2;
-							mostRight += panelWidth;
-						}
-						canvasRect.anchoredPosition = pos;
-						break;
-				}
-				// 패널 크기 재조정
-				canvasRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, maxWidth + 2 * marginH);
-				canvasRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, -y + marginV);
-			}
+			RectTransform rt = (RectTransform)GameObject.Instantiate(HorizontalSectionPrefab);
+			HorizontalLayoutGroup hl = rt.GetComponent<HorizontalLayoutGroup>();
+			hl.spacing = Spacing;
+			AddRect(rt, targetCanvas);
+			HorizontalSections[targetCanvas] = rt;
 		}
 
-		private float GetWidth(Transform transform)
+		/// <summary>
+		/// 가로 배치 영역 끝
+		/// </summary>
+		/// <param name="targetCanvas">표시할 패널의 ID, 기본값은 0</param>
+		public void EndHorizontalSection(int targetCanvas = 0)
 		{
-			return Mathf.Abs(transform.GetComponent<RectTransform>().offsetMax.x - transform.GetComponent<RectTransform>().offsetMin.x);
+			Assert.IsNotNull(HorizontalSections[targetCanvas]);
+			HorizontalSections[targetCanvas] = null;
 		}
-		private float GetHeight(Transform transform)
-		{
-			return Mathf.Abs(transform.GetComponent<RectTransform>().offsetMax.y - transform.GetComponent<RectTransform>().offsetMin.y);
-		}
-
-		private void AddRect(RectTransform r, int targetCanvas)
-		{
-			if (targetCanvas > targetContentPanels.Length)
-			{
-				Debug.LogError("Attempted to add panel to canvas " + targetCanvas + ", but only " + targetContentPanels.Length + " panels were provided. Fix in the inspector or pass a lower value for target canvas.");
-				return;
-			}
-			bool isHorizontalSection = HorizontalSections[targetCanvas] != null;
-			Transform parent = isHorizontalSection ? HorizontalSections[targetCanvas] : targetContentPanels[targetCanvas];
-			r.transform.SetParent(parent, false);
-			if (isHorizontalSection && GetHeight(parent) < GetHeight(r))
-				parent.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, GetHeight(r));
-			if (!isHorizontalSection) insertedElements[targetCanvas].Add(r);
-			if (gameObject.activeInHierarchy)
-			{
-				Relayout();
-			}
-        }
 
 		/// <summary>
 		/// 버튼 만들기
@@ -590,29 +655,67 @@ namespace Fashion.UIManager
 			return rt;
 		}
 
+		/// <summary>
+		/// InputField 만들기
+		/// </summary>
+		/// <param name="defaultText">기본으로 입력될 문자열</param>
+		/// <param name="placeHolderText">문자가 입력되지 않았을 때 표시되는 플레이스 홀더 문자열</param>
+		/// <param name="onEndEdit">입력이 끝났을 때(엔터를 눌렀을 때) 호출할 콜백 함수</param>
+		/// <param name="onValueChanged">값이 변할 때마다 호출할 콜백 함수</param>
+		/// <param name="targetCanvas">표시할 패널의 ID, 기본값은 0</param>
+		/// <returns>생성된 객체의 RectTransform</returns>
 		public RectTransform AddInputField(string defaultText, string placeHolderText, UnityAction<string> onEndEdit, UnityAction<string> onValueChanged = null, int targetCanvas = 0)
 		{
 			RectTransform rt = (RectTransform)GameObject.Instantiate(inputFieldPrefab);
 			AddRect(rt, targetCanvas);
+
 			InputField inputField = rt.GetComponent<InputField>();
+
 			if (!string.IsNullOrEmpty(defaultText))
 				inputField.text = defaultText;
 			if (!string.IsNullOrEmpty(placeHolderText))
 				inputField.placeholder.gameObject.GetComponent<Text>().text = placeHolderText;
-			inputField.onValueChanged.AddListener(onValueChanged);
-			inputField.onEndEdit.AddListener(onEndEdit);
+			if (onValueChanged != null)
+				inputField.onValueChanged.AddListener(onValueChanged);
+			if (onEndEdit != null)
+				inputField.onEndEdit.AddListener(onEndEdit);
+			AddKeyboard();
+			InputFieldVR inputFieldVR = rt.GetComponent<InputFieldVR>();
+			inputFieldVR.keyboardManager = keyboardManager;
+
 			return rt;
 		}
 
-		public RectTransform AddInputNumberField(InputNumberFieldParams param, string placeHolderText, UnityAction<int> onEndEdit, UnityAction<int> onValueChanged = null, int targetCanvas = 0)
+		/// <summary>
+		/// 숫자 입력 전용 InputField 만들기
+		/// </summary>
+		/// <param name="param">InputNumberField의 초기값 설정</param>
+		/// <param name="placeHolderText">숫자가 입력되지 않았을 때 표시되는 플레이스 홀더 문자열</param>
+		/// <param name="onEndEditNumber">입력이 끝났을 때(엔터를 눌렀을 때) 호출할 콜백 함수</param>
+		/// <param name="onNumberChanged">값이 변할 때마다 호출할 콜백 함수</param>
+		/// <param name="targetCanvas">표시할 패널의 ID, 기본값은 0</param>
+		/// <returns>생성된 객체의 RectTransform</returns>
+		public RectTransform AddInputNumberField(InputNumberFieldParams param, string placeHolderText, UnityAction<int> onEndEditNumber, UnityAction<int> onNumberChanged = null, int targetCanvas = 0)
 		{
 			RectTransform rt = (RectTransform)GameObject.Instantiate(inputNumberFieldPrefab);
 			AddRect(rt, targetCanvas);
+
+			InputField inputField = rt.GetComponent<InputField>();
+			if (!string.IsNullOrEmpty(placeHolderText))
+				inputField.placeholder.gameObject.GetComponent<Text>().text = placeHolderText;
+
 			InputNumberField inputNumberField = rt.GetComponent<InputNumberField>();
+
 			inputNumberField.DefaultValues = param;
-			inputNumberField.placeHolderText = placeHolderText;
-			inputNumberField.onValueChanged += onValueChanged;
-			inputNumberField.onEndEdit += onEndEdit;
+			if (onNumberChanged != null)
+				inputNumberField.onNumberChanged += onNumberChanged;
+			if (onEndEditNumber != null)
+				inputNumberField.onEndEditNumber += onEndEditNumber;
+
+			AddKeyboard();
+			InputFieldVR inputFieldVR = rt.GetComponent<InputFieldVR>();
+			inputFieldVR.keyboardManager = keyboardManager;
+
 			return rt;
 		}
 
@@ -622,32 +725,8 @@ namespace Fashion.UIManager
 		/// <param name="isOn">true이면 켜기</param>
 		public void ToggleLaserPointer(bool isOn)
 		{
-			if (lp)
-			{
-				if (isOn)
-				{
-					lp.enabled = true;
-				}
-				else
-				{
-					lp.enabled = false;
-				}
-			}
+			if (lp) lp.enabled = isOn;
 		}
-
-		public void StartHorizontalSection(float Spacing = 0, int targetCanvas = 0)
-		{
-			RectTransform rt = (RectTransform)GameObject.Instantiate(HorizontalSectionPrefab);
-			HorizontalLayoutGroup hl = rt.GetComponent<HorizontalLayoutGroup>();
-			hl.spacing = Spacing;
-			AddRect(rt, targetCanvas);
-			HorizontalSections[targetCanvas] = rt;
-		}
-
-		public void EndHorizontalSection(int targetCanvas = 0)
-		{
-			Assert.IsNotNull(HorizontalSections[targetCanvas]);
-			HorizontalSections[targetCanvas] = null;
-		}
+		#endregion
 	}
 }
