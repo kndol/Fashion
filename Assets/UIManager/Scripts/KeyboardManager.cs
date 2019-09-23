@@ -142,6 +142,18 @@ namespace VRKeyboard.Utils
 			shiftFlag = !shiftFlag;
 		}
 
+		private void OnEnable()
+		{
+			// 키보드가 중복 생성되지 않도록 다른 키보드 끄기
+			KeyboardManager[] kms = FindObjectsOfType<KeyboardManager>();
+			foreach (var km in kms)
+			{
+				if (km.gameObject != gameObject)
+					km.gameObject.SetActive(false);
+			}
+
+		}
+
 		public void Enter()
 		{
 			StartCoroutine(SetClickColor(enterKey, enterColor));

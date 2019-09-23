@@ -23,6 +23,8 @@ using VRKeyboard.Utils;
 
 namespace Fashion.UIManager
 {
+	public enum Reply { Cancel=-1, No, Yes }
+
 	public class UIBuilder : MonoBehaviour
 	{
 		// room for extension:
@@ -145,7 +147,6 @@ namespace Fashion.UIManager
 			}
 
 			lp = FindObjectOfType<LaserPointer>();
-			print(lp);
 			if (!lp)
 			{
 				if (uiHelpersToInstantiate)
@@ -690,7 +691,7 @@ namespace Fashion.UIManager
 		/// <param name="onValueChanged">값이 변할 때마다 호출할 콜백 함수</param>
 		/// <param name="targetCanvas">표시할 패널의 ID, 기본값은 0</param>
 		/// <returns>생성된 객체의 RectTransform</returns>
-		public RectTransform AddInputField(string defaultText, string placeHolderText, UnityAction<string> onEndEdit, UnityAction<string> onValueChanged = null, int targetCanvas = 0)
+		public RectTransform AddInputField(string defaultText, string placeHolderText, OnInputFieldEndEdit onEndEdit, OnInputFieldValueChanged onValueChanged = null, int targetCanvas = 0)
 		{
 			RectTransform rt = (RectTransform)GameObject.Instantiate(inputFieldPrefab);
 			AddRect(rt, targetCanvas);
@@ -702,9 +703,9 @@ namespace Fashion.UIManager
 			if (!string.IsNullOrEmpty(placeHolderText))
 				inputField.placeholder.gameObject.GetComponent<Text>().text = placeHolderText;
 			if (onValueChanged != null)
-				inputField.onValueChanged.AddListener(onValueChanged);
+				inputField.onValueChanged.AddListener(delegate(string s) { onValueChanged(s); });
 			if (onEndEdit != null)
-				inputField.onEndEdit.AddListener(onEndEdit);
+				inputField.onEndEdit.AddListener(delegate (string s) { onEndEdit(s); });
 			AddKeyboard();
 			InputFieldVR inputFieldVR = rt.GetComponent<InputFieldVR>();
 			inputFieldVR.keyboardManager = keyboardManager;
@@ -721,7 +722,7 @@ namespace Fashion.UIManager
 		/// <param name="onNumberChanged">값이 변할 때마다 호출할 콜백 함수</param>
 		/// <param name="targetCanvas">표시할 패널의 ID, 기본값은 0</param>
 		/// <returns>생성된 객체의 RectTransform</returns>
-		public RectTransform AddInputNumberField(int defalutNumber, string placeHolderText, UnityAction<int> onEndEditNumber, UnityAction<int> onNumberChanged = null, int targetCanvas = 0)
+		public RectTransform AddInputNumberField(int defalutNumber, string placeHolderText, OnInputNumberFieldEndEdit onEndEditNumber, OnInputNumberFieldValueChanged onNumberChanged = null, int targetCanvas = 0)
 		{
 			RectTransform rt = (RectTransform)GameObject.Instantiate(inputNumberFieldPrefab);
 			AddRect(rt, targetCanvas);
@@ -734,9 +735,9 @@ namespace Fashion.UIManager
 
 			inputNumberField.defaultNumber = defalutNumber;
 			if (onNumberChanged != null)
-				inputNumberField.onNumberChanged += onNumberChanged;
+				inputNumberField.onNumberChanged += delegate (int i) { onNumberChanged(i); };
 			if (onEndEditNumber != null)
-				inputNumberField.onEndEditNumber += onEndEditNumber;
+				inputNumberField.onEndEditNumber += delegate (int i) { onEndEditNumber(i); };
 
 			AddNumberKeyboard();
 			InputFieldVR inputFieldVR = rt.GetComponent<InputFieldVR>();
