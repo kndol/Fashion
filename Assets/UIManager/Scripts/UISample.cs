@@ -52,12 +52,7 @@ public class UISample : MonoBehaviour
 		uIBuilder.AddRadio("사이드 라디오 2", "group2", delegate(Toggle t) { RadioPressed("사이드 라디오 2", "group2", t); }, UIBuilder.PANE_RIGHT);
 		uIBuilder.AddInputField("", "문자 넣어", OnEndEdit, null, UIBuilder.PANE_RIGHT);
 
-		InputNumberFieldParams param;
-		param.defaultNumber = 10;
-		param.interval = 2;
-		param.minNumber = -10;
-		param.maxNumber = 40;
-		uIBuilder.AddInputNumberField(param, "숫자 넣어", OnEndEditNumber, OnEndEditNumber, UIBuilder.PANE_RIGHT);
+		uIBuilder.AddInputNumberField(10, "숫자 넣어", OnEndEditNumber, OnEndEditNumber, UIBuilder.PANE_RIGHT);
 
 		var labelPrefabRight = uIBuilder.AddLabel("오른쪽 레이블", TextAnchor.MiddleCenter, UIBuilder.PANE_RIGHT);
 		labelTextRight = labelPrefabRight.GetComponentInChildren<Text>();
@@ -73,11 +68,12 @@ public class UISample : MonoBehaviour
         inMenu = true;
 	}
 
-		public void TogglePressed(Toggle t)
+	public void TogglePressed(Toggle t)
     {
         Debug.Log("Toggle pressed. Is on? "+t.isOn);
     }
-    public void RadioPressed(string radioLabel, string group, Toggle t)
+
+	public void RadioPressed(string radioLabel, string group, Toggle t)
     {
         Debug.Log("Radio value changed: "+radioLabel+", from group "+group+". New value: "+t.isOn);
     }

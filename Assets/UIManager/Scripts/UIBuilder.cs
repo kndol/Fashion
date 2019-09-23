@@ -30,12 +30,15 @@ namespace Fashion.UIManager
 		// fix bug where it seems to appear at a random offset
 		// support remove
 
+		#region 패널 위치 상수 정의
 		// Convenience consts for clarity when using multiple panes. 
 		// But note that you can an arbitrary number of panes if you add them in the inspector.
 		public const int PANE_CENTER = 0;
 		public const int PANE_RIGHT = 1;
 		public const int PANE_LEFT = 2;
+		#endregion
 
+		#region SerializeField 변수 정의
 		[SerializeField]
 		private RectTransform buttonPrefab;
 		[SerializeField]
@@ -58,52 +61,59 @@ namespace Fashion.UIManager
 		private RectTransform inputNumberFieldPrefab;
 		[SerializeField]
 		private RectTransform keyboardPrefab;
-
-		private RectTransform keyboardRT;
-		private KeyboardManager keyboardManager;
-
+		[SerializeField]
+		private RectTransform numberKeyboardPrefab;
 		[SerializeField]
 		private RectTransform HorizontalSectionPrefab;
-
-		private RectTransform []HorizontalSections;
-
 		[SerializeField]
 		private GameObject uiHelpersToInstantiate;
-
 		[SerializeField]
 		private Transform[] targetContentPanels;
-
 		[SerializeField]
 		private bool manuallyResizeContentPanels;
-
-		private bool[] reEnable;
-
 		[SerializeField]
 		private List<GameObject> toEnable;
 		[SerializeField]
 		private List<GameObject> toDisable;
+		#endregion
 
+		#region 객체 관련 변수 정의
+		private bool[] reEnable;
+		private RectTransform keyboardRT;
+		private KeyboardManager keyboardManager;
+		private RectTransform numberKeyboardRT;
+		private KeyboardManager numberKeyboardManager;
+		private RectTransform[] horizontalSections;
+		private Dictionary<string, ToggleGroup> radioGroups = new Dictionary<string, ToggleGroup>();
+		#endregion
+
+		#region 콜백 함수 정의
 		public delegate void OnClick();
 		public delegate void OnToggleValueChanged(Toggle t);
 		public delegate void OnSlider(float f);
 		public delegate bool ActiveUpdate();
 		public delegate void OnInputFieldValueChanged(string s);
 		public delegate void OnInputFieldEndEdit(string s);
+		public delegate void OnInputNumberFieldValueChanged(int i);
+		public delegate void OnInputNumberFieldEndEdit(int i);
+		#endregion
 
+		#region 레이아웃 관련 변수 정의
 		private const float elementSpacing = 16.0f;
 		private const float marginH = 16.0f;
 		private const float marginV = 16.0f;
 		private Vector2[] insertPositions;
 		private List<RectTransform>[] insertedElements;
 		private Vector3 menuOffset;
-		public Camera worldCamera { get; set; }
+		#endregion
 
+		#region 오큘러스 VR 관련 변수 정의
 		OVRCameraRig rig;
-		private Dictionary<string, ToggleGroup> radioGroups = new Dictionary<string, ToggleGroup>();
 		LaserPointer lp;
 		LineRenderer lr;
 
 		public LaserPointer.LaserBeamBehavior laserBeamBehavior;
+		#endregion
 
 		#region MonoBehaviour handler
 		public void Awake()
@@ -126,6 +136,12 @@ namespace Fashion.UIManager
 			for (int i = 0; i < insertedElements.Length; ++i)
 			{
 				insertedElements[i] = new List<RectTransform>();
+			}
+
+			horizontalSections = new RectTransform[targetContentPanels.Length];
+			for (int i = 0; i < horizontalSections.Length; ++i)
+			{
+				horizontalSections[i] = null;
 			}
 
 			lp = FindObjectOfType<LaserPointer>();
@@ -152,9 +168,6 @@ namespace Fashion.UIManager
 				toEnable.Add(lp.gameObject);
 			}
 			GetComponent<OVRRaycaster>().pointer = lp.gameObject;
-			HorizontalSections = new RectTransform[targetContentPanels.Length];
-			for(int i=0; i< HorizontalSections.Length; i++)
-				HorizontalSections[i] = null;
 
 #if UNITY_EDITOR
 			string scene = SceneManager.GetActiveScene().name;
@@ -169,14 +182,13 @@ namespace Fashion.UIManager
 #endif
 		}
 
-		private void Start()
-		{
-			worldCamera = GetComponent<Canvas>().worldCamera;
-		}
-
 		private void Update()
 		{
 			OVRInput.Update();
+		}
+		private void FixedUpdate()
+		{
+			OVRInput.FixedUpdate();
 		}
 		#endregion
 
@@ -192,6 +204,20 @@ namespace Fashion.UIManager
 				keyboardRT.localScale = Vector3.one * 2;
 				keyboardRT.localEulerAngles = new Vector3(30, 0, 0);
 				keyboardRT.localPosition = new Vector3(0, -500, -500);
+			}
+		}
+
+		private void AddNumberKeyboard()
+		{
+			if (numberKeyboardRT == null)
+			{
+				numberKeyboardRT = GameObject.Instantiate(numberKeyboardPrefab);
+				numberKeyboardRT.gameObject.SetActive(false);
+				numberKeyboardManager = numberKeyboardRT.GetComponent<KeyboardManager>();
+				numberKeyboardRT.transform.SetParent(this.transform);
+				numberKeyboardRT.localScale = Vector3.one * 2;
+				numberKeyboardRT.localEulerAngles = new Vector3(30, 0, 0);
+				numberKeyboardRT.localPosition = new Vector3(0, -500, -500);
 			}
 		}
 
@@ -267,8 +293,8 @@ namespace Fashion.UIManager
 				Debug.LogError("Attempted to add panel to canvas " + targetCanvas + ", but only " + targetContentPanels.Length + " panels were provided. Fix in the inspector or pass a lower value for target canvas.");
 				return;
 			}
-			bool isHorizontalSection = HorizontalSections[targetCanvas] != null;
-			Transform parent = isHorizontalSection ? HorizontalSections[targetCanvas] : targetContentPanels[targetCanvas];
+			bool isHorizontalSection = horizontalSections[targetCanvas] != null;
+			Transform parent = isHorizontalSection ? horizontalSections[targetCanvas] : targetContentPanels[targetCanvas];
 			r.transform.SetParent(parent, false);
 			if (isHorizontalSection && GetHeight(parent) < GetHeight(r))
 				parent.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, GetHeight(r));
@@ -386,7 +412,7 @@ namespace Fashion.UIManager
 			HorizontalLayoutGroup hl = rt.GetComponent<HorizontalLayoutGroup>();
 			hl.spacing = Spacing;
 			AddRect(rt, targetCanvas);
-			HorizontalSections[targetCanvas] = rt;
+			horizontalSections[targetCanvas] = rt;
 		}
 
 		/// <summary>
@@ -395,8 +421,8 @@ namespace Fashion.UIManager
 		/// <param name="targetCanvas">표시할 패널의 ID, 기본값은 0</param>
 		public void EndHorizontalSection(int targetCanvas = 0)
 		{
-			Assert.IsNotNull(HorizontalSections[targetCanvas]);
-			HorizontalSections[targetCanvas] = null;
+			Assert.IsNotNull(horizontalSections[targetCanvas]);
+			horizontalSections[targetCanvas] = null;
 		}
 
 		/// <summary>
@@ -695,7 +721,7 @@ namespace Fashion.UIManager
 		/// <param name="onNumberChanged">값이 변할 때마다 호출할 콜백 함수</param>
 		/// <param name="targetCanvas">표시할 패널의 ID, 기본값은 0</param>
 		/// <returns>생성된 객체의 RectTransform</returns>
-		public RectTransform AddInputNumberField(InputNumberFieldParams param, string placeHolderText, UnityAction<int> onEndEditNumber, UnityAction<int> onNumberChanged = null, int targetCanvas = 0)
+		public RectTransform AddInputNumberField(int defalutNumber, string placeHolderText, UnityAction<int> onEndEditNumber, UnityAction<int> onNumberChanged = null, int targetCanvas = 0)
 		{
 			RectTransform rt = (RectTransform)GameObject.Instantiate(inputNumberFieldPrefab);
 			AddRect(rt, targetCanvas);
@@ -706,15 +732,15 @@ namespace Fashion.UIManager
 
 			InputNumberField inputNumberField = rt.GetComponent<InputNumberField>();
 
-			inputNumberField.DefaultValues = param;
+			inputNumberField.defaultNumber = defalutNumber;
 			if (onNumberChanged != null)
 				inputNumberField.onNumberChanged += onNumberChanged;
 			if (onEndEditNumber != null)
 				inputNumberField.onEndEditNumber += onEndEditNumber;
 
-			AddKeyboard();
+			AddNumberKeyboard();
 			InputFieldVR inputFieldVR = rt.GetComponent<InputFieldVR>();
-			inputFieldVR.keyboardManager = keyboardManager;
+			inputFieldVR.keyboardManager = numberKeyboardManager;
 
 			return rt;
 		}
