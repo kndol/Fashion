@@ -22,7 +22,7 @@ public class Cut_Performance : MonoBehaviour
 
     public LaserPointer.LaserBeamBehavior laserBeamBehavior;
 
-    private void Awake()
+    /*private void Awake()
     {
         lp = FindObjectOfType<LaserPointer>();
         if (!lp)
@@ -40,7 +40,7 @@ public class Cut_Performance : MonoBehaviour
         }
         lp.laserBeamBehavior = laserBeamBehavior;
         GetComponent<OVRRaycaster>().pointer = lp.gameObject;
-    }
+    }*/
 
     void Start()
     {
