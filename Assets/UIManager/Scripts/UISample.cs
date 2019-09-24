@@ -40,6 +40,7 @@ public class UISample : MonoBehaviour
 		for (int i = 0; i < sprites.Length; i++)
 			uIBuilder.AddImageButton(sprites[i], rc, delegate () { OnClickHor(i); });
 		uIBuilder.EndHorizontalSection();
+		uIBuilder.AddYesNoButtons("", "", OnYesNoClicked, 40);
 		uIBuilder.AddDivider();
 		uIBuilder.AddToggle("토글", TogglePressed);
 		uIBuilder.AddRadio("라디오1", "group", delegate(Toggle t) { RadioPressed("라디오1", "group", t); }) ;
@@ -61,11 +62,31 @@ public class UISample : MonoBehaviour
 		uIBuilder.AddLabel("왼쪽 탭", TextAnchor.MiddleCenter, UIBuilder.PANE_LEFT);
 		uIBuilder.AddDivider(UIBuilder.PANE_LEFT);
 		uIBuilder.AddButton("왼쪽 패널 버튼", LeftButtonPressed, UIBuilder.PANE_LEFT);
+		uIBuilder.AddYesNoButtons("", "", OnYesNoClicked, 30, UIBuilder.PANE_LEFT);
+		uIBuilder.AddYesNoCancelButtons("", "", "", OnYesNoClicked, 30, UIBuilder.PANE_LEFT);
 		var labelPrefabLeft = uIBuilder.AddLabel("왼쪽 레이블", TextAnchor.MiddleCenter, UIBuilder.PANE_LEFT);
 		labelTextLeft = labelPrefabLeft.GetComponentInChildren<Text>();
 
 		uIBuilder.Show();
         inMenu = true;
+	}
+
+	public void OnYesNoClicked(Reply reply)
+	{
+		switch(reply)
+		{
+			case Reply.Yes:
+				labelTextLeft.text = "예";
+				break;
+			case Reply.No:
+				labelTextLeft.text = "아니오";
+				break;
+			default:
+				labelTextLeft.text = "취소";
+				break;
+		}
+
+		StartCoroutine(ChangeLabel(false));
 	}
 
 	public void TogglePressed(Toggle t)

@@ -159,6 +159,14 @@ public class OVRPlayerController : MonoBehaviour
 		CameraRig.transform.localPosition = p;
 	}
 
+	public void SetCameraRig(OVRCameraRig rig)
+	{
+		CameraRig = rig;
+		var p = CameraRig.transform.localPosition;
+		p.z = OVRManager.profile.eyeDepth;
+		CameraRig.transform.localPosition = p;
+	}
+
 	void Awake()
 	{
 		Controller = gameObject.GetComponent<CharacterController>();
