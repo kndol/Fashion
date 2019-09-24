@@ -363,7 +363,7 @@ MonoBehaviour:
     type: 3}
   HorizontalSectionPrefab: {fileID: 640667539827623596, guid: d379694a31cc08746970b1ca5df1cef2,
     type: 3}
-  uiHelpersToInstantiate: {fileID: 4674563233965534827, guid: 0540249d583a3604683a9107fdd5920f,
+  uiHelpersToInstantiate: {fileID: 1732808951507650, guid: d2bc36393bc3ebc40886ce8f58792a7e,
     type: 3}
   targetContentPanels:
   - {fileID: 224850501658498312}

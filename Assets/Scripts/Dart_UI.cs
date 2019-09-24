@@ -19,8 +19,6 @@ public class Dart_UI : MonoBehaviour
 
     UIBuilder uiDart;
 
-    InputNumberFieldParams value;
-
     Text inputSize;
     Text firstSize;
     Text secondSize;

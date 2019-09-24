@@ -27,8 +27,6 @@ public class Origin_Form_UI : MonoBehaviour
 
     UIBuilder uiOrigin;
 
-    InputNumberFieldParams value;
-
     Text inputText;
     Text firstValue;
     Text secondValue;
@@ -203,7 +201,7 @@ public class Origin_Form_UI : MonoBehaviour
                 uiOrigin.AddImage(tshirtsSpite[0], new Rect(0, 0, 450, 350), UIBuilder.PANE_LEFT);  //기초선
                 uiOrigin.AddLabel("치수입력", TextAnchor.MiddleCenter, UIBuilder.PANE_CENTER);
                 uiOrigin.AddDivider(UIBuilder.PANE_CENTER);
-                uiOrigin.AddInputNumberField(value, "치수를 입력하세요.", Bust_Size_Input, null, UIBuilder.PANE_CENTER);
+                uiOrigin.AddInputNumberField(0, "치수를 입력하세요.", Bust_Size_Input, null, UIBuilder.PANE_CENTER);
                 var size_tshirts_B_Text = uiOrigin.AddLabel("", TextAnchor.MiddleCenter, UIBuilder.PANE_CENTER);
                 inputText = size_tshirts_B_Text.GetComponentInChildren<Text>();
                 var calculate_tshirts_B_1 = uiOrigin.AddLabel("", TextAnchor.MiddleCenter, UIBuilder.PANE_CENTER);
@@ -228,7 +226,7 @@ public class Origin_Form_UI : MonoBehaviour
                 uiOrigin.AddDivider(UIBuilder.PANE_LEFT);
                 uiOrigin.AddDivider(UIBuilder.PANE_CENTER);
                 uiOrigin.AddImage(tshirtsSpite[0], new Rect(0, 0, 450, 350), UIBuilder.PANE_LEFT);
-                uiOrigin.AddInputNumberField(value, "B를 입력하세요.", Bust_Size_Input, null, UIBuilder.PANE_CENTER);
+                uiOrigin.AddInputNumberField(0, "B를 입력하세요.", Bust_Size_Input, null, UIBuilder.PANE_CENTER);
                 var size_B_Text = uiOrigin.AddLabel("", TextAnchor.MiddleCenter, UIBuilder.PANE_CENTER);
                 inputText = size_B_Text.GetComponentInChildren<Text>();
                 var calculate_B_1 = uiOrigin.AddLabel("", TextAnchor.MiddleCenter, UIBuilder.PANE_CENTER);
@@ -245,7 +243,7 @@ public class Origin_Form_UI : MonoBehaviour
                 uiOrigin.AddLabel("소매 기초선", TextAnchor.MiddleCenter, UIBuilder.PANE_LEFT);
                 uiOrigin.AddDivider(UIBuilder.PANE_LEFT);
                 uiOrigin.AddImage(SleeveSprite[0], new Rect(0, 0, 450, 350), UIBuilder.PANE_LEFT);
-                uiOrigin.AddInputNumberField(value, "소매치수를 입력하세요.", Sleeve_Size_Input, null, UIBuilder.PANE_CENTER);
+                uiOrigin.AddInputNumberField(0, "소매치수를 입력하세요.", Sleeve_Size_Input, null, UIBuilder.PANE_CENTER);
                 var size_S_Text = uiOrigin.AddLabel("", TextAnchor.MiddleCenter, UIBuilder.PANE_CENTER);
                 inputText = size_S_Text.GetComponentInChildren<Text>();
                 var calculate_S_1 = uiOrigin.AddLabel("", TextAnchor.MiddleCenter, UIBuilder.PANE_CENTER);
