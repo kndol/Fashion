@@ -15,9 +15,17 @@ public class Dart_UI : MonoBehaviour
     [SerializeField]
     Transform arrangePos = null;
     [SerializeField]
-    Sprite[] dartSpite = null;  //dart 이미지
+    Sprite[] completionSpite = null;  //0:티셔츠  1:블라우스  2:바지  3:치마
 
     UIBuilder uiDart;
+
+    InputNumberFieldParams value;
+
+    Text inputSize;
+    Text firstSize;
+    Text secondSize;
+    Text thirdSize;
+    Text forthSize;
 
     bool isCheck = true;
 
@@ -26,10 +34,6 @@ public class Dart_UI : MonoBehaviour
         if (Data.MS == Making_State.start)
         {
             uiDart = Instantiate<UIBuilder>(uiCanvasPrefab);
-
-            uiDart.SetPaneWidth(900);
-            uiDart.AddLabel("위치지정", TextAnchor.MiddleCenter);
-            uiDart.AddDivider();
         }
     }
 
@@ -46,7 +50,7 @@ public class Dart_UI : MonoBehaviour
     {
         if (isCheck)
         {
-            uiDart.AddLabel("앞/뒤 구분 설명", TextAnchor.MiddleCenter, UIBuilder.PANE_RIGHT);
+            uiDart.AddLabel("앞/뒤 구분 설명", TextAnchor.MiddleCenter, UIBuilder.PANE_RIGHT);   //적어
             isCheck = false;
         }
         else
@@ -60,7 +64,7 @@ public class Dart_UI : MonoBehaviour
     {
         if (isCheck)
         {
-            uiDart.AddLabel("골선 설명", TextAnchor.MiddleCenter, UIBuilder.PANE_RIGHT);
+            uiDart.AddLabel("골선 설명", TextAnchor.MiddleCenter, UIBuilder.PANE_RIGHT);    //적어
             isCheck = false;
         }
         else
@@ -74,7 +78,7 @@ public class Dart_UI : MonoBehaviour
     {
         if (isCheck)
         {
-            uiDart.AddLabel("식서 설명", TextAnchor.MiddleCenter, UIBuilder.PANE_RIGHT);
+            uiDart.AddLabel("식서 설명", TextAnchor.MiddleCenter, UIBuilder.PANE_RIGHT);  //적어
             isCheck = false;
         }
         else
@@ -88,7 +92,7 @@ public class Dart_UI : MonoBehaviour
     {
         if (isCheck)
         {
-            uiDart.AddLabel("암홀위치 설명", TextAnchor.MiddleCenter, UIBuilder.PANE_RIGHT);
+            uiDart.AddLabel("암홀위치 설명", TextAnchor.MiddleCenter, UIBuilder.PANE_RIGHT);   //적어
             isCheck = false;
         }
         else
@@ -105,20 +109,21 @@ public class Dart_UI : MonoBehaviour
         Show_Confirm();
     }
 
+    public void Size_Input(int i)
+    {
+        
+    }
+
     public void Show_Confirm()
     {
-        uiDart.SetPaneWidth(550, UIBuilder.PANE_LEFT);
-        uiDart.SetPaneWidth(30, UIBuilder.PANE_CENTER);
-        uiDart.SetPaneWidth(550, UIBuilder.PANE_RIGHT);
-        uiDart.AddLabel("원형제도", TextAnchor.MiddleCenter, UIBuilder.PANE_LEFT);
-        uiDart.AddLabel("설명", TextAnchor.MiddleCenter, UIBuilder.PANE_RIGHT);
+        uiDart.AddLabel("패턴완성", TextAnchor.MiddleCenter, UIBuilder.PANE_LEFT);
+        uiDart.AddLabel("Description", TextAnchor.MiddleCenter, UIBuilder.PANE_RIGHT);
         uiDart.AddDivider(UIBuilder.PANE_LEFT);
         uiDart.AddDivider(UIBuilder.PANE_RIGHT);
         switch (Data.CS)
         {
             case Cloth_State.t_shirts:
-                uiDart.AddImage(dartSpite[0], new Rect(0, 0, 450, 350), UIBuilder.PANE_LEFT);
-                // InputField 사이즈 입력, PANE_CENTER
+                uiDart.AddImage(completionSpite[0], new Rect(0, 0, 450, 350), UIBuilder.PANE_LEFT);
                 uiDart.AddButton("앞/뒤 구분", Front_Back_Button, UIBuilder.PANE_CENTER);
                 uiDart.AddButton("골선", Ford_Button, UIBuilder.PANE_CENTER);
                 uiDart.AddButton("식서방향", Selvage_Button, UIBuilder.PANE_CENTER);
@@ -131,7 +136,7 @@ public class Dart_UI : MonoBehaviour
             case Cloth_State.skirt:
                 break;
         }
-        uiDart.AddButton("확인", DartButton, UIBuilder.PANE_LEFT);
+        uiDart.AddButton("다음으로", DartButton, UIBuilder.PANE_CENTER);
         uiDart.Show();
     }
 
@@ -139,21 +144,8 @@ public class Dart_UI : MonoBehaviour
     {
         if (Data.MS == Making_State.dart_pos && Data.isCheck == true)
         {
-            switch (Data.CS)
-            {
-                case Cloth_State.t_shirts:
-                    uiDart.AddImage(dartSpite[0], new Rect(0, 0, 450, 350));
-                    break;
-                case Cloth_State.shirts:
-                    break;
-                case Cloth_State.pants:
-                    break;
-                case Cloth_State.skirt:
-                    break;
-            }
-            uiDart.AddButton("확인", DartButton);
-            uiDart.Show();
             Data.isCheck = false;
+            Show_Confirm();
         }
     }
 }

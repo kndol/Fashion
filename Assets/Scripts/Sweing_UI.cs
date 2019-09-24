@@ -66,7 +66,7 @@ public class Sweing_UI : MonoBehaviour
                     switch (Data.CS)
                     {
                         case Cloth_State.t_shirts:
-                            uiSweing_sheet.AddImage(s_sheetSpite[0], new Rect(0, 0, 450, 350));
+                            //uiSweing_sheet.AddImage(s_sheetSpite[0], new Rect(0, 0, 450, 350));
                             break;
                         case Cloth_State.shirts:
                             break;
@@ -84,7 +84,7 @@ public class Sweing_UI : MonoBehaviour
                     switch (Data.CS)
                     {
                         case Cloth_State.t_shirts:
-                            uiSweing_fabrication.AddImage(s_fabSpite[0], new Rect(0, 0, 450, 350));
+                            //uiSweing_fabrication.AddImage(s_fabSpite[0], new Rect(0, 0, 450, 350));
                             break;
                         case Cloth_State.shirts:
                             break;

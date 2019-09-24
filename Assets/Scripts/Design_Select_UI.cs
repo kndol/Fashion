@@ -26,23 +26,13 @@ public class Design_Select_UI : MonoBehaviour
     UIBuilder uiClothes;
     UIBuilder uiSelect;
 
+    Sprite selectSprite;
+
     void Start()
     {
-        if (Data.MS == Making_State.start)
+        if (Data.CS == Cloth_State.start)
         {
-			Rect rc = new Rect(0, 0, 200, 350);
             uiClothes = Instantiate<UIBuilder>(uiCanvasPrefab);
-
-			uiClothes.SetPaneWidth(880);
-			uiClothes.AddLabel("디자인을 선택하세요.");
-            uiClothes.AddDivider();
-			uiClothes.StartHorizontalSection(5);
-			uiClothes.AddImageButton(spriteTshirt, rc, Tshirt_Button);
-            uiClothes.AddImageButton(spriteShirt, rc, Shirts_Button);
-            uiClothes.AddImageButton(spritePants, rc, Pants_Button);
-            uiClothes.AddImageButton(spriteSkirt, rc, Skirt_Button);
-            uiClothes.EndHorizontalSection();
-
             uiSelect = Instantiate<UIBuilder>(uiCanvasPrefab);
         }
     }
@@ -51,54 +41,67 @@ public class Design_Select_UI : MonoBehaviour
     {
         Data.CS = Cloth_State.t_shirts;
         uiClothes.Hide();
-        Show_Confirm();
+        YesNo_Show_Confirm();
     }
 
     public void Shirts_Button()      //셔츠 버튼
     {
         Data.CS = Cloth_State.shirts;
         uiClothes.Hide();
-        Show_Confirm();
+        YesNo_Show_Confirm();
     }
 
     public void Pants_Button()       //바지 버튼
     {
         Data.CS = Cloth_State.pants;
         uiClothes.Hide();
-        Show_Confirm();
+        YesNo_Show_Confirm();
     }
 
     public void Skirt_Button()       //치마 버튼
     {
         Data.CS = Cloth_State.skirt;
         uiClothes.Hide();
-        Show_Confirm();
+        YesNo_Show_Confirm();
+    }
+
+    public void Body_Button()        //몸판 버튼
+    {
+        Data.CS = Cloth_State.Body;
+        uiClothes.Hide();
+        YesNo_Show_Confirm();
+    }
+
+    public void Sleeve_Button()       //소매 버튼
+    {
+        Data.CS = Cloth_State.Sleeve;
+        uiClothes.Hide();
+        YesNo_Show_Confirm();
     }
 
     public void Yes_Button()
     {
         player.transform.position = originPos.transform.position;
         player.transform.rotation = originPos.transform.rotation;
-        uiClothes.Hide();
-        uiSelect.Hide();
+        Destroy(uiClothes.gameObject);
         Destroy(uiSelect.gameObject);
+        uiClothes = Instantiate<UIBuilder>(uiCanvasPrefab);
+        uiSelect = Instantiate<UIBuilder>(uiCanvasPrefab);
         Data.MS = Making_State.original_form;
         Data.isCheck = true;
     }
 
     public void No_Button()
     {
-        uiSelect.Hide();
         Destroy(uiSelect.gameObject);
         uiClothes.Show();
         uiSelect = Instantiate<UIBuilder>(uiCanvasPrefab);
     }
 
-    void Show_Confirm()
+    public void YesNo_Show_Confirm()
     {
         uiSelect.AddLabel("선택한 옷을 만드시겠습니까?");
         uiSelect.AddDivider();
-        Sprite selectSprite;
         switch (Data.CS)
         {
             case Cloth_State.t_shirts:
@@ -110,9 +113,15 @@ public class Design_Select_UI : MonoBehaviour
             case Cloth_State.pants:
                 selectSprite = spritePants;
                 break;
-            default:
+            case Cloth_State.skirt:
                 selectSprite = spriteSkirt;
-                break;  
+                break;
+            case Cloth_State.Body:
+                selectSprite = spriteSkirt;
+                break;
+            default:   //소매
+                selectSprite = spriteSkirt;
+                break;        
         }
         uiSelect.AddImage(selectSprite, new Rect(0, 0, 450, 350));
         uiSelect.AddDivider();
@@ -120,20 +129,37 @@ public class Design_Select_UI : MonoBehaviour
         uiSelect.AddButton("No", No_Button);
         uiSelect.Show();
     }
+    public void Cloth_Select_Show_Confirm()
+    {
+        Rect rc = new Rect(0, 0, 200, 350);
+
+        uiClothes.SetPaneWidth(1300);
+        uiClothes.AddLabel("디자인을 선택하세요.");
+        uiClothes.AddDivider();
+        uiClothes.StartHorizontalSection(5);
+        uiClothes.AddImageButton(spriteTshirt, rc, Tshirt_Button);
+        uiClothes.AddImageButton(spriteShirt, rc, Shirts_Button);
+        uiClothes.AddImageButton(spritePants, rc, Pants_Button);
+        uiClothes.AddImageButton(spriteSkirt, rc, Skirt_Button);
+        uiClothes.AddImageButton(spriteSkirt, rc, Body_Button);       //몸판 버튼
+        uiClothes.AddImageButton(spriteSkirt, rc, Sleeve_Button);     //소매 버튼
+        uiClothes.EndHorizontalSection();
+        uiClothes.Show();
+    }
 
     void Update()
     {
         if (Data.MS == Making_State.Design_Select && Data.isCheck == true)
         {
-            uiClothes.Show();
             Data.isCheck = false;
-            switch(Data.PM)
+            Cloth_Select_Show_Confirm();
+            /*switch(Data.PM)
             {
                 case Play_Mode.tutorial:
                     break;
                 case Play_Mode.test:
                     break;
-            }
+            }*/
         }
     }
 }

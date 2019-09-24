@@ -138,5 +138,5 @@ namespace Fashion.UIManager
 		{
 			if (cursorVisual) cursorVisual.SetActive(false);
 		}
-	}
+    }
 }

@@ -4,7 +4,10 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Laser
+  - Cut_Collider
+  - Cut_Collider_1
+  - Cut_Collider_2
+  - Cut_Collider_3
   layers:
   - Default
   - TransparentFX

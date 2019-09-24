@@ -590,6 +590,15 @@ namespace Fashion.UIManager
 			return rt;
 		}
 
+        /// <summary>
+        /// InputField 만들기
+        /// </summary>
+        /// <param name="defaultText"></param>
+        /// <param name="placeHolderText"></param>
+        /// <param name="onEndEdit"></param>
+        /// <param name="onValueChanged"></param>
+        /// <param name="targetCanvas"></param>
+        /// <returns></returns>
 		public RectTransform AddInputField(string defaultText, string placeHolderText, UnityAction<string> onEndEdit, UnityAction<string> onValueChanged = null, int targetCanvas = 0)
 		{
 			RectTransform rt = (RectTransform)GameObject.Instantiate(inputFieldPrefab);
@@ -604,6 +613,15 @@ namespace Fashion.UIManager
 			return rt;
 		}
 
+        /// <summary>
+        /// InputField 만들기(숫자)
+        /// </summary>
+        /// <param name="param"></param>
+        /// <param name="placeHolderText"></param>
+        /// <param name="onEndEdit"></param>
+        /// <param name="onValueChanged"></param>
+        /// <param name="targetCanvas"></param>
+        /// <returns></returns>
 		public RectTransform AddInputNumberField(InputNumberFieldParams param, string placeHolderText, UnityAction<int> onEndEdit, UnityAction<int> onValueChanged = null, int targetCanvas = 0)
 		{
 			RectTransform rt = (RectTransform)GameObject.Instantiate(inputNumberFieldPrefab);

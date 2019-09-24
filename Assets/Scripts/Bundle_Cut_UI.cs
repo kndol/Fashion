@@ -19,6 +19,7 @@ public class Bundle_Cut_UI : MonoBehaviour
     [SerializeField]
     Sprite[] cutSpite = null;  //재단 이미지
 
+    LaserPointer lp;
     UIBuilder uiBundle;
     UIBuilder uiCutting;
 
@@ -26,18 +27,17 @@ public class Bundle_Cut_UI : MonoBehaviour
     {
         if (Data.MS == Making_State.start)
         {
-            uiBundle = Instantiate<UIBuilder>(uiCanvasPrefab);
+            //uiBundle = Instantiate<UIBuilder>(uiCanvasPrefab);
 
-            uiBundle.SetPaneWidth(900);
+            //uiBundle.SetPaneWidth(900);
+            //uiBundle.AddLabel("마름질");
+            //uiBundle.AddDivider();
 
-            uiBundle.AddLabel("마름질");
-            uiBundle.AddDivider();
+            //uiCutting = Instantiate<UIBuilder>(uiCanvasPrefab);
 
-            uiCutting = Instantiate<UIBuilder>(uiCanvasPrefab);
-
-            uiCutting.SetPaneWidth(900);
-            uiCutting.AddLabel("재단");
-            uiCutting.AddDivider();
+            //uiCutting.SetPaneWidth(900);
+            //uiCutting.AddLabel("재단");
+            //uiCutting.AddDivider();
         }
     }
 
@@ -45,7 +45,7 @@ public class Bundle_Cut_UI : MonoBehaviour
     {
         uiBundle.Hide();
         Data.MS = Making_State.cutting;
-        Data.isCheck = true;
+        Show_Confirm();
     }
 
     public void CutButton()
@@ -57,48 +57,50 @@ public class Bundle_Cut_UI : MonoBehaviour
         Data.isCheck = true;
     }
 
+    public void Show_Confirm()
+    {
+        switch (Data.MS)
+        {
+            case Making_State.bundle:
+                switch (Data.CS)
+                {
+                    case Cloth_State.t_shirts:
+                        //uiBundle.AddImage(bundleSpite[0], new Rect(0, 0, 450, 350));
+                        break;
+                    case Cloth_State.shirts:
+                        break;
+                    case Cloth_State.pants:
+                        break;
+                    case Cloth_State.skirt:
+                        break;
+                }
+                //uiBundle.Show();
+                Data.isCheck = false;
+                break;
+
+            case Making_State.cutting:
+                switch (Data.CS)
+                {
+                    case Cloth_State.t_shirts:
+                        //uiCutting.AddImage(cutSpite[0], new Rect(0, 0, 450, 350));
+                        break;
+                    case Cloth_State.shirts:
+                        break;
+                    case Cloth_State.pants:
+                        break;
+                    case Cloth_State.skirt:
+                        break;
+                }
+                //uiCutting.Show();
+                break;
+        }
+    }
+
     void Update()
     {
         if (Data.isCheck == true)
         {
-            switch (Data.MS)
-            {
-                case Making_State.bundle:
-                    switch (Data.CS)
-                    {
-                        case Cloth_State.t_shirts:
-                            uiBundle.AddImage(bundleSpite[0], new Rect(0, 0, 450, 350));
-                            break;
-                        case Cloth_State.shirts:
-                            break;
-                        case Cloth_State.pants:
-                            break;
-                        case Cloth_State.skirt:
-                            break;
-                    }
-                    uiBundle.AddButton("확인", BundleButton);
-                    uiBundle.Show();
-                    Data.isCheck = false;
-                    break;
-
-                case Making_State.cutting:
-                    switch (Data.CS)
-                    {
-                        case Cloth_State.t_shirts:
-                            uiCutting.AddImage(cutSpite[0], new Rect(0, 0, 450, 350));
-                            break;
-                        case Cloth_State.shirts:
-                            break;
-                        case Cloth_State.pants:
-                            break;
-                        case Cloth_State.skirt:
-                            break;
-                    }
-                    uiCutting.AddButton("확인", CutButton);
-                    uiCutting.Show();
-                    Data.isCheck = false;
-                    break;
-            }
+            //Show_Confirm();
         }
     }
 }

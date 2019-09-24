@@ -68,7 +68,7 @@ public class StartUI : MonoBehaviour
         player.transform.position = selectPos.transform.position;
         player.transform.rotation = selectPos.transform.rotation;
         uiMenu.Hide();
-		Data.MS = Making_State.Design_Select;
+        Data.MS = Making_State.Design_Select;
         Data.PM = Play_Mode.tutorial;
         Data.isCheck = true;
     }
