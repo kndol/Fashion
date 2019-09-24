@@ -29,6 +29,20 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
+--- !u!114 &4072143475152364173
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1711323865102556156}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1254083943, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AspectMode: 1
+  m_AspectRatio: 2.5
 --- !u!1001 &1709789092193966308
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -113,7 +127,7 @@ PrefabInstance:
     - target: {fileID: 224113878955223432, guid: 6b29b8b1a79e4b04faf91a90cbc6ccb4,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: 200
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 224113878955223432, guid: 6b29b8b1a79e4b04faf91a90cbc6ccb4,
         type: 3}

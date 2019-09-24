@@ -46,6 +46,8 @@ public class OVRHeadsetEmulator : MonoBehaviour {
 
 	private Vector3 recordedHeadPoseRelativeOffsetTranslation;
 	private Vector3 recordedHeadPoseRelativeOffsetRotation;
+	private Vector3 initialHeadPoseRelativeOffsetTranslation;
+	private Vector3 initialHeadPoseRelativeOffsetRotation;
 
 	private bool hasSentEvent = false;
 	private bool emulatorHasInitialized = false;
@@ -64,6 +66,8 @@ public class OVRHeadsetEmulator : MonoBehaviour {
 				manager = OVRManager.instance;
 				recordedHeadPoseRelativeOffsetTranslation = manager.headPoseRelativeOffsetTranslation;
 				recordedHeadPoseRelativeOffsetRotation = manager.headPoseRelativeOffsetRotation;
+				initialHeadPoseRelativeOffsetTranslation = manager.headPoseRelativeOffsetTranslation;
+				initialHeadPoseRelativeOffsetRotation = manager.headPoseRelativeOffsetRotation;
 				emulatorHasInitialized = true;
 			}
 			else
@@ -76,14 +80,14 @@ public class OVRHeadsetEmulator : MonoBehaviour {
 
 			if (!lastFrameEmulationActivated && resetHmdPoseOnRelease)
 			{
-				manager.headPoseRelativeOffsetTranslation = recordedHeadPoseRelativeOffsetTranslation;
-				manager.headPoseRelativeOffsetRotation = recordedHeadPoseRelativeOffsetRotation;
+				manager.headPoseRelativeOffsetTranslation = initialHeadPoseRelativeOffsetTranslation;
+				manager.headPoseRelativeOffsetRotation = initialHeadPoseRelativeOffsetRotation;
 			}
 
 			if (resetHmdPoseByMiddleMouseButton && Input.GetMouseButton(2))
 			{
-				manager.headPoseRelativeOffsetTranslation = Vector3.zero;
-				manager.headPoseRelativeOffsetRotation = Vector3.zero;
+				manager.headPoseRelativeOffsetTranslation = initialHeadPoseRelativeOffsetTranslation; // Vector3.zero;
+				manager.headPoseRelativeOffsetRotation = initialHeadPoseRelativeOffsetRotation; // Vector3.zero;
 			}
 			else
 			{
@@ -129,8 +133,8 @@ public class OVRHeadsetEmulator : MonoBehaviour {
 
 				if (resetHmdPoseOnRelease)
 				{
-					manager.headPoseRelativeOffsetTranslation = Vector3.zero;
-					manager.headPoseRelativeOffsetRotation = Vector3.zero;
+					manager.headPoseRelativeOffsetTranslation = initialHeadPoseRelativeOffsetTranslation; // Vector3.zero;
+					manager.headPoseRelativeOffsetRotation = initialHeadPoseRelativeOffsetRotation; // Vector3.zero;
 				}
 			}
 		}
