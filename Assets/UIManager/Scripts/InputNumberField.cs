@@ -35,6 +35,7 @@ namespace Fashion.UIManager
 			text = m_curNumber.ToString();
 			onValueChanged.AddListener((string s) =>
 			{
+				if (string.IsNullOrEmpty(s)) s = "0";
 				onNumberChanged(Convert.ToInt32(s));
 			});
 			onEndEdit.AddListener((string s) =>
@@ -46,7 +47,10 @@ namespace Fashion.UIManager
 
 		public void OnNumberChanged()
 		{
+			if (string.IsNullOrEmpty(text)) text = "0";
 			int num = Convert.ToInt32(text);
+			// 0으로 시작되는 경우를 바로잡기 위해
+			text = num.ToString();
 			m_curNumber = num;
 		}
 
