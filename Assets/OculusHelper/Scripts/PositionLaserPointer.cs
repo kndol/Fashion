@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.UI;
 // https://forum.unity.com/threads/how-best-to-test-vr-when-not-always-using-a-vr-headset.532265/
 public class PositionLaserPointer : MonoBehaviour
 {
@@ -14,7 +14,9 @@ public class PositionLaserPointer : MonoBehaviour
 	Vector3 offset;
 	GameObject go;
 
-	private void Start()
+    bool isCheck = false;
+
+    private void Start()
 	{
 		offset = new Vector3(0, -0.01f, 0);
 		go = new GameObject();
@@ -30,11 +32,12 @@ public class PositionLaserPointer : MonoBehaviour
 			go.transform.localScale = transform.localScale;
 			Ray ray = new Ray(go.transform.position, go.transform.forward);
 
-			RaycastHit hit;
-			if (Physics.Raycast(ray, out hit, maxReach, layerMask))
+            RaycastHit hit;
+
+            if (Physics.Raycast(ray, out hit, maxReach, layerMask))
 			{
-				lp.SetCursorStartDest(go.transform.position, hit.point, hit.point.normalized);
-			}
+                lp.SetCursorStartDest(go.transform.position, hit.point, hit.point.normalized);
+            }
 			else
 			{
 				lp.SetCursorRay(go.transform);

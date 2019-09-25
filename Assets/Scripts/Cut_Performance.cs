@@ -18,38 +18,21 @@ public class Cut_Performance : MonoBehaviour
     static int check_count2 = 0;
     static int check_count3 = 0;
 
-    LaserPointer lp;
+    Fashion.UIManager.LaserPointer lp;
 
-    public LaserPointer.LaserBeamBehavior laserBeamBehavior;
-
-    /*private void Awake()
-    {
-        lp = FindObjectOfType<LaserPointer>();
-        if (!lp)
-        {
-            if (uiHelpersToInstantiate)
-            {
-                GameObject.Instantiate(uiHelpersToInstantiate);
-            }
-            lp = FindObjectOfType<LaserPointer>();
-            if (!lp)
-            {
-                Debug.LogError("UIBuilder requires use of a LaserPointer and will not function without it. Add one to your scene, or assign the UIHelpers prefab to the UIBuilder in the inspector.");
-                return;
-            }
-        }
-        lp.laserBeamBehavior = laserBeamBehavior;
-        GetComponent<OVRRaycaster>().pointer = lp.gameObject;
-    }*/
-
-    void Start()
-    {
-        
-    }
+    bool hasLaser = false;
 
     void Update()
     {
-  
+        if (!hasLaser)
+        {
+            lp = FindObjectOfType<Fashion.UIManager.LaserPointer>();
+            if (lp)
+            {
+                GetComponent<OVRRaycaster>().pointer = lp.gameObject;
+                hasLaser = true;
+            }
+        }
     }
 
     private void OnTriggerEnter(Collider other)

@@ -141,8 +141,11 @@ public class Design_Select_UI : MonoBehaviour
         uiClothes.AddImageButton(spriteShirt, rc, Shirts_Button);
         uiClothes.AddImageButton(spritePants, rc, Pants_Button);
         uiClothes.AddImageButton(spriteSkirt, rc, Skirt_Button);
-        uiClothes.AddImageButton(spriteSkirt, rc, Body_Button);       //몸판 버튼
-        uiClothes.AddImageButton(spriteSkirt, rc, Sleeve_Button);     //소매 버튼
+        if (Data.PM == Play_Mode.tutorial)
+        {
+            uiClothes.AddImageButton(spriteSkirt, rc, Body_Button);       //몸판 버튼
+            uiClothes.AddImageButton(spriteSkirt, rc, Sleeve_Button);     //소매 버튼
+        }
         uiClothes.EndHorizontalSection();
         uiClothes.Show();
     }

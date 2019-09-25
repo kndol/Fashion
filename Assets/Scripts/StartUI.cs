@@ -21,6 +21,7 @@ public class StartUI : MonoBehaviour
 
     void Start ()
     {
+        print("dd");
         Init_Data();
         if (Data.MS == Making_State.start)
         {

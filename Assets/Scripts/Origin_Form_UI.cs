@@ -260,8 +260,9 @@ public class Origin_Form_UI : MonoBehaviour
     {
         if (Data.MS == Making_State.original_form && Data.isCheck == true)
         {
-            Show_Confirm();
             Data.isCheck = false;
+            Show_Confirm();
+            
         }
     }
 }
