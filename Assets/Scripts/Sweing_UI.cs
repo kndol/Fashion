@@ -24,20 +24,17 @@ public class Sweing_UI : MonoBehaviour
 
     void Start()
     {
-        if (Data.MS == Making_State.start)
-        {
-            uiSweing_sheet = Instantiate<UIBuilder>(uiCanvasPrefab);
+        uiSweing_sheet = Instantiate<UIBuilder>(uiCanvasPrefab);
 
-            uiSweing_sheet.SetPaneWidth(900);
-            uiSweing_sheet.AddLabel("낱장 재봉");
-            uiSweing_sheet.AddDivider();
+        uiSweing_sheet.SetPaneWidth(900);
+        uiSweing_sheet.AddLabel("낱장 재봉");
+        uiSweing_sheet.AddDivider();
 
-            uiSweing_fabrication = Instantiate<UIBuilder>(uiCanvasPrefab);
+        uiSweing_fabrication = Instantiate<UIBuilder>(uiCanvasPrefab);
 
-            uiSweing_fabrication.SetPaneWidth(900);
-            uiSweing_fabrication.AddLabel("합봉");
-            uiSweing_fabrication.AddDivider();
-        }
+        uiSweing_fabrication.SetPaneWidth(900);
+        uiSweing_fabrication.AddLabel("합봉");
+        uiSweing_fabrication.AddDivider();
     }
 
     public void Sweing_Sheet_Button()

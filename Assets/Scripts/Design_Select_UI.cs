@@ -15,6 +15,8 @@ public class Design_Select_UI : MonoBehaviour
     [SerializeField]
     Transform originPos = null;
     [SerializeField]
+    Transform testmodePos = null;
+    [SerializeField]
     Sprite spriteTshirt = null;
     [SerializeField]
     Sprite spriteShirt = null;
@@ -25,80 +27,35 @@ public class Design_Select_UI : MonoBehaviour
 
     UIBuilder uiClothes;
     UIBuilder uiSelect;
+    Test_Mode_UI test_mode;
 
     Sprite selectSprite;
 
     void Start()
     {
-        if (Data.CS == Cloth_State.start)
-        {
-            uiClothes = Instantiate<UIBuilder>(uiCanvasPrefab);
-            uiSelect = Instantiate<UIBuilder>(uiCanvasPrefab);
-        }
-    }
-
-    public void Tshirt_Button()    //티셔트 버튼
-    {
-        Data.CS = Cloth_State.t_shirts;
-        uiClothes.Hide();
-        YesNo_Show_Confirm();
-    }
-
-    public void Shirts_Button()      //셔츠 버튼
-    {
-        Data.CS = Cloth_State.shirts;
-        uiClothes.Hide();
-        YesNo_Show_Confirm();
-    }
-
-    public void Pants_Button()       //바지 버튼
-    {
-        Data.CS = Cloth_State.pants;
-        uiClothes.Hide();
-        YesNo_Show_Confirm();
-    }
-
-    public void Skirt_Button()       //치마 버튼
-    {
-        Data.CS = Cloth_State.skirt;
-        uiClothes.Hide();
-        YesNo_Show_Confirm();
-    }
-
-    public void Body_Button()        //몸판 버튼
-    {
-        Data.CS = Cloth_State.Body;
-        uiClothes.Hide();
-        YesNo_Show_Confirm();
-    }
-
-    public void Sleeve_Button()       //소매 버튼
-    {
-        Data.CS = Cloth_State.Sleeve;
-        uiClothes.Hide();
-        YesNo_Show_Confirm();
-    }
-
-    public void Yes_Button()
-    {
-        player.transform.position = originPos.transform.position;
-        player.transform.rotation = originPos.transform.rotation;
-        Destroy(uiClothes.gameObject);
-        Destroy(uiSelect.gameObject);
         uiClothes = Instantiate<UIBuilder>(uiCanvasPrefab);
         uiSelect = Instantiate<UIBuilder>(uiCanvasPrefab);
-        Data.MS = Making_State.original_form;
-        Data.isCheck = true;
     }
 
-    public void No_Button()
+    public void StartTutorial()
     {
-        Destroy(uiSelect.gameObject);
+        Rect rc = new Rect(0, 0, 200, 350);
+
+        uiClothes.SetPaneWidth(1300);
+        uiClothes.AddLabel("디자인을 선택하세요.");
+        uiClothes.AddDivider();
+        uiClothes.StartHorizontalSection(5);
+        uiClothes.AddImageButton(spriteTshirt, rc, TshirtButton);
+        uiClothes.AddImageButton(spriteShirt, rc, ShirtsButton);
+        uiClothes.AddImageButton(spritePants, rc, PantsButton);
+        uiClothes.AddImageButton(spriteSkirt, rc, SkirtButton);
+        uiClothes.AddImageButton(spriteSkirt, rc, BodyButton);       //몸판 버튼
+        uiClothes.AddImageButton(spriteSkirt, rc, SleeveButton);     //소매 버튼
+        uiClothes.EndHorizontalSection();
         uiClothes.Show();
-        uiSelect = Instantiate<UIBuilder>(uiCanvasPrefab);
     }
 
-    public void YesNo_Show_Confirm()
+    public void YesNoShow()
     {
         uiSelect.AddLabel("선택한 옷을 만드시겠습니까?");
         uiSelect.AddDivider();
@@ -121,48 +78,80 @@ public class Design_Select_UI : MonoBehaviour
                 break;
             default:   //소매
                 selectSprite = spriteSkirt;
-                break;        
+                break;
         }
         uiSelect.AddImage(selectSprite, new Rect(0, 0, 450, 350));
         uiSelect.AddDivider();
-        uiSelect.AddButton("Yes", Yes_Button);
-        uiSelect.AddButton("No", No_Button);
+        uiSelect.AddButton("Yes", YesButton);
+        uiSelect.AddButton("No", NoButton);
         uiSelect.Show();
     }
-    public void Cloth_Select_Show_Confirm()
-    {
-        Rect rc = new Rect(0, 0, 200, 350);
 
-        uiClothes.SetPaneWidth(1300);
-        uiClothes.AddLabel("디자인을 선택하세요.");
-        uiClothes.AddDivider();
-        uiClothes.StartHorizontalSection(5);
-        uiClothes.AddImageButton(spriteTshirt, rc, Tshirt_Button);
-        uiClothes.AddImageButton(spriteShirt, rc, Shirts_Button);
-        uiClothes.AddImageButton(spritePants, rc, Pants_Button);
-        uiClothes.AddImageButton(spriteSkirt, rc, Skirt_Button);
-        if (Data.PM == Play_Mode.tutorial)
-        {
-            uiClothes.AddImageButton(spriteSkirt, rc, Body_Button);       //몸판 버튼
-            uiClothes.AddImageButton(spriteSkirt, rc, Sleeve_Button);     //소매 버튼
-        }
-        uiClothes.EndHorizontalSection();
-        uiClothes.Show();
+    public void TshirtButton()    //티셔트 버튼
+    {
+        Data.CS = Cloth_State.t_shirts;
+        uiClothes.Hide();
+        YesNoShow();
     }
 
-    void Update()
+    public void ShirtsButton()      //셔츠 버튼
     {
-        if (Data.MS == Making_State.Design_Select && Data.isCheck == true)
+        Data.CS = Cloth_State.shirts;
+        uiClothes.Hide();
+        YesNoShow();
+    }
+
+    public void PantsButton()       //바지 버튼
+    {
+        Data.CS = Cloth_State.pants;
+        uiClothes.Hide();
+        YesNoShow();
+    }
+
+    public void SkirtButton()       //치마 버튼
+    {
+        Data.CS = Cloth_State.skirt;
+        uiClothes.Hide();
+        YesNoShow();
+    }
+
+    public void BodyButton()        //몸판 버튼
+    {
+        Data.CS = Cloth_State.Body;
+        uiClothes.Hide();
+        YesNoShow();
+    }
+
+    public void SleeveButton()       //소매 버튼
+    {
+        Data.CS = Cloth_State.Sleeve;
+        uiClothes.Hide();
+        YesNoShow();
+    }
+
+    public void YesButton()
+    {
+        player.transform.position = originPos.transform.position;
+        player.transform.rotation = originPos.transform.rotation;
+        Destroy(uiClothes.gameObject);
+        Destroy(uiSelect.gameObject);
+        uiClothes = Instantiate<UIBuilder>(uiCanvasPrefab);
+        uiSelect = Instantiate<UIBuilder>(uiCanvasPrefab);
+        Data.MS = Making_State.original_form;
+
+        if(Data.PM == Play_Mode.test)
         {
-            Data.isCheck = false;
-            Cloth_Select_Show_Confirm();
-            /*switch(Data.PM)
-            {
-                case Play_Mode.tutorial:
-                    break;
-                case Play_Mode.test:
-                    break;
-            }*/
+            player.transform.position = testmodePos.transform.position;
+            player.transform.rotation = testmodePos.transform.rotation;
+            test_mode.Question_Show();
         }
+        Data.isCheck = true;
+    }
+
+    public void NoButton()
+    {
+        Destroy(uiSelect.gameObject);
+        uiClothes.Show();
+        uiSelect = Instantiate<UIBuilder>(uiCanvasPrefab);
     }
 }

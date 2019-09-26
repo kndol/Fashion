@@ -37,7 +37,7 @@ public class Cut_Performance : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.tag == "Cut_Collider_1")
+        /*if(other.gameObject.tag == "Cut_Collider_1")
         {
             check_count1++;
             Destroy(other.gameObject);
@@ -51,6 +51,6 @@ public class Cut_Performance : MonoBehaviour
         {
             check_count3++;
             Destroy(other.gameObject);
-        }
+        }*/
     }
 }

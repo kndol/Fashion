@@ -29,90 +29,10 @@ public class Dart_UI : MonoBehaviour
 
     void Start()
     {
-        if (Data.MS == Making_State.start)
-        {
-            uiDart = Instantiate<UIBuilder>(uiCanvasPrefab);
-        }
-    }
-
-    public void DartButton()
-    {
-        player.transform.position = arrangePos.transform.position;
-        player.transform.rotation = arrangePos.transform.rotation;
-        uiDart.Hide();
-        Data.MS = Making_State.arrangement;
-        Data.isCheck = true;
-    }
-
-    public void Front_Back_Button()   //앞뒤구분 설명 버튼  //설명 추가 예정
-    {
-        if (isCheck)
-        {
-            uiDart.AddLabel("앞/뒤 구분 설명", TextAnchor.MiddleCenter, UIBuilder.PANE_RIGHT);   //적어
-            isCheck = false;
-        }
-        else
-        {
-            Description_Back();
-            isCheck = true;
-        }
-    }
-
-    public void Ford_Button()         //골선 설명 버튼      //설명 추가 예정
-    {
-        if (isCheck)
-        {
-            uiDart.AddLabel("골선 설명", TextAnchor.MiddleCenter, UIBuilder.PANE_RIGHT);    //적어
-            isCheck = false;
-        }
-        else
-        {
-            Description_Back();
-            isCheck = true;
-        }
-    }
-
-    public void Selvage_Button()      //식서 설명 버튼      //설명 추가 예정
-    {
-        if (isCheck)
-        {
-            uiDart.AddLabel("식서 설명", TextAnchor.MiddleCenter, UIBuilder.PANE_RIGHT);  //적어
-            isCheck = false;
-        }
-        else
-        {
-            Description_Back();
-            isCheck = true;
-        }
-    }
-
-    public void ArmHole_Pos_Button()  //암홀위치 설명 버튼  //설명 추가 예정
-    {
-        if (isCheck)
-        {
-            uiDart.AddLabel("암홀위치 설명", TextAnchor.MiddleCenter, UIBuilder.PANE_RIGHT);   //적어
-            isCheck = false;
-        }
-        else
-        {
-            Description_Back();
-            isCheck = true;
-        }
-    }
-
-    public void Description_Back()
-    {
-        Destroy(uiDart.gameObject);
         uiDart = Instantiate<UIBuilder>(uiCanvasPrefab);
-        Show_Confirm();
     }
 
-    public void Size_Input(int i)
-    {
-        
-    }
-
-    public void Show_Confirm()
+    public void StartTutorial()
     {
         uiDart.AddLabel("패턴완성", TextAnchor.MiddleCenter, UIBuilder.PANE_LEFT);
         uiDart.AddLabel("Description", TextAnchor.MiddleCenter, UIBuilder.PANE_RIGHT);
@@ -122,10 +42,10 @@ public class Dart_UI : MonoBehaviour
         {
             case Cloth_State.t_shirts:
                 uiDart.AddImage(completionSpite[0], new Rect(0, 0, 450, 350), UIBuilder.PANE_LEFT);
-                uiDart.AddButton("앞/뒤 구분", Front_Back_Button, UIBuilder.PANE_CENTER);
-                uiDart.AddButton("골선", Ford_Button, UIBuilder.PANE_CENTER);
-                uiDart.AddButton("식서방향", Selvage_Button, UIBuilder.PANE_CENTER);
-                uiDart.AddButton("암홀위치", ArmHole_Pos_Button, UIBuilder.PANE_CENTER);
+                uiDart.AddButton("앞/뒤 구분", FrontBackButton, UIBuilder.PANE_CENTER);
+                uiDart.AddButton("골선", FordButton, UIBuilder.PANE_CENTER);
+                uiDart.AddButton("식서방향", SelvageButton, UIBuilder.PANE_CENTER);
+                uiDart.AddButton("암홀위치", ArmHolePosButton, UIBuilder.PANE_CENTER);
                 break;
             case Cloth_State.shirts:
                 break;
@@ -138,12 +58,80 @@ public class Dart_UI : MonoBehaviour
         uiDart.Show();
     }
 
-    void Update()
+    public void DartButton()
     {
-        if (Data.MS == Making_State.dart_pos && Data.isCheck == true)
+        player.transform.position = arrangePos.transform.position;
+        player.transform.rotation = arrangePos.transform.rotation;
+        uiDart.Hide();
+        Data.MS = Making_State.arrangement;
+        Data.isCheck = true;
+    }
+
+    public void FrontBackButton()   //앞뒤구분 설명 버튼  //설명 추가 예정
+    {
+        if (isCheck)
         {
-            Data.isCheck = false;
-            Show_Confirm();
+            uiDart.AddLabel("앞/뒤 구분 설명", TextAnchor.MiddleCenter, UIBuilder.PANE_RIGHT);   //적어
+            isCheck = false;
         }
+        else
+        {
+            DescriptionBack();
+            isCheck = true;
+        }
+    }
+
+    public void FordButton()         //골선 설명 버튼      //설명 추가 예정
+    {
+        if (isCheck)
+        {
+            uiDart.AddLabel("골선 설명", TextAnchor.MiddleCenter, UIBuilder.PANE_RIGHT);    //적어
+            isCheck = false;
+        }
+        else
+        {
+            DescriptionBack();
+            isCheck = true;
+        }
+    }
+
+    public void SelvageButton()      //식서 설명 버튼      //설명 추가 예정
+    {
+        if (isCheck)
+        {
+            uiDart.AddLabel("식서 설명", TextAnchor.MiddleCenter, UIBuilder.PANE_RIGHT);  //적어
+            isCheck = false;
+        }
+        else
+        {
+            DescriptionBack();
+            isCheck = true;
+        }
+    }
+
+    public void ArmHolePosButton()  //암홀위치 설명 버튼  //설명 추가 예정
+    {
+        if (isCheck)
+        {
+            uiDart.AddLabel("암홀위치 설명", TextAnchor.MiddleCenter, UIBuilder.PANE_RIGHT);   //적어
+            isCheck = false;
+        }
+        else
+        {
+            DescriptionBack();
+            isCheck = true;
+        }
+    }
+
+    public void DescriptionBack()
+    {
+        Destroy(uiDart.gameObject);
+        uiDart = Instantiate<UIBuilder>(uiCanvasPrefab);
+        StartTutorial();
+    }
+
+    public void Size_Input(int i)
+    {
+        
     }
 }

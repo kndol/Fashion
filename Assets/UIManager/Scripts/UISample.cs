@@ -18,14 +18,29 @@ public class UISample : MonoBehaviour
 	[SerializeField]
 	Sprite[] sprites;
 
+    public Sprite sprite;
+
 	UIBuilder uIBuilder;
 
 	void Start ()
     {
-		uIBuilder = Instantiate<UIBuilder>(uiCanvasPrefab);
+		uIBuilder = Instantiate<UIBuilder>(uiCanvasPrefab);//
 
-		uIBuilder.SetPaneWidth(880);
-		uIBuilder.AddButton("버튼", LogButtonPressed);
+        uIBuilder.AddLabel("식서기호로 올바른 것은?");
+        uIBuilder.AddDivider();
+
+        uIBuilder.StartHorizontalSection(5);
+        uIBuilder.AddImageButton(sprite, new Rect(0, 0, 100, 100), LogButtonPressed);
+        uIBuilder.AddImageButton(sprite, new Rect(0, 0, 100, 100), LogButtonPressed);
+        uIBuilder.AddImageButton(sprite, new Rect(0, 0, 100, 100), LogButtonPressed);
+        uIBuilder.EndHorizontalSection();
+
+        uIBuilder.Show();
+        uIBuilder.Hide();
+
+        
+
+        uIBuilder.SetPaneWidth(880);		
         var labelPrefab = uIBuilder.AddLabel("레이블");
         var sliderPrefab = uIBuilder.AddSlider("슬라이더", 1.0f, 10.0f, SliderPressed, true);
 		labelText = labelPrefab.GetComponentInChildren<Text>();
