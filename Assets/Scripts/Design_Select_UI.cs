@@ -6,16 +6,10 @@ using UnityEngine.UI;
 using Fashion;
 using Fashion.UIManager;
 
-public class Design_Select_UI : MonoBehaviour
+public class Design_Select_UI : FashionController
 {
     [SerializeField]
-    UIBuilder uiCanvasPrefab = null;
-    [SerializeField]
-    Transform player = null;
-    [SerializeField]
-    Transform originPos = null;
-    [SerializeField]
-    Transform testmodePos = null;
+    protected Transform testmodePos = null;
     [SerializeField]
     Sprite spriteTshirt = null;
     [SerializeField]
@@ -27,18 +21,16 @@ public class Design_Select_UI : MonoBehaviour
 
     UIBuilder uiClothes;
     UIBuilder uiSelect;
-    Test_Mode_UI test_mode;
 
     Sprite selectSprite;
 
-    void Start()
+    public override void StartTutorial()
     {
+        base.StartTutorial();
+
         uiClothes = Instantiate<UIBuilder>(uiCanvasPrefab);
         uiSelect = Instantiate<UIBuilder>(uiCanvasPrefab);
-    }
 
-    public void StartTutorial()
-    {
         Rect rc = new Rect(0, 0, 200, 350);
 
         uiClothes.SetPaneWidth(1300);
@@ -53,38 +45,6 @@ public class Design_Select_UI : MonoBehaviour
         uiClothes.AddImageButton(spriteSkirt, rc, SleeveButton);     //소매 버튼
         uiClothes.EndHorizontalSection();
         uiClothes.Show();
-    }
-
-    public void YesNoShow()
-    {
-        uiSelect.AddLabel("선택한 옷을 만드시겠습니까?");
-        uiSelect.AddDivider();
-        switch (Data.CS)
-        {
-            case ClothType.t_shirts:
-                selectSprite = spriteTshirt;
-                break;
-            case ClothType.shirts:
-                selectSprite = spriteShirt;
-                break;
-            case ClothType.pants:
-                selectSprite = spritePants;
-                break;
-            case ClothType.skirt:
-                selectSprite = spriteSkirt;
-                break;
-            case ClothType.Body:
-                selectSprite = spriteSkirt;
-                break;
-            default:   //소매
-                selectSprite = spriteSkirt;
-                break;
-        }
-        uiSelect.AddImage(selectSprite, new Rect(0, 0, 450, 350));
-        uiSelect.AddDivider();
-        uiSelect.AddButton("Yes", YesButton);
-        uiSelect.AddButton("No", NoButton);
-        uiSelect.Show();
     }
 
     public void TshirtButton()    //티셔트 버튼
@@ -129,23 +89,45 @@ public class Design_Select_UI : MonoBehaviour
         YesNoShow();
     }
 
+    public void YesNoShow()
+    {
+        uiSelect.AddLabel("선택한 옷을 만드시겠습니까?");
+        uiSelect.AddDivider();
+        switch (Data.CS)
+        {
+            case Cloth_State.t_shirts:
+                selectSprite = spriteTshirt;
+                break;
+            case Cloth_State.shirts:
+                selectSprite = spriteShirt;
+                break;
+            case Cloth_State.pants:
+                selectSprite = spritePants;
+                break;
+            case Cloth_State.skirt:
+                selectSprite = spriteSkirt;
+                break;
+            case Cloth_State.Body:
+                selectSprite = spriteSkirt;
+                break;
+            default:   //소매
+                selectSprite = spriteSkirt;
+                break;
+        }
+        uiSelect.AddImage(selectSprite, new Rect(0, 0, 450, 350));
+        uiSelect.AddDivider();
+        uiSelect.AddButton("Yes", YesButton);
+        uiSelect.AddButton("No", NoButton);
+        uiSelect.Show();
+    }
+
     public void YesButton()
     {
-        player.transform.position = originPos.transform.position;
-        player.transform.rotation = originPos.transform.rotation;
         Destroy(uiClothes.gameObject);
         Destroy(uiSelect.gameObject);
         uiClothes = Instantiate<UIBuilder>(uiCanvasPrefab);
         uiSelect = Instantiate<UIBuilder>(uiCanvasPrefab);
-        Data.MS = Making_State.original_form;
-
-        if(Data.PM == Play_Mode.test)
-        {
-            player.transform.position = testmodePos.transform.position;
-            player.transform.rotation = testmodePos.transform.rotation;
-            test_mode.Question_Show();
-        }
-        Data.isCheck = true;
+        OnTutorialEnd();
     }
 
     public void NoButton()
@@ -153,5 +135,17 @@ public class Design_Select_UI : MonoBehaviour
         Destroy(uiSelect.gameObject);
         uiClothes.Show();
         uiSelect = Instantiate<UIBuilder>(uiCanvasPrefab);
+    }
+
+    public override void OnTutorialEnd()
+    {
+        switch(Data.PM)
+        {
+            case Play_Mode.tutorial:
+                base.OnTutorialEnd();
+                break;
+            case Play_Mode.test:
+                break;
+        }
     }
 }

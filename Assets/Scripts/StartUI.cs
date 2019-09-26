@@ -15,34 +15,41 @@ public class StartUI : FashionController
 
     public override void Start ()
     {
+        StartTutorial();
+    }
+
+    public override void StartTutorial()
+    {
+        base.StartTutorial();
+
         Init_Data();
         uiMenu = Instantiate<UIBuilder>(uiCanvasPrefab);
 
-        uiMenu.AddLabel("¸Þ´º");
+        uiMenu.AddLabel("ï¿½Þ´ï¿½");
         uiMenu.AddDivider();
-        uiMenu.AddButton("¿ë¾î¼³¸í", ButtonTerms);
-        uiMenu.AddButton("Æ©Åä¸®¾ó", ButtonTutorial);
-        uiMenu.AddButton("Å×½ºÆ®", ButtonTest);
-        uiMenu.AddButton("³¡³»±â", ButtonExit);
+        uiMenu.AddButton("ï¿½ï¿½î¼³ï¿½ï¿½", ButtonTerms);
+        uiMenu.AddButton("Æ©ï¿½ä¸®ï¿½ï¿½", ButtonTutorial);
+        uiMenu.AddButton("ï¿½×½ï¿½Æ®", ButtonTest);
+        uiMenu.AddButton("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", ButtonExit);
         uiMenu.Show();
 
         uiTerm = Instantiate<UIBuilder>(uiCanvasPrefab);
 
         uiTerm.SetPaneWidth(980);
-        uiTerm.AddLabel("<b>¿ë¾î ¼³¸í</b>");
+        uiTerm.AddLabel("<b>ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½</b>");
         uiTerm.AddDivider();
-        uiTerm.AddLabel("Ç×¸ñ\t\t³»¿ë", TextAnchor.MiddleLeft);
-        uiTerm.AddScrollView("<b>¿Ï¼º¼±</b>\t\tÆÐÅÏÀÇ ¿Ï¼º¼±\n" +
-            "<b>¾È³»¼±</b>\t\t¿Ï¼º¼±À» ±×¸®±â À§ÇÑ º¸Á¶¼±\n" +
-            "<b>¾È´Ü¼±</b>\t\t¾È´Ü ÆÐÅÏÀ» Ç¥½ÃÇÏ±â À§ÇÑ ¼±\n" +
-            "<b>Àý°³¼±</b>\t\t°¡À§ÁúÀ» ÇØ¾ßÇÔÀ» ³ªÅ¸³»´Â Ç¥½Ã\n" +
-            "<b>²ªÀÓ¼±</b>\t\tÁ¢´Â ¼± Ç¥½Ã\n" +
-            "<b>½ºÆ¼Ä¡¼±</b>\t½ºÆ¼Ä¡ÀÇ ½ÃÀÛ ºÎºÐ°ú ³¡ºÎºÐÀ» ³ªÅ¸³½´Ù.\n" +
-            "<b>µîºÐ¼±</b>\t\tµîºÐÀ» Ç¥½ÃÇÏ¸ç ºÎÈ£¸¦ ºÙÀÌ´Â °æ¿ìµµ ÀÖÀ½", TextAnchor.UpperLeft, 320);
-        uiTerm.AddButton("¸Þ´º·Î", ButtonMenu);
+        uiTerm.AddLabel("ï¿½×¸ï¿½\t\tï¿½ï¿½ï¿½ï¿½", TextAnchor.MiddleLeft);
+        uiTerm.AddScrollView("<b>ï¿½Ï¼ï¿½ï¿½ï¿½</b>\t\tï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ï¼ï¿½ï¿½ï¿½\n" +
+            "<b>ï¿½È³ï¿½ï¿½ï¿½</b>\t\tï¿½Ï¼ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½×¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½\n" +
+            "<b>ï¿½È´Ü¼ï¿½</b>\t\tï¿½È´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ç¥ï¿½ï¿½ï¿½Ï±ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½\n" +
+            "<b>ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½</b>\t\tï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ø¾ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Å¸ï¿½ï¿½ï¿½ï¿½ Ç¥ï¿½ï¿½\n" +
+            "<b>ï¿½ï¿½ï¿½Ó¼ï¿½</b>\t\tï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ Ç¥ï¿½ï¿½\n" +
+            "<b>ï¿½ï¿½Æ¼Ä¡ï¿½ï¿½</b>\tï¿½ï¿½Æ¼Ä¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ÎºÐ°ï¿½ ï¿½ï¿½ï¿½Îºï¿½ï¿½ï¿½ ï¿½ï¿½Å¸ï¿½ï¿½ï¿½ï¿½.\n" +
+            "<b>ï¿½ï¿½Ð¼ï¿½</b>\t\tï¿½ï¿½ï¿½ï¿½ï¿½ Ç¥ï¿½ï¿½ï¿½Ï¸ï¿½ ï¿½ï¿½È£ï¿½ï¿½ ï¿½ï¿½ï¿½Ì´ï¿½ ï¿½ï¿½ìµµ ï¿½ï¿½ï¿½ï¿½", TextAnchor.UpperLeft, 320);
+        uiTerm.AddButton("ï¿½Þ´ï¿½ï¿½ï¿½", ButtonMenu);
     }
 
-	public void ButtonMenu()
+    public void ButtonMenu()
 	{
 		uiTerm.Hide();
 		uiMenu.Show();
@@ -54,22 +61,19 @@ public class StartUI : FashionController
 		uiTerm.Show();
     }
 
-	public void ButtonTutorial()    //Æ©Åä¸®¾ó ¹öÆ°
+	public void ButtonTutorial()    //Æ©ï¿½ä¸®ï¿½ï¿½ ï¿½ï¿½Æ°
 	{
         uiMenu.Hide();
-        Data.MS = Making_State.Design_Select;
         Data.PM = Play_Mode.tutorial;
-        design_selectUI.StartTutorial();
+        OnTutorialEnd();
+
     }
 
-	public void ButtonTest()        //Å×½ºÆ® ¹öÆ°
+	public void ButtonTest()        //ï¿½×½ï¿½Æ® ï¿½ï¿½Æ°
 	{
-        player.transform.position = selectPos.transform.position;
-        player.transform.rotation = selectPos.transform.rotation;
         uiMenu.Hide();
-        Data.MS = Making_State.Design_Select;
         Data.PM = Play_Mode.test;
-        design_selectUI.StartTutorial();
+        OnTutorialEnd();
     }
 
 	public void ButtonExit()
@@ -81,10 +85,14 @@ public class StartUI : FashionController
 #endif
 	}
 
-    public void Init_Data()    //ÃÊ±âÈ­ ÇÔ¼ö
+    public override void OnTutorialEnd()
+    {
+        base.OnTutorialEnd();
+    }
+
+    public void Init_Data()    //ï¿½Ê±ï¿½È­ ï¿½Ô¼ï¿½
     {
         Data.Score = 100;
-        Data.isCheck = false;
         Data.PM = Play_Mode.start;
         Data.CS = ClothType.t_shirts;
         Data.MS = Making_State.start;
