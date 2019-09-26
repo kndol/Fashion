@@ -46,9 +46,8 @@ public class Tutorial_Arrange_and_Cut : FashionController
 
 	bool hasLaser = false;
 
-	public override void Start()
+	void Start()
 	{
-		base.Start();
 		int i, j;
 		for (i=0; i<parts.Length; i++)
 		{
@@ -130,15 +129,15 @@ public class Tutorial_Arrange_and_Cut : FashionController
 	public void DoArrange()
 	{
 		btnOk.GetComponent<Button>().interactable = false;
-		imageBtns = new RectTransform[parts[(int)Data.CS].arrangeParts.Length];
+		imageBtns = new RectTransform[parts[(int)Data.clothType].arrangeParts.Length];
 		curCountPointSelected = 0;
 
 		uiArrangement.AddLabel("배치", TextAnchor.MiddleCenter, UIBuilder.PANE_RIGHT);
 		uiArrangement.AddDivider(UIBuilder.PANE_RIGHT);
 		uiArrangement.AddLabel("원단을 클릭하여 배치하세요.", TextAnchor.MiddleCenter, UIBuilder.PANE_RIGHT);
-		for (int i = 0; i < parts[(int)Data.CS].arrangeParts.Length; i++)
+		for (int i = 0; i < parts[(int)Data.clothType].arrangeParts.Length; i++)
 		{
-			Sprite sprite = parts[(int)Data.CS].arrangeParts[i].GetComponent<Image>().sprite;
+			Sprite sprite = parts[(int)Data.clothType].arrangeParts[i].GetComponent<Image>().sprite;
 			imageBtns[i] = uiArrangement.AddImageButton(sprite, imgBtnRect, delegate { arrange(i); }, UIBuilder.PANE_RIGHT); // 배치하기
 		}
 		uiArrangement.Show();
@@ -148,8 +147,8 @@ public class Tutorial_Arrange_and_Cut : FashionController
 	{
 		imageBtns[partNum].GetComponent<Button>().interactable = false;
 
-		parts[(int)Data.CS].arrangeParts[partNum].SetActive(true);
-		if (++curCountPointSelected == parts[(int)Data.CS].arrangeParts.Length)
+		parts[(int)Data.clothType].arrangeParts[partNum].SetActive(true);
+		if (++curCountPointSelected == parts[(int)Data.clothType].arrangeParts.Length)
 			uiArrangement.AddButton("다음으로", ShowCutDesc, UIBuilder.PANE_RIGHT);
 	}
 
@@ -185,7 +184,7 @@ public class Tutorial_Arrange_and_Cut : FashionController
 
 	public void DoCut()
 	{
-		int clothType = (int)Data.CS;
+		int clothType = (int)Data.clothType;
 		int groupCount = parts[clothType].pointGroup.Length;
 		PointSelected = new List<bool>[groupCount];
 		countPointSelected = new int[groupCount];
@@ -218,9 +217,9 @@ public class Tutorial_Arrange_and_Cut : FashionController
 		uiArrangement.AddLabel("시접", TextAnchor.MiddleCenter, UIBuilder.PANE_RIGHT);
 		uiArrangement.AddDivider(UIBuilder.PANE_RIGHT);
 		uiArrangement.AddLabel("원단 도안의 점선을 따라 포인터를 움직여 .", TextAnchor.MiddleCenter, UIBuilder.PANE_RIGHT);
-		for (int i = 0; i < parts[(int)Data.CS].arrangeParts.Length; i++)
+		for (int i = 0; i < parts[(int)Data.clothType].arrangeParts.Length; i++)
 		{
-			Sprite sprite = parts[(int)Data.CS].arrangeParts[i].GetComponent<Image>().sprite;
+			Sprite sprite = parts[(int)Data.clothType].arrangeParts[i].GetComponent<Image>().sprite;
 			imageBtns[i] = uiArrangement.AddImageButton(sprite, imgBtnRect, delegate { arrange(i); }, UIBuilder.PANE_RIGHT); // 배치하기
 		}
 		uiArrangement.Show();
@@ -233,7 +232,7 @@ public class Tutorial_Arrange_and_Cut : FashionController
 			print("선택 group: " + group + ", id: " + id);
 			PointSelected[group][id] = true;
 			++countPointSelected[group];
-			if (countPointSelected[group] > parts[(int)Data.CS].pointGroup[group].transform.childCount * 2 / 3)
+			if (countPointSelected[group] > parts[(int)Data.clothType].pointGroup[group].transform.childCount * 2 / 3)
 			{
 				print("성공");
 			}

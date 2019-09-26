@@ -21,7 +21,7 @@ public class Dart_UI : FashionController
 
     bool isCheck = true;
 
-    public override void StartTutorial()
+    void StartTutorial()
     {
         uiDart = Instantiate<UIBuilder>(uiCanvasPrefab);
 
@@ -29,7 +29,7 @@ public class Dart_UI : FashionController
         uiDart.AddLabel("Description", TextAnchor.MiddleCenter, UIBuilder.PANE_RIGHT);
         uiDart.AddDivider(UIBuilder.PANE_LEFT);
         uiDart.AddDivider(UIBuilder.PANE_RIGHT);
-        switch (Data.CS)
+        switch (Data.clothType)
         {
             case ClothType.t_shirts:
                 uiDart.AddImage(completionSpite[0], new Rect(0, 0, 450, 350), UIBuilder.PANE_LEFT);

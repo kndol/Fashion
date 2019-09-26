@@ -8,26 +8,20 @@ using Fashion.UIManager;
 
 public class Design_Select_UI : FashionController
 {
-    [SerializeField]
-    protected Transform testmodePos = null;
-    [SerializeField]
-    Sprite spriteTshirt = null;
-    [SerializeField]
-    Sprite spriteShirt = null;
-    [SerializeField]
-    Sprite spritePants = null;
-    [SerializeField]
-    Sprite spriteSkirt = null;
+	[SerializeField]
+	string tutorialSceneName = null;
+	[SerializeField]
+	string testSceneName = null;
+	[SerializeField]
+	Sprite[] spriteClothes = null;
 
-    UIBuilder uiClothes;
+	UIBuilder uiClothes;
     UIBuilder uiSelect;
 
-    Sprite selectSprite;
+	RectTransform imgBtn;
 
-    public override void StartTutorial()
-    {
-        base.StartTutorial();
-
+	private void Start()
+	{
         uiClothes = Instantiate<UIBuilder>(uiCanvasPrefab);
         uiSelect = Instantiate<UIBuilder>(uiCanvasPrefab);
 
@@ -37,115 +31,47 @@ public class Design_Select_UI : FashionController
         uiClothes.AddLabel("디자인을 선택하세요.");
         uiClothes.AddDivider();
         uiClothes.StartHorizontalSection(5);
-        uiClothes.AddImageButton(spriteTshirt, rc, TshirtButton);
-        uiClothes.AddImageButton(spriteShirt, rc, ShirtsButton);
-        uiClothes.AddImageButton(spritePants, rc, PantsButton);
-        uiClothes.AddImageButton(spriteSkirt, rc, SkirtButton);
-        uiClothes.AddImageButton(spriteSkirt, rc, BodyButton);       //몸판 버튼
-        uiClothes.AddImageButton(spriteSkirt, rc, SleeveButton);     //소매 버튼
-        uiClothes.EndHorizontalSection();
+        uiClothes.AddImageButton(spriteClothes[0], rc, delegate { SelCloth(ClothType.t_shirts); });
+		uiClothes.AddImageButton(spriteClothes[1], rc, delegate { SelCloth(ClothType.shirts); });
+		uiClothes.AddImageButton(spriteClothes[2], rc, delegate { SelCloth(ClothType.pants); });
+		uiClothes.AddImageButton(spriteClothes[3], rc, delegate { SelCloth(ClothType.skirt); });
+		uiClothes.AddImageButton(spriteClothes[4], rc, delegate { SelCloth(ClothType.body); });
+		uiClothes.AddImageButton(spriteClothes[5], rc, delegate { SelCloth(ClothType.sleeve); });
+		uiClothes.EndHorizontalSection();
         uiClothes.Show();
+
+		uiSelect.AddLabel("선택한 옷을 만드시겠습니까?");
+		uiSelect.AddDivider();
+		imgBtn = uiSelect.AddImage(spriteClothes[0], new Rect(0, 0, 450, 350));
+		uiSelect.AddDivider();
+		uiSelect.AddYesNoButtons("", "", OnYesNoButton);
+	}
+
+	public void SelCloth(ClothType clothType)
+	{
+		Data.clothType = clothType;
+
+		uiClothes.Hide();
+		imgBtn.GetComponent<Image>().sprite = spriteClothes[(int)Data.clothType];
+		uiSelect.Show();
     }
 
-    public void TshirtButton()    //티셔트 버튼
+    public void OnYesNoButton(Reply reply)
     {
-        Data.CS = ClothType.t_shirts;
-        uiClothes.Hide();
-        YesNoShow();
-    }
+		if (reply == Reply.Yes)
+		{
+			nextSceneName = Data.playType == PlayType.tutorial ? tutorialSceneName : testSceneName;
+			OnTutorialEnd();
+		}
+		else
+		{
+			uiSelect.Hide();
+			uiClothes.Show();
+		}
+	}
 
-    public void ShirtsButton()      //셔츠 버튼
+	public override void OnTutorialEnd()
     {
-        Data.CS = ClothType.shirts;
-        uiClothes.Hide();
-        YesNoShow();
-    }
-
-    public void PantsButton()       //바지 버튼
-    {
-        Data.CS = ClothType.pants;
-        uiClothes.Hide();
-        YesNoShow();
-    }
-
-    public void SkirtButton()       //치마 버튼
-    {
-        Data.CS = ClothType.skirt;
-        uiClothes.Hide();
-        YesNoShow();
-    }
-
-    public void BodyButton()        //몸판 버튼
-    {
-        Data.CS = ClothType.Body;
-        uiClothes.Hide();
-        YesNoShow();
-    }
-
-    public void SleeveButton()       //소매 버튼
-    {
-        Data.CS = ClothType.Sleeve;
-        uiClothes.Hide();
-        YesNoShow();
-    }
-
-    public void YesNoShow()
-    {
-        uiSelect.AddLabel("선택한 옷을 만드시겠습니까?");
-        uiSelect.AddDivider();
-        switch (Data.CS)
-        {
-            case Cloth_State.t_shirts:
-                selectSprite = spriteTshirt;
-                break;
-            case Cloth_State.shirts:
-                selectSprite = spriteShirt;
-                break;
-            case Cloth_State.pants:
-                selectSprite = spritePants;
-                break;
-            case Cloth_State.skirt:
-                selectSprite = spriteSkirt;
-                break;
-            case Cloth_State.Body:
-                selectSprite = spriteSkirt;
-                break;
-            default:   //소매
-                selectSprite = spriteSkirt;
-                break;
-        }
-        uiSelect.AddImage(selectSprite, new Rect(0, 0, 450, 350));
-        uiSelect.AddDivider();
-        uiSelect.AddButton("Yes", YesButton);
-        uiSelect.AddButton("No", NoButton);
-        uiSelect.Show();
-    }
-
-    public void YesButton()
-    {
-        Destroy(uiClothes.gameObject);
-        Destroy(uiSelect.gameObject);
-        uiClothes = Instantiate<UIBuilder>(uiCanvasPrefab);
-        uiSelect = Instantiate<UIBuilder>(uiCanvasPrefab);
-        OnTutorialEnd();
-    }
-
-    public void NoButton()
-    {
-        Destroy(uiSelect.gameObject);
-        uiClothes.Show();
-        uiSelect = Instantiate<UIBuilder>(uiCanvasPrefab);
-    }
-
-    public override void OnTutorialEnd()
-    {
-        switch(Data.PM)
-        {
-            case Play_Mode.tutorial:
-                base.OnTutorialEnd();
-                break;
-            case Play_Mode.test:
-                break;
-        }
+		base.OnTutorialEnd();
     }
 }

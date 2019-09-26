@@ -9,44 +9,48 @@ using Fashion.UIManager;
 // Show off all the Debug UI components.
 public class StartUI : FashionController
 {
-    Design_Select_UI design_selectUI;
+	[SerializeField]
+	string TutorialSceneName = null;
+	[SerializeField]
+	string TestSceneName = null;
+
+	Design_Select_UI design_selectUI;
     UIBuilder uiMenu;
 	UIBuilder uiTerm;
 
-    public override void Start ()
+
+    void Start ()
     {
         StartTutorial();
     }
 
-    public override void StartTutorial()
+    void StartTutorial()
     {
-        base.StartTutorial();
-
         Init_Data();
         uiMenu = Instantiate<UIBuilder>(uiCanvasPrefab);
 
-        uiMenu.AddLabel("�޴�");
-        uiMenu.AddDivider();
-        uiMenu.AddButton("����", ButtonTerms);
-        uiMenu.AddButton("Ʃ�丮��", ButtonTutorial);
-        uiMenu.AddButton("�׽�Ʈ", ButtonTest);
-        uiMenu.AddButton("������", ButtonExit);
-        uiMenu.Show();
+		uiMenu.AddLabel("메뉴");
+		uiMenu.AddDivider();
+		uiMenu.AddButton("용어설명", ButtonTerms);
+		uiMenu.AddButton("튜토리얼", ButtonTutorial);
+		uiMenu.AddButton("테스트", ButtonTest);
+		uiMenu.AddButton("끝내기", ButtonExit);
+		uiMenu.Show();
 
         uiTerm = Instantiate<UIBuilder>(uiCanvasPrefab);
 
         uiTerm.SetPaneWidth(980);
-        uiTerm.AddLabel("<b>��� ����</b>");
+        uiTerm.AddLabel("<b용어 설명</b>");
         uiTerm.AddDivider();
-        uiTerm.AddLabel("�׸�\t\t����", TextAnchor.MiddleLeft);
-        uiTerm.AddScrollView("<b>�ϼ���</b>\t\t������ �ϼ���\n" +
-            "<b>�ȳ���</b>\t\t�ϼ����� �׸��� ���� ������\n" +
-            "<b>�ȴܼ�</b>\t\t�ȴ� ������ ǥ���ϱ� ���� ��\n" +
-            "<b>������</b>\t\t�������� �ؾ����� ��Ÿ���� ǥ��\n" +
-            "<b>���Ӽ�</b>\t\t���� �� ǥ��\n" +
-            "<b>��Ƽġ��</b>\t��Ƽġ�� ���� �κа� ���κ��� ��Ÿ����.\n" +
-            "<b>��м�</b>\t\t����� ǥ���ϸ� ��ȣ�� ���̴� ��쵵 ����", TextAnchor.UpperLeft, 320);
-        uiTerm.AddButton("�޴���", ButtonMenu);
+		uiTerm.AddLabel("항목\t\t내용", TextAnchor.MiddleLeft);
+		uiTerm.AddScrollView("<b>완성선</b>\t\t패턴의 완성선\n" +
+			"<b>안내선</b>\t\t완성선을 그리기 위한 보조선\n" +
+			"<b>안단선</b>\t\t안단 패턴을 표시하기 위한 선\n" +
+			"<b>절개선</b>\t\t가위질을 해야함을 나타내는 표시\n" +
+			"<b>꺾임선</b>\t\t접는 선 표시\n" +
+			"<b>스티치선</b>\t스티치의 시작 부분과 끝부분을 나타낸다.\n" +
+			"<b>등분선</b>\t\t등분을 표시하며 부호를 붙이는 경우도 있음", TextAnchor.UpperLeft, 320);
+		uiTerm.AddButton("메뉴로", ButtonMenu);
     }
 
     public void ButtonMenu()
@@ -61,18 +65,17 @@ public class StartUI : FashionController
 		uiTerm.Show();
     }
 
-	public void ButtonTutorial()    //Ʃ�丮�� ��ư
+	public void ButtonTutorial()    //튜토리얼 버튼
 	{
         uiMenu.Hide();
-        Data.PM = Play_Mode.tutorial;
+		nextSceneName = TutorialSceneName;
         OnTutorialEnd();
-
     }
 
-	public void ButtonTest()        //�׽�Ʈ ��ư
+	public void ButtonTest()        //테스트 버튼
 	{
         uiMenu.Hide();
-        Data.PM = Play_Mode.test;
+		nextSceneName = TestSceneName;
         OnTutorialEnd();
     }
 
@@ -90,11 +93,9 @@ public class StartUI : FashionController
         base.OnTutorialEnd();
     }
 
-    public void Init_Data()    //�ʱ�ȭ �Լ�
-    {
+    public void Init_Data()    //초기화 함수
+	{
         Data.Score = 100;
-        Data.PM = Play_Mode.start;
-        Data.CS = ClothType.t_shirts;
-        Data.MS = Making_State.start;
+        Data.clothType = ClothType.t_shirts;
     }
 }

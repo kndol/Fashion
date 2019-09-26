@@ -31,15 +31,13 @@ public class Origin_Form_UI : FashionController
 
     bool isCheck = true;
 
-    public override void StartTutorial()
+	private void Start()
     {
-        base.StartTutorial();
-
         uiOrigin = Instantiate<UIBuilder>(uiCanvasPrefab);
 
-        switch (Data.CS)
+        switch (Data.clothType)
         {
-            case Cloth_State.t_shirts:
+            case ClothType.t_shirts:
                 uiOrigin.AddLabel("티셔츠 기초선", TextAnchor.MiddleCenter, UIBuilder.PANE_LEFT);
                 uiOrigin.AddDivider(UIBuilder.PANE_LEFT);
                 uiOrigin.AddImage(tshirtsSpite[0], new Rect(0, 0, 450, 350), UIBuilder.PANE_LEFT);  //기초선
@@ -57,13 +55,13 @@ public class Origin_Form_UI : FashionController
                 var calculate_tshirts_B_4 = uiOrigin.AddLabel("", TextAnchor.MiddleCenter, UIBuilder.PANE_CENTER);
                 forthValue = calculate_tshirts_B_4.GetComponentInChildren<Text>();
                 break;
-            case Cloth_State.shirts:
+            case ClothType.shirts:
                 break;
-            case Cloth_State.pants:
+            case ClothType.pants:
                 break;
-            case Cloth_State.skirt:
+            case ClothType.skirt:
                 break;
-            case Cloth_State.Body:
+            case ClothType.body:
                 uiOrigin.AddLabel("몸판 기초선", TextAnchor.MiddleCenter, UIBuilder.PANE_LEFT);
                 uiOrigin.AddLabel("치수 입력", TextAnchor.MiddleCenter, UIBuilder.PANE_CENTER);
                 uiOrigin.AddDivider(UIBuilder.PANE_LEFT);
@@ -81,7 +79,7 @@ public class Origin_Form_UI : FashionController
                 var calculate_B_4 = uiOrigin.AddLabel("", TextAnchor.MiddleCenter, UIBuilder.PANE_CENTER);
                 forthValue = calculate_B_4.GetComponentInChildren<Text>();
                 break;
-            case Cloth_State.Sleeve:
+            case ClothType.sleeve:
                 uiOrigin.AddLabel("소매 기초선", TextAnchor.MiddleCenter, UIBuilder.PANE_LEFT);
                 uiOrigin.AddDivider(UIBuilder.PANE_LEFT);
                 uiOrigin.AddImage(SleeveSprite[0], new Rect(0, 0, 450, 350), UIBuilder.PANE_LEFT);
@@ -100,9 +98,9 @@ public class Origin_Form_UI : FashionController
 
     public void Next_Button()
     {
-        switch (Data.CS)
+        switch (Data.clothType)
         {
-            case Cloth_State.t_shirts:
+            case ClothType.t_shirts:
                 Destroy(uiOrigin.gameObject);
                 uiOrigin = Instantiate<UIBuilder>(uiCanvasPrefab);
                 uiOrigin.AddLabel("패턴제도");
@@ -110,7 +108,7 @@ public class Origin_Form_UI : FashionController
                 uiOrigin.AddImage(tshirtsSpite[1], new Rect(0, 0, 350, 350));
                 uiOrigin.AddButton("다음으로", OriginButton);
                 break;
-            case Cloth_State.Body:
+            case ClothType.body:
                 Destroy(uiOrigin.gameObject);
                 uiOrigin = Instantiate<UIBuilder>(uiCanvasPrefab);
                 uiOrigin.AddLabel("Description", TextAnchor.MiddleCenter, UIBuilder.PANE_RIGHT);
@@ -121,7 +119,7 @@ public class Origin_Form_UI : FashionController
                 uiOrigin.AddButton("반무다트", banmudart_Pattern, UIBuilder.PANE_CENTER);
                 uiOrigin.AddButton("소매만들기", Sleeve_Button, UIBuilder.PANE_CENTER);
                 break;
-            case Cloth_State.Sleeve:  //가로 배치 및 폭수정
+            case ClothType.sleeve:  //가로 배치 및 폭수정
                 Destroy(uiOrigin.gameObject);
                 uiOrigin = Instantiate<UIBuilder>(uiCanvasPrefab);
                 uiOrigin.AddLabel("Description");
@@ -138,13 +136,13 @@ public class Origin_Form_UI : FashionController
 
     public void OriginButton()
     {
-        switch (Data.CS)
+        switch (Data.clothType)
         {
-            case Cloth_State.t_shirts:
+            case ClothType.t_shirts:
                 uiOrigin.Hide();
                 OnTutorialEnd();
                 break;
-            case Cloth_State.Sleeve:
+            case ClothType.sleeve:
                 Destroy(uiOrigin.gameObject);
                 //디자인 선택창으로 이동
                 break;
@@ -225,7 +223,7 @@ public class Origin_Form_UI : FashionController
     {
         Destroy(uiOrigin.gameObject);
         uiOrigin = Instantiate<UIBuilder>(uiCanvasPrefab);
-        Data.CS = Cloth_State.Sleeve;
+        Data.clothType = ClothType.sleeve;
         OnTutorialEnd();
     }
 

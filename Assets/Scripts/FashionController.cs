@@ -16,7 +16,7 @@ namespace Fashion
 		[Header("다음 작업")]
 		[Tooltip("이 작업이 끝나면 이동할 다음 작업")]
 		[SerializeField]
-		string nextSceneName = null;
+		protected string nextSceneName = null;
 
 		public virtual void OnTutorialEnd()
 		{
