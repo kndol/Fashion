@@ -7,21 +7,20 @@ using Fashion;
 using Fashion.UIManager;
 
 // Show off all the Debug UI components.
-public class StartUI : MonoBehaviour
+public class StartUI : FashionController
 {
-    [SerializeField]
-    UIBuilder uiCanvasPrefab = null;
-    [SerializeField]
-    Transform player = null;
-    [SerializeField]
-    Transform selectPos = null;
-
-    Design_Select_UI design_selectUI;
     UIBuilder uiMenu;
 	UIBuilder uiTerm;
 
     void Start ()
     {
+        StartTutorial();
+    }
+
+    public override void StartTutorial()
+    {
+        base.StartTutorial();
+
         Init_Data();
         uiMenu = Instantiate<UIBuilder>(uiCanvasPrefab);
 
@@ -49,7 +48,7 @@ public class StartUI : MonoBehaviour
         uiTerm.AddButton("메뉴로", ButtonMenu);
     }
 
-	public void ButtonMenu()
+    public void ButtonMenu()
 	{
 		uiTerm.Hide();
 		uiMenu.Show();
@@ -63,22 +62,17 @@ public class StartUI : MonoBehaviour
 
 	public void ButtonTutorial()    //튜토리얼 버튼
 	{
-        player.transform.position = selectPos.transform.position;
-        player.transform.rotation = selectPos.transform.rotation;
         uiMenu.Hide();
-        Data.MS = Making_State.Design_Select;
         Data.PM = Play_Mode.tutorial;
-        design_selectUI.StartTutorial();
+        OnTutorialEnd();
+
     }
 
 	public void ButtonTest()        //테스트 버튼
 	{
-        player.transform.position = selectPos.transform.position;
-        player.transform.rotation = selectPos.transform.rotation;
         uiMenu.Hide();
-        Data.MS = Making_State.Design_Select;
         Data.PM = Play_Mode.test;
-        design_selectUI.StartTutorial();
+        OnTutorialEnd();
     }
 
 	public void ButtonExit()
@@ -90,12 +84,15 @@ public class StartUI : MonoBehaviour
 #endif
 	}
 
+    public override void OnTutorialEnd()
+    {
+        base.OnTutorialEnd();
+    }
+
     public void Init_Data()    //초기화 함수
     {
         Data.Score = 100;
-        Data.isCheck = false;
         Data.PM = Play_Mode.start;
         Data.CS = Cloth_State.start;
-        Data.MS = Making_State.start;
     }
 }

@@ -6,27 +6,18 @@ using UnityEngine.UI;
 using Fashion;
 using Fashion.UIManager;
 
-public class Bundle_Cut_UI : MonoBehaviour
+public class Bundle_Cut_UI : FashionController
 {
-    [SerializeField]
-    UIBuilder uiCanvasPrefab = null;
-    [SerializeField]
-    Transform player = null;
-    [SerializeField]
-    Transform sweingPos = null;
     [SerializeField]
     Sprite[] bundleSpite = null;  //마름질 이미지
     [SerializeField]
     Sprite[] cutSpite = null;  //재단 이미지
 
-    LaserPointer lp;
     UIBuilder uiBundle;
     UIBuilder uiCutting;
 
     void Start()
     {
-        if (Data.MS == Making_State.start)
-        {
             //uiBundle = Instantiate<UIBuilder>(uiCanvasPrefab);
 
             //uiBundle.SetPaneWidth(900);
@@ -38,69 +29,47 @@ public class Bundle_Cut_UI : MonoBehaviour
             //uiCutting.SetPaneWidth(900);
             //uiCutting.AddLabel("재단");
             //uiCutting.AddDivider();
-        }
     }
 
     public void BundleButton()
     {
         uiBundle.Hide();
-        Data.MS = Making_State.cutting;
         Show_Confirm();
     }
 
     public void CutButton()
     {
-        player.transform.position = sweingPos.transform.position;
-        player.transform.rotation = sweingPos.transform.rotation;
+
         uiCutting.Hide();
-        Data.MS = Making_State.sweing_sheet;
-        Data.isCheck = true;
     }
 
     public void Show_Confirm()
     {
-        switch (Data.MS)
+        switch (Data.CS)
         {
-            case Making_State.bundle:
-                switch (Data.CS)
-                {
-                    case Cloth_State.t_shirts:
-                        //uiBundle.AddImage(bundleSpite[0], new Rect(0, 0, 450, 350));
-                        break;
-                    case Cloth_State.shirts:
-                        break;
-                    case Cloth_State.pants:
-                        break;
-                    case Cloth_State.skirt:
-                        break;
-                }
-                //uiBundle.Show();
-                Data.isCheck = false;
+            case Cloth_State.t_shirts:
+                //uiBundle.AddImage(bundleSpite[0], new Rect(0, 0, 450, 350));
                 break;
-
-            case Making_State.cutting:
-                switch (Data.CS)
-                {
-                    case Cloth_State.t_shirts:
-                        //uiCutting.AddImage(cutSpite[0], new Rect(0, 0, 450, 350));
-                        break;
-                    case Cloth_State.shirts:
-                        break;
-                    case Cloth_State.pants:
-                        break;
-                    case Cloth_State.skirt:
-                        break;
-                }
-                //uiCutting.Show();
+            case Cloth_State.shirts:
+                break;
+            case Cloth_State.pants:
+                break;
+            case Cloth_State.skirt:
                 break;
         }
-    }
-
-    void Update()
-    {
-        if (Data.isCheck == true)
+        //uiBundle.Show();
+        switch (Data.CS)
         {
-            //Show_Confirm();
+            case Cloth_State.t_shirts:
+                //uiCutting.AddImage(cutSpite[0], new Rect(0, 0, 450, 350));
+                break;
+            case Cloth_State.shirts:
+                break;
+            case Cloth_State.pants:
+                break;
+            case Cloth_State.skirt:
+                break;
         }
+        //uiCutting.Show();
     }
 }

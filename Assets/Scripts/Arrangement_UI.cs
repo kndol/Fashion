@@ -6,7 +6,6 @@ using UnityEngine.UI;
 using Fashion;
 using Fashion.UIManager;
 
-enum Tshirts_State { start, front, back, sleeve };
 public class Arrangement_UI : FashionController
 {
 	[SerializeField]
