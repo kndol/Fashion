@@ -21,7 +21,7 @@ public class Dart_UI : FashionController
 
     bool isCheck = true;
 
-    public override void StartTutorial()
+    void StartTutorial()
     {
         uiDart = Instantiate<UIBuilder>(uiCanvasPrefab);
 
@@ -29,20 +29,20 @@ public class Dart_UI : FashionController
         uiDart.AddLabel("Description", TextAnchor.MiddleCenter, UIBuilder.PANE_RIGHT);
         uiDart.AddDivider(UIBuilder.PANE_LEFT);
         uiDart.AddDivider(UIBuilder.PANE_RIGHT);
-        switch (Data.CS)
+        switch (Data.clothType)
         {
-            case Cloth_State.t_shirts:
+            case ClothType.t_shirts:
                 uiDart.AddImage(completionSpite[0], new Rect(0, 0, 450, 350), UIBuilder.PANE_LEFT);
                 uiDart.AddButton("앞/뒤 구분", FrontBackButton, UIBuilder.PANE_CENTER);
                 uiDart.AddButton("골선", FordButton, UIBuilder.PANE_CENTER);
                 uiDart.AddButton("식서방향", SelvageButton, UIBuilder.PANE_CENTER);
                 uiDart.AddButton("암홀위치", ArmHolePosButton, UIBuilder.PANE_CENTER);
                 break;
-            case Cloth_State.shirts:
+            case ClothType.shirts:
                 break;
-            case Cloth_State.pants:
+            case ClothType.pants:
                 break;
-            case Cloth_State.skirt:
+            case ClothType.skirt:
                 break;
         }
         uiDart.AddButton("다음으로", DartButton, UIBuilder.PANE_CENTER);

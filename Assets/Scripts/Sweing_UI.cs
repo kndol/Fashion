@@ -16,9 +16,8 @@ public class Sweing_UI : FashionController
     UIBuilder uiSweing_sheet;
     UIBuilder uiSweing_fabrication;
 
-	public override void StartTutorial()
+	void StartTutorial()
 	{
-		base.StartTutorial();
         // 일단 base.StartTutorial() 호출한 뒤에 작업 시작
         uiSweing_sheet = Instantiate<UIBuilder>(uiCanvasPrefab);
         uiSweing_fabrication = Instantiate<UIBuilder>(uiCanvasPrefab);
@@ -26,16 +25,16 @@ public class Sweing_UI : FashionController
         uiSweing_sheet.SetPaneWidth(900);
         uiSweing_sheet.AddLabel("낱장 재봉");
         uiSweing_sheet.AddDivider();
-        switch (Data.CS)
+        switch (Data.clothType)
         {
-            case Cloth_State.t_shirts:
+            case ClothType.t_shirts:
                 //uiSweing_sheet.AddImage(s_sheetSpite[0], new Rect(0, 0, 450, 350));
                 break;
-            case Cloth_State.shirts:
+            case ClothType.shirts:
                 break;
-            case Cloth_State.pants:
+            case ClothType.pants:
                 break;
-            case Cloth_State.skirt:
+            case ClothType.skirt:
                 break;
         }
         uiSweing_sheet.AddButton("확인", Sweing_Sheet_Button);
@@ -48,16 +47,16 @@ public class Sweing_UI : FashionController
         uiSweing_fabrication.SetPaneWidth(900);
         uiSweing_fabrication.AddLabel("합봉");
         uiSweing_fabrication.AddDivider();
-        switch (Data.CS)
+        switch (Data.clothType)
         {
-            case Cloth_State.t_shirts:
+            case ClothType.t_shirts:
                 //uiSweing_fabrication.AddImage(s_fabSpite[0], new Rect(0, 0, 450, 350));
                 break;
-            case Cloth_State.shirts:
+            case ClothType.shirts:
                 break;
-            case Cloth_State.pants:
+            case ClothType.pants:
                 break;
-            case Cloth_State.skirt:
+            case ClothType.skirt:
                 break;
         }
         uiSweing_fabrication.AddButton("확인", Sweing_Fab_Button);

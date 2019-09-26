@@ -5,6 +5,7 @@
 [Bb]uilds/
 Assets/AssetStoreTools*
 Assets/Plugins/Android/Assets/oculussig_*
+ProjectSettings/EditorBuildSettings.asset
 
 # Visual Studio cache directory
 .vs/

@@ -48,10 +48,8 @@ public class Test_Mode_UI : FashionController
     //bool rightCheck = false;
     //bool randgetCheck = false;
 
-    public override void StartTutorial()
-    {
-        base.StartTutorial();
-
+	private void Start()
+	{
         uiTest = Instantiate<UIBuilder>(uiCanvasPrefab);
         uiYesNo = Instantiate<UIBuilder>(uiCanvasPrefab);
 
@@ -60,21 +58,29 @@ public class Test_Mode_UI : FashionController
 
     /*public void Question_Show()
     {
-        switch (Data.CS)
+        if (!randgetCheck)
         {
-            case Cloth_State.t_shirts:
+            Rand_List.Rand_Get(bodyQuestion_rand);
+            randgetCheck = true;
+        }
+        
+        if (i > bodyQuestion_rand.Count - 1) End_Test();
+
+        switch (Data.clothType)
+        {
+            case ClothType.t_shirts:
                 break;
-            case Cloth_State.shirts:
+            case ClothType.shirts:
                 break;
-            case Cloth_State.pants:
+            case ClothType.pants:
                 break;
-            case Cloth_State.skirt:
+            case ClothType.skirt:
                 break;
-            case Cloth_State.Body:      //몸판문제
-                
+            case ClothType.body:      //몸판문제
+                Body_Question(i);
                 break;
-            case Cloth_State.Sleeve:    //소매 문제
-                
+            case ClothType.sleeve:    //소매 문제
+                Sleeve_Question(i);
                 break;
 
                 if (!randgetCheck)

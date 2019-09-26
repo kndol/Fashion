@@ -11,9 +11,9 @@ public class Wearing_UI : FashionController
 {
     UIBuilder uiWearing;
 
-    public override void StartTutorial()
+    void StartTutorial()
     {
-        base.StartTutorial();
+        StartTutorial();
 
         uiWearing = Instantiate<UIBuilder>(uiCanvasPrefab);
 
