@@ -23,32 +23,30 @@ public class Rand_List   //난수생성
     }
 }
 
-[Serializable]
-public class Question
+public class SetQuestion
 {
-    [SerializeField]
-    public Sprite[] example;
+    Sprite sprite { get; set; }
+    bool rightCheck { get; set; }
 }
+
+
 
 public class Test_Mode_UI : FashionController
 {
     [SerializeField]
     Sprite[] body_questionSprite = null;
-    [SerializeField]
-    Question[] bodyQuestion = null;
 
     UIBuilder uiTest;
     UIBuilder uiYesNo;
 
+    List<SetQuestion> setQuestion = new List<SetQuestion>();
+    //List<int> bodyQuestion_rand = new List<int>() { 1, 2, 3 };   //몸판문제
+    //List<int> sleeveQuestion_rand = new List<int>() { 1, 2 };
+    //List<int> example_rand = new List<int> { 1, 2, 3 };
 
-    List<int> bodyQuestion_rand = new List<int>() { 1, 2, 3 };   //몸판문제
-    List<int> sleeveQuestion_rand = new List<int>() { 1, 2 };
-    List<int> example_rand = new List<int> { 1, 2, 3 };
-    //Question bodyQuest = new Question();
-
-    int i = 0;
-    bool rightCheck = false;
-    bool randgetCheck = false;
+    //int i = 0;
+    //bool rightCheck = false;
+    //bool randgetCheck = false;
 
     public override void StartTutorial()
     {
@@ -57,19 +55,11 @@ public class Test_Mode_UI : FashionController
         uiTest = Instantiate<UIBuilder>(uiCanvasPrefab);
         uiYesNo = Instantiate<UIBuilder>(uiCanvasPrefab);
 
-        Question_Show();
+        //Question_Show();
     }
 
-    public void Question_Show()
+    /*public void Question_Show()
     {
-        if (!randgetCheck)
-        {
-            Rand_List.Rand_Get(bodyQuestion_rand);
-            randgetCheck = true;
-        }
-        
-        if (i > bodyQuestion_rand.Count - 1) End_Test();
-
         switch (Data.CS)
         {
             case Cloth_State.t_shirts:
@@ -81,15 +71,40 @@ public class Test_Mode_UI : FashionController
             case Cloth_State.skirt:
                 break;
             case Cloth_State.Body:      //몸판문제
-                Body_Question(i);
+                
                 break;
             case Cloth_State.Sleeve:    //소매 문제
-                Sleeve_Question(i);
+                
                 break;
+
+                if (!randgetCheck)
+                {
+                    Rand_List.Rand_Get(bodyQuestion_rand);
+                    randgetCheck = true;
+                }
+
+                if (i > bodyQuestion_rand.Count - 1) End_Test();
+
+                switch (Data.CS)
+                {
+                    case Cloth_State.t_shirts:
+                        break;
+                    case Cloth_State.shirts:
+                        break;
+                    case Cloth_State.pants:
+                        break;
+                    case Cloth_State.skirt:
+                        break;
+                    case Cloth_State.Body:      //몸판문제
+                        Body_Question(i);
+                        break;
+                    case Cloth_State.Sleeve:    //소매 문제
+                        Sleeve_Question(i);
+                        break;
+                }
+                i++;
+                uiTest.Show();
         }
-        i++;
-        uiTest.Show();
-    }
 
     public void Body_Question(int num)   //몸판문제
     {
@@ -206,5 +221,5 @@ public class Test_Mode_UI : FashionController
     public override void OnTutorialEnd()
     {
         base.OnTutorialEnd();
-    }
+    }*/
 }
