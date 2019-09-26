@@ -31,12 +31,11 @@ public class Design_Select_UI : FashionController
         uiClothes.AddLabel("디자인을 선택하세요.");
         uiClothes.AddDivider();
         uiClothes.StartHorizontalSection(5);
-        uiClothes.AddImageButton(spriteClothes[0], rc, delegate { SelCloth(ClothType.t_shirts); });
-		uiClothes.AddImageButton(spriteClothes[1], rc, delegate { SelCloth(ClothType.shirts); });
-		uiClothes.AddImageButton(spriteClothes[2], rc, delegate { SelCloth(ClothType.pants); });
-		uiClothes.AddImageButton(spriteClothes[3], rc, delegate { SelCloth(ClothType.skirt); });
-		uiClothes.AddImageButton(spriteClothes[4], rc, delegate { SelCloth(ClothType.body); });
-		uiClothes.AddImageButton(spriteClothes[5], rc, delegate { SelCloth(ClothType.sleeve); });
+		for (int i = 0; i< spriteClothes.Length; i++)
+		{
+			ClothType ct = (ClothType)i; // 위임하기 위해 루프의 변수를 지역 변수로 할당
+			uiClothes.AddImageButton(spriteClothes[i], rc, delegate { SelCloth(ct); });
+		}
 		uiClothes.EndHorizontalSection();
         uiClothes.Show();
 
