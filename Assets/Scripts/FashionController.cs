@@ -11,8 +11,6 @@ namespace Fashion
 		[Tooltip("UIBuilder 프리펩 연결하기")]
 		[SerializeField]
 		protected UIBuilder uiCanvasPrefab = null;
-		[SerializeField]
-		protected Transform playerPos = null;
 		[Header("다음 작업")]
 		[Tooltip("이 작업이 끝나면 이동할 다음 작업")]
 		[SerializeField]
