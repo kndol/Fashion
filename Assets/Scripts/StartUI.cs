@@ -7,20 +7,13 @@ using Fashion;
 using Fashion.UIManager;
 
 // Show off all the Debug UI components.
-public class StartUI : MonoBehaviour
+public class StartUI : FashionController
 {
-    [SerializeField]
-    UIBuilder uiCanvasPrefab = null;
-    [SerializeField]
-    Transform player = null;
-    [SerializeField]
-    Transform selectPos = null;
-
     Design_Select_UI design_selectUI;
     UIBuilder uiMenu;
 	UIBuilder uiTerm;
 
-    void Start ()
+    public override void Start ()
     {
         Init_Data();
         uiMenu = Instantiate<UIBuilder>(uiCanvasPrefab);
@@ -63,8 +56,6 @@ public class StartUI : MonoBehaviour
 
 	public void ButtonTutorial()    //튜토리얼 버튼
 	{
-        player.transform.position = selectPos.transform.position;
-        player.transform.rotation = selectPos.transform.rotation;
         uiMenu.Hide();
         Data.MS = Making_State.Design_Select;
         Data.PM = Play_Mode.tutorial;
@@ -95,7 +86,7 @@ public class StartUI : MonoBehaviour
         Data.Score = 100;
         Data.isCheck = false;
         Data.PM = Play_Mode.start;
-        Data.CS = Cloth_State.start;
+        Data.CS = ClothType.t_shirts;
         Data.MS = Making_State.start;
     }
 }

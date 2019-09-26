@@ -64,14 +64,14 @@ public class Bundle_Cut_UI : MonoBehaviour
             case Making_State.bundle:
                 switch (Data.CS)
                 {
-                    case Cloth_State.t_shirts:
+                    case ClothType.t_shirts:
                         //uiBundle.AddImage(bundleSpite[0], new Rect(0, 0, 450, 350));
                         break;
-                    case Cloth_State.shirts:
+                    case ClothType.shirts:
                         break;
-                    case Cloth_State.pants:
+                    case ClothType.pants:
                         break;
-                    case Cloth_State.skirt:
+                    case ClothType.skirt:
                         break;
                 }
                 //uiBundle.Show();
@@ -81,14 +81,14 @@ public class Bundle_Cut_UI : MonoBehaviour
             case Making_State.cutting:
                 switch (Data.CS)
                 {
-                    case Cloth_State.t_shirts:
+                    case ClothType.t_shirts:
                         //uiCutting.AddImage(cutSpite[0], new Rect(0, 0, 450, 350));
                         break;
-                    case Cloth_State.shirts:
+                    case ClothType.shirts:
                         break;
-                    case Cloth_State.pants:
+                    case ClothType.pants:
                         break;
-                    case Cloth_State.skirt:
+                    case ClothType.skirt:
                         break;
                 }
                 //uiCutting.Show();

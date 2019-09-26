@@ -60,18 +60,18 @@ public class Test_Mode_UI : MonoBehaviour
 
         switch (Data.CS)
         {
-            case Cloth_State.t_shirts:
+            case ClothType.t_shirts:
                 break;
-            case Cloth_State.shirts:
+            case ClothType.shirts:
                 break;
-            case Cloth_State.pants:
+            case ClothType.pants:
                 break;
-            case Cloth_State.skirt:
+            case ClothType.skirt:
                 break;
-            case Cloth_State.Body:   //몸판문제
+            case ClothType.Body:   //몸판문제
                 Body_Question(i);
                 break;
-            case Cloth_State.Sleeve:    //소매 문제
+            case ClothType.Sleeve:    //소매 문제
                 Sleeve_Question(i);
                 break;
         }

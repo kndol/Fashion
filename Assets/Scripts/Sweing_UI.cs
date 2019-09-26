@@ -36,11 +36,6 @@ public class Sweing_UI : FashionController
         uiSweing_fabrication.AddLabel("합봉");
         uiSweing_fabrication.AddDivider();
     }
-	public override void StartTutorial()
-	{
-		base.StartTutorial();
-		// 일단 base.StartTutorial() 호출한 뒤에 작업 시작
-	}
 
 	public void Sweing_Sheet_Button()
     {
@@ -67,14 +62,14 @@ public class Sweing_UI : FashionController
                 case Making_State.sweing_sheet:
                     switch (Data.CS)
                     {
-                        case Cloth_State.t_shirts:
+                        case ClothType.t_shirts:
                             //uiSweing_sheet.AddImage(s_sheetSpite[0], new Rect(0, 0, 450, 350));
                             break;
-                        case Cloth_State.shirts:
+                        case ClothType.shirts:
                             break;
-                        case Cloth_State.pants:
+                        case ClothType.pants:
                             break;
-                        case Cloth_State.skirt:
+                        case ClothType.skirt:
                             break;
                     }
                     uiSweing_sheet.AddButton("확인", Sweing_Sheet_Button);
@@ -85,14 +80,14 @@ public class Sweing_UI : FashionController
                 case Making_State.sweing_fabrication:
                     switch (Data.CS)
                     {
-                        case Cloth_State.t_shirts:
+                        case ClothType.t_shirts:
                             //uiSweing_fabrication.AddImage(s_fabSpite[0], new Rect(0, 0, 450, 350));
                             break;
-                        case Cloth_State.shirts:
+                        case ClothType.shirts:
                             break;
-                        case Cloth_State.pants:
+                        case ClothType.pants:
                             break;
-                        case Cloth_State.skirt:
+                        case ClothType.skirt:
                             break;
                     }
                     uiSweing_fabrication.AddButton("확인", Sweing_Fab_Button);

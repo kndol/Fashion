@@ -47,11 +47,11 @@ public class Origin_Form_UI : MonoBehaviour
     {
         switch (Data.CS)
         {
-            case Cloth_State.t_shirts:
+            case ClothType.t_shirts:
                 uiOrigin.Hide();
                 Data.MS = Making_State.dart_pos;
                 break;
-            case Cloth_State.Sleeve:
+            case ClothType.Sleeve:
                 Data.MS = Making_State.Design_Select;
                 Destroy(uiOrigin.gameObject);
                 break;
@@ -149,7 +149,7 @@ public class Origin_Form_UI : MonoBehaviour
     {
         Destroy(uiOrigin.gameObject);
         uiOrigin = Instantiate<UIBuilder>(uiCanvasPrefab);
-        Data.CS = Cloth_State.Sleeve;
+        Data.CS = ClothType.Sleeve;
         Show_Confirm();
     }
 
@@ -157,7 +157,7 @@ public class Origin_Form_UI : MonoBehaviour
     {
         switch (Data.CS)
         {
-            case Cloth_State.t_shirts:
+            case ClothType.t_shirts:
                 Destroy(uiOrigin.gameObject);
                 uiOrigin = Instantiate<UIBuilder>(uiCanvasPrefab);
                 uiOrigin.AddLabel("패턴제도");
@@ -165,7 +165,7 @@ public class Origin_Form_UI : MonoBehaviour
                 uiOrigin.AddImage(tshirtsSpite[1], new Rect(0, 0, 350, 350));
                 uiOrigin.AddButton("다음으로", OriginButton);
                 break;
-            case Cloth_State.Body:
+            case ClothType.Body:
                 Destroy(uiOrigin.gameObject);
                 uiOrigin = Instantiate<UIBuilder>(uiCanvasPrefab);
                 uiOrigin.AddLabel("Description", TextAnchor.MiddleCenter, UIBuilder.PANE_RIGHT);
@@ -176,7 +176,7 @@ public class Origin_Form_UI : MonoBehaviour
                 uiOrigin.AddButton("반무다트", banmudart_Pattern, UIBuilder.PANE_CENTER);
                 uiOrigin.AddButton("소매만들기", Sleeve_Button, UIBuilder.PANE_CENTER);
                 break;
-            case Cloth_State.Sleeve:  //가로 배치 및 폭수정
+            case ClothType.Sleeve:  //가로 배치 및 폭수정
                 Destroy(uiOrigin.gameObject);
                 uiOrigin = Instantiate<UIBuilder>(uiCanvasPrefab);
                 uiOrigin.AddLabel("Description");
@@ -195,7 +195,7 @@ public class Origin_Form_UI : MonoBehaviour
     {
         switch (Data.CS)
         {
-            case Cloth_State.t_shirts:
+            case ClothType.t_shirts:
                 uiOrigin.AddLabel("티셔츠 기초선", TextAnchor.MiddleCenter, UIBuilder.PANE_LEFT);
                 uiOrigin.AddDivider(UIBuilder.PANE_LEFT);
                 uiOrigin.AddImage(tshirtsSpite[0], new Rect(0, 0, 450, 350), UIBuilder.PANE_LEFT);  //기초선
@@ -214,13 +214,13 @@ public class Origin_Form_UI : MonoBehaviour
                 forthValue = calculate_tshirts_B_4.GetComponentInChildren<Text>();
                 uiOrigin.AddButton("다음으로", Next_Button, UIBuilder.PANE_CENTER);
                 break;
-            case Cloth_State.shirts:
+            case ClothType.shirts:
                 break;
-            case Cloth_State.pants:
+            case ClothType.pants:
                 break;
-            case Cloth_State.skirt:
+            case ClothType.skirt:
                 break;
-            case Cloth_State.Body:
+            case ClothType.Body:
                 uiOrigin.AddLabel("몸판 기초선", TextAnchor.MiddleCenter, UIBuilder.PANE_LEFT);
                 uiOrigin.AddLabel("치수 입력", TextAnchor.MiddleCenter, UIBuilder.PANE_CENTER);
                 uiOrigin.AddDivider(UIBuilder.PANE_LEFT);
@@ -239,7 +239,7 @@ public class Origin_Form_UI : MonoBehaviour
                 forthValue = calculate_B_4.GetComponentInChildren<Text>();
                 uiOrigin.AddButton("다음으로", Next_Button, UIBuilder.PANE_CENTER);
                 break;
-            case Cloth_State.Sleeve:
+            case ClothType.Sleeve:
                 uiOrigin.AddLabel("소매 기초선", TextAnchor.MiddleCenter, UIBuilder.PANE_LEFT);
                 uiOrigin.AddDivider(UIBuilder.PANE_LEFT);
                 uiOrigin.AddImage(SleeveSprite[0], new Rect(0, 0, 450, 350), UIBuilder.PANE_LEFT);

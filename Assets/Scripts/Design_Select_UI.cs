@@ -61,19 +61,19 @@ public class Design_Select_UI : MonoBehaviour
         uiSelect.AddDivider();
         switch (Data.CS)
         {
-            case Cloth_State.t_shirts:
+            case ClothType.t_shirts:
                 selectSprite = spriteTshirt;
                 break;
-            case Cloth_State.shirts:
+            case ClothType.shirts:
                 selectSprite = spriteShirt;
                 break;
-            case Cloth_State.pants:
+            case ClothType.pants:
                 selectSprite = spritePants;
                 break;
-            case Cloth_State.skirt:
+            case ClothType.skirt:
                 selectSprite = spriteSkirt;
                 break;
-            case Cloth_State.Body:
+            case ClothType.Body:
                 selectSprite = spriteSkirt;
                 break;
             default:   //소매
@@ -89,42 +89,42 @@ public class Design_Select_UI : MonoBehaviour
 
     public void TshirtButton()    //티셔트 버튼
     {
-        Data.CS = Cloth_State.t_shirts;
+        Data.CS = ClothType.t_shirts;
         uiClothes.Hide();
         YesNoShow();
     }
 
     public void ShirtsButton()      //셔츠 버튼
     {
-        Data.CS = Cloth_State.shirts;
+        Data.CS = ClothType.shirts;
         uiClothes.Hide();
         YesNoShow();
     }
 
     public void PantsButton()       //바지 버튼
     {
-        Data.CS = Cloth_State.pants;
+        Data.CS = ClothType.pants;
         uiClothes.Hide();
         YesNoShow();
     }
 
     public void SkirtButton()       //치마 버튼
     {
-        Data.CS = Cloth_State.skirt;
+        Data.CS = ClothType.skirt;
         uiClothes.Hide();
         YesNoShow();
     }
 
     public void BodyButton()        //몸판 버튼
     {
-        Data.CS = Cloth_State.Body;
+        Data.CS = ClothType.Body;
         uiClothes.Hide();
         YesNoShow();
     }
 
     public void SleeveButton()       //소매 버튼
     {
-        Data.CS = Cloth_State.Sleeve;
+        Data.CS = ClothType.Sleeve;
         uiClothes.Hide();
         YesNoShow();
     }
