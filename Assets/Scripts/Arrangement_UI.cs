@@ -7,405 +7,109 @@ using Fashion;
 using Fashion.UIManager;
 
 enum Tshirts_State { start, front, back, sleeve };
-public class Arrangement_UI : MonoBehaviour
+public class Arrangement_UI : FashionController
 {
-    [SerializeField]
-    UIBuilder uiCanvasPrefab = null;
-    [SerializeField]
-    Transform player = null;
-    //[SerializeField]
-    //Transform arrangePos = null;
-    //[SerializeField]
-    //RectTransform arrangeUI = null;
-    [SerializeField]
-    RectTransform []arrangeUI_child = null;
-    [SerializeField]
-    Transform bundlePos = null;
-    [SerializeField]
-    Sprite bankgroundSprite = null;
-    [SerializeField]
-    Sprite[] tshirts_btnSprite = null;     //티셔츠 버튼 이미지
-    [SerializeField]
-    Sprite[] arrangeSprite = null;  //배치 완성 이미지
+	[SerializeField]
+	GameObject[] arrangeParts = null;
+	[SerializeField]
+	GameObject[] dotParts = null;
+	[SerializeField]
+	GameObject[] cutParts = null;
+	[SerializeField]
+	GameObject background = null;
+	
+	UIBuilder uiArrangement;
 
-    UIBuilder uiArrangement;
+	Transform[] imageBtns;
+	Rect imgBtnRect = new Rect(0, 0, 150, 100);
 
-    Rect rc = new Rect(0, 0, 150, 100);
-    Color color = new Color(1.0f, 1.0f, 1.0f, 0.5f);
+	int count = 0;
 
-    Tshirts_State TS = Tshirts_State.start;
+	void Start()
+	{
+		for (int i = 0; i < arrangeParts.Length; i++)
+		{
+			arrangeParts[i].SetActive(false);
+		}
+	}
 
-    static int count = 0;
+	public override void StartTutorial()
+	{
+		base.StartTutorial();
+		// 일단 base.StartTutorial() 호출한 뒤에 작업 시작
 
-    void Start()
-    {
-        if (Data.MS == Making_State.start)
-        {
-            uiArrangement = Instantiate<UIBuilder>(uiCanvasPrefab);
-            for(int i = 0; i < 3; i++)
-            {
-                arrangeUI_child[i].gameObject.SetActive(false);
-            }
-        }
-    }
+		uiArrangement = Instantiate<UIBuilder>(uiCanvasPrefab);
+		background.SetActive(true);
+		uiArrangement = Instantiate<UIBuilder>(uiCanvasPrefab);
+		uiArrangement.AddLabel("티셔츠 마름질 배치");
+		uiArrangement.AddDivider();
+		uiArrangement.AddScrollView("배치에 관한 설명 넣기");
+		uiArrangement.AddButton("확인", DoArrange);
+		uiArrangement.Show();
+	}
 
-    public void ArrangeButton()
-    {
-        player.transform.position = bundlePos.transform.position;
-        player.transform.rotation = bundlePos.transform.rotation;
-        uiArrangement.Hide();
-        Data.MS = Making_State.bundle;
-        Data.isCheck = true;
-    }
+	public void DoArrange()
+	{
+		imageBtns = new Transform[arrangeParts.Length];
+		count = 0;
 
-    public void Next_Button()
-    {
-        Destroy(uiArrangement.gameObject);
-        uiArrangement = Instantiate<UIBuilder>(uiCanvasPrefab);
-        uiArrangement.AddLabel("배치완료", TextAnchor.MiddleCenter, UIBuilder.PANE_LEFT);
-        uiArrangement.AddDivider(UIBuilder.PANE_LEFT);
-        uiArrangement.AddImage(arrangeSprite[0], new Rect(0, 0, 450, 350), UIBuilder.PANE_LEFT);
-        uiArrangement.AddLabel("Description", UIBuilder.PANE_CENTER);
-        uiArrangement.AddDivider(UIBuilder.PANE_CENTER);
-        uiArrangement.AddLabel("배치설명", UIBuilder.PANE_CENTER);
-        uiArrangement.AddButton("확인", ArrangeButton, UIBuilder.PANE_CENTER);
-        uiArrangement.Show();
-    }
+		uiArrangement.AddLabel("배치");
+		uiArrangement.AddDivider();
+		uiArrangement.AddLabel("원단을 클릭하여 배치하세요.");
+		switch (Data.CS)
+		{
+			case Cloth_State.t_shirts:
+				for (int i = 0; i < arrangeParts.Length; i++)
+				{
+					Sprite sprite = arrangeParts[i].GetComponent<Image>().sprite;
+					imageBtns[i] = uiArrangement.AddImageButton(sprite, imgBtnRect, delegate { arrange(i); });   //티셔츠 배치하기
+				}
+				break;
+			case Cloth_State.shirts:
+				break;
+			case Cloth_State.pants:
+				break;
+			case Cloth_State.skirt:
+				break;
+		}
+		uiArrangement.Show();
+	}
 
-    public void Tshirts_Front_Btn()
-    {
-        count++;
-        Destroy(uiArrangement.gameObject);
-        uiArrangement = Instantiate<UIBuilder>(uiCanvasPrefab);
-        arrangeUI_child[0].gameObject.SetActive(true);
-        uiArrangement.AddLabel("배치", TextAnchor.MiddleCenter, UIBuilder.PANE_LEFT);
-        uiArrangement.AddDivider(UIBuilder.PANE_LEFT);
-        uiArrangement.AddLabel("원단을 클릭하여 배치하세요.", TextAnchor.MiddleCenter, UIBuilder.PANE_LEFT);
-        switch (count)
-        {
-            case 1:
-                switch (Data.CS)
-                {
-                    case Cloth_State.t_shirts:
-                        var frontBtn = uiArrangement.AddImageButton(tshirts_btnSprite[0], rc, Tshirts_Front_Btn, UIBuilder.PANE_LEFT);   //티셔츠 앞면 버튼
-                        frontBtn.GetComponent<Button>().enabled = false;
-                        frontBtn.GetComponent<Image>().color = color;
-                        uiArrangement.AddImageButton(tshirts_btnSprite[1], rc, Tshirts_Back_Btn, UIBuilder.PANE_LEFT);    //티셔츠 뒷면 버튼
-                        uiArrangement.AddImageButton(tshirts_btnSprite[2], rc, Tshirts_Sleeve_Btn, UIBuilder.PANE_LEFT);  //티셔트 소매 버튼
-                        break;
-                    case Cloth_State.shirts:
-                        break;
-                    case Cloth_State.pants:
-                        break;
-                    case Cloth_State.skirt:
-                        break;
-                }
-                break;
-            case 2:
-                switch (TS)
-                {
-                    case Tshirts_State.back:
-                        switch (Data.CS)
-                        {
-                            case Cloth_State.t_shirts:
-                                var frontBtn = uiArrangement.AddImageButton(tshirts_btnSprite[0], rc, Tshirts_Front_Btn, UIBuilder.PANE_LEFT);   //티셔츠 앞면 버튼
-                                frontBtn.GetComponent<Button>().enabled = false;
-                                frontBtn.GetComponent<Image>().color = color;
-                                var backBtn = uiArrangement.AddImageButton(tshirts_btnSprite[1], rc, Tshirts_Back_Btn, UIBuilder.PANE_LEFT);    //티셔츠 뒷면 버튼
-                                backBtn.GetComponent<Button>().enabled = false;
-                                backBtn.GetComponent<Image>().color = color;
-                                uiArrangement.AddImageButton(tshirts_btnSprite[2], rc, Tshirts_Sleeve_Btn, UIBuilder.PANE_LEFT);  //티셔트 소매 버튼
-                                break;
-                            case Cloth_State.shirts:
-                                break;
-                            case Cloth_State.pants:
-                                break;
-                            case Cloth_State.skirt:
-                                break;
-                        }
-                        break;
-                    case Tshirts_State.sleeve:
-                        switch (Data.CS)
-                        {
-                            case Cloth_State.t_shirts:
-                                var frontBtn = uiArrangement.AddImageButton(tshirts_btnSprite[0], rc, Tshirts_Front_Btn, UIBuilder.PANE_LEFT);   //티셔츠 앞면 버튼
-                                frontBtn.GetComponent<Button>().enabled = false;
-                                frontBtn.GetComponent<Image>().color = color;
-                                uiArrangement.AddImageButton(tshirts_btnSprite[1], rc, Tshirts_Back_Btn, UIBuilder.PANE_LEFT);    //티셔츠 뒷면 버튼
-                                var sleeveBtn = uiArrangement.AddImageButton(tshirts_btnSprite[2], rc, Tshirts_Sleeve_Btn, UIBuilder.PANE_LEFT);  //티셔트 소매 버튼
-                                sleeveBtn.GetComponent<Button>().enabled = false;
-                                sleeveBtn.GetComponent<Image>().color = color;
-                                break;
-                            case Cloth_State.shirts:
-                                break;
-                            case Cloth_State.pants:
-                                break;
-                            case Cloth_State.skirt:
-                                break;
-                        }
-                        break;
-                }
-                break;
-            case 3:
-                switch (Data.CS)
-                {
-                    case Cloth_State.t_shirts:
-                        var frontBtn = uiArrangement.AddImageButton(tshirts_btnSprite[0], rc, Tshirts_Front_Btn, UIBuilder.PANE_LEFT);   //티셔츠 앞면 버튼
-                        frontBtn.GetComponent<Button>().enabled = false;
-                        frontBtn.GetComponent<Image>().color = color;
-                        var backBtn = uiArrangement.AddImageButton(tshirts_btnSprite[1], rc, Tshirts_Back_Btn, UIBuilder.PANE_LEFT);    //티셔츠 뒷면 버튼
-                        backBtn.GetComponent<Button>().enabled = false;
-                        backBtn.GetComponent<Image>().color = color;
-                        var sleeveBtn = uiArrangement.AddImageButton(tshirts_btnSprite[2], rc, Tshirts_Sleeve_Btn, UIBuilder.PANE_LEFT);  //티셔트 소매 버튼
-                        sleeveBtn.GetComponent<Button>().enabled = false;
-                        sleeveBtn.GetComponent<Image>().color = color;
-                        break;
-                    case Cloth_State.shirts:
-                        break;
-                    case Cloth_State.pants:
-                        break;
-                    case Cloth_State.skirt:
-                        break;
-                }
-                uiArrangement.AddButton("다음으로", Next_Button, UIBuilder.PANE_LEFT);
-                break;
-        }
-        uiArrangement.Show();
-        TS = Tshirts_State.front;
-    }
+	public void arrange(int partNum)
+	{
+		imageBtns[partNum].GetComponent<Button>().interactable = false;
 
-    public void Tshirts_Back_Btn()
-    {
-        count++;
-        Destroy(uiArrangement.gameObject);
-        uiArrangement = Instantiate<UIBuilder>(uiCanvasPrefab);
-        arrangeUI_child[1].gameObject.SetActive(true);
-        uiArrangement.AddLabel("배치", TextAnchor.MiddleCenter, UIBuilder.PANE_LEFT);
-        uiArrangement.AddDivider(UIBuilder.PANE_LEFT);
-        uiArrangement.AddLabel("원단을 클릭하여 배치하세요.", TextAnchor.MiddleCenter, UIBuilder.PANE_LEFT);
-        switch (count)
-        {
-            case 1:
-                switch (Data.CS)
-                {
-                    case Cloth_State.t_shirts:
-                        uiArrangement.AddImageButton(tshirts_btnSprite[0], rc, Tshirts_Front_Btn, UIBuilder.PANE_LEFT);   //티셔츠 앞면 버튼
-                        var backBtn = uiArrangement.AddImageButton(tshirts_btnSprite[1], rc, Tshirts_Back_Btn, UIBuilder.PANE_LEFT);    //티셔츠 뒷면 버튼
-                        backBtn.GetComponent<Button>().enabled = false;
-                        backBtn.GetComponent<Image>().color = color;
-                        uiArrangement.AddImageButton(tshirts_btnSprite[2], rc, Tshirts_Sleeve_Btn, UIBuilder.PANE_LEFT);  //티셔트 소매 버튼
-                        break;
-                    case Cloth_State.shirts:
-                        break;
-                    case Cloth_State.pants:
-                        break;
-                    case Cloth_State.skirt:
-                        break;
-                }
-                break;
-            case 2:
-                switch (TS)
-                {
-                    case Tshirts_State.front:
-                        switch (Data.CS)
-                        {
-                            case Cloth_State.t_shirts:
-                                var frontBtn = uiArrangement.AddImageButton(tshirts_btnSprite[0], rc, Tshirts_Front_Btn, UIBuilder.PANE_LEFT);   //티셔츠 앞면 버튼
-                                frontBtn.GetComponent<Button>().enabled = false;
-                                frontBtn.GetComponent<Image>().color = color;
-                                var backBtn = uiArrangement.AddImageButton(tshirts_btnSprite[1], rc, Tshirts_Back_Btn, UIBuilder.PANE_LEFT);    //티셔츠 뒷면 버튼
-                                backBtn.GetComponent<Button>().enabled = false;
-                                backBtn.GetComponent<Image>().color = color;
-                                uiArrangement.AddImageButton(tshirts_btnSprite[2], rc, Tshirts_Sleeve_Btn, UIBuilder.PANE_LEFT);  //티셔트 소매 버튼
-                                break;
-                            case Cloth_State.shirts:
-                                break;
-                            case Cloth_State.pants:
-                                break;
-                            case Cloth_State.skirt:
-                                break;
-                        }
-                        break;
-                    case Tshirts_State.sleeve:
-                        switch (Data.CS)
-                        {
-                            case Cloth_State.t_shirts:
-                                uiArrangement.AddImageButton(tshirts_btnSprite[0], rc, Tshirts_Front_Btn, UIBuilder.PANE_LEFT);   //티셔츠 앞면 버튼
-                                var backBtn = uiArrangement.AddImageButton(tshirts_btnSprite[1], rc, Tshirts_Back_Btn, UIBuilder.PANE_LEFT);    //티셔츠 뒷면 버튼
-                                backBtn.GetComponent<Button>().enabled = false;
-                                backBtn.GetComponent<Image>().color = color;
-                                var sleeveBtn = uiArrangement.AddImageButton(tshirts_btnSprite[2], rc, Tshirts_Sleeve_Btn, UIBuilder.PANE_LEFT);  //티셔트 소매 버튼
-                                sleeveBtn.GetComponent<Button>().enabled = false;
-                                sleeveBtn.GetComponent<Image>().color = color;
-                                break;
-                            case Cloth_State.shirts:
-                                break;
-                            case Cloth_State.pants:
-                                break;
-                            case Cloth_State.skirt:
-                                break;
-                        }
-                        break;
-                }
-                break;
-            case 3:
-                switch (Data.CS)
-                {
-                    case Cloth_State.t_shirts:
-                        var frontBtn = uiArrangement.AddImageButton(tshirts_btnSprite[0], rc, Tshirts_Front_Btn, UIBuilder.PANE_LEFT);   //티셔츠 앞면 버튼
-                        frontBtn.GetComponent<Button>().enabled = false;
-                        frontBtn.GetComponent<Image>().color = color;
-                        var backBtn = uiArrangement.AddImageButton(tshirts_btnSprite[1], rc, Tshirts_Back_Btn, UIBuilder.PANE_LEFT);    //티셔츠 뒷면 버튼
-                        backBtn.GetComponent<Button>().enabled = false;
-                        backBtn.GetComponent<Image>().color = color;
-                        var sleeveBtn = uiArrangement.AddImageButton(tshirts_btnSprite[2], rc, Tshirts_Sleeve_Btn, UIBuilder.PANE_LEFT);  //티셔트 소매 버튼
-                        sleeveBtn.GetComponent<Button>().enabled = false;
-                        sleeveBtn.GetComponent<Image>().color = color;
-                        break;
-                    case Cloth_State.shirts:
-                        break;
-                    case Cloth_State.pants:
-                        break;
-                    case Cloth_State.skirt:
-                        break;
-                }
-                uiArrangement.AddButton("다음으로", Next_Button, UIBuilder.PANE_LEFT);
-                break;
-        }
-        uiArrangement.Show();
-        TS = Tshirts_State.back;
-    }
+		switch (Data.CS)
+		{
+			case Cloth_State.t_shirts:
+				arrangeParts[partNum].SetActive(true);
+				break;
+			case Cloth_State.shirts:
+				break;
+			case Cloth_State.pants:
+				break;
+			case Cloth_State.skirt:
+				break;
+		}
+		if (++count == arrangeParts.Length)
+			uiArrangement.AddButton("다음으로", GoNext);
+	}
 
-    public void Tshirts_Sleeve_Btn()
-    {
-        count++;
-        Destroy(uiArrangement.gameObject);
-        uiArrangement = Instantiate<UIBuilder>(uiCanvasPrefab);
-        arrangeUI_child[2].gameObject.SetActive(true);
-        uiArrangement.AddLabel("배치", TextAnchor.MiddleCenter, UIBuilder.PANE_LEFT);
-        uiArrangement.AddDivider(UIBuilder.PANE_LEFT);
-        uiArrangement.AddLabel("원단을 클릭하여 배치하세요.", TextAnchor.MiddleCenter, UIBuilder.PANE_LEFT);
-        switch (count)
-        {
-            case 1:
-                switch (Data.CS)
-                {
-                    case Cloth_State.t_shirts:
-                        uiArrangement.AddImageButton(tshirts_btnSprite[0], rc, Tshirts_Front_Btn, UIBuilder.PANE_LEFT);   //티셔츠 앞면 버튼
-                        uiArrangement.AddImageButton(tshirts_btnSprite[1], rc, Tshirts_Back_Btn, UIBuilder.PANE_LEFT);    //티셔츠 뒷면 버튼                    
-                        var sleeveBtn = uiArrangement.AddImageButton(tshirts_btnSprite[2], rc, Tshirts_Sleeve_Btn, UIBuilder.PANE_LEFT);  //티셔트 소매 버튼
-                        sleeveBtn.GetComponent<Button>().enabled = false;
-                        sleeveBtn.GetComponent<Image>().color = color;
-                        break;
-                    case Cloth_State.shirts:
-                        break;
-                    case Cloth_State.pants:
-                        break;
-                    case Cloth_State.skirt:
-                        break;
-                }
-                break;
-            case 2:
-                switch (TS)
-                {
-                    case Tshirts_State.front:
-                        switch (Data.CS)
-                        {
-                            case Cloth_State.t_shirts:
-                                var frontBtn = uiArrangement.AddImageButton(tshirts_btnSprite[0], rc, Tshirts_Front_Btn, UIBuilder.PANE_LEFT);   //티셔츠 앞면 버튼
-                                frontBtn.GetComponent<Button>().enabled = false;
-                                frontBtn.GetComponent<Image>().color = color;
-                                uiArrangement.AddImageButton(tshirts_btnSprite[1], rc, Tshirts_Back_Btn, UIBuilder.PANE_LEFT);    //티셔츠 뒷면 버튼                            
-                                var sleeveBtn = uiArrangement.AddImageButton(tshirts_btnSprite[2], rc, Tshirts_Sleeve_Btn, UIBuilder.PANE_LEFT);  //티셔트 소매 버튼
-                                sleeveBtn.GetComponent<Button>().enabled = false;
-                                sleeveBtn.GetComponent<Image>().color = color;
-                                break;
-                            case Cloth_State.shirts:
-                                break;
-                            case Cloth_State.pants:
-                                break;
-                            case Cloth_State.skirt:
-                                break;
-                        }
-                        break;
-                    case Tshirts_State.back:
-                        switch (Data.CS)
-                        {
-                            case Cloth_State.t_shirts:
-                                uiArrangement.AddImageButton(tshirts_btnSprite[0], rc, Tshirts_Front_Btn, UIBuilder.PANE_LEFT);   //티셔츠 앞면 버튼                               
-                                var backBtn = uiArrangement.AddImageButton(tshirts_btnSprite[1], rc, Tshirts_Back_Btn, UIBuilder.PANE_LEFT);    //티셔츠 뒷면 버튼
-                                backBtn.GetComponent<Button>().enabled = false;
-                                backBtn.GetComponent<Image>().color = color;
-                                var sleeveBtn = uiArrangement.AddImageButton(tshirts_btnSprite[2], rc, Tshirts_Sleeve_Btn, UIBuilder.PANE_LEFT);  //티셔트 소매 버튼
-                                sleeveBtn.GetComponent<Button>().enabled = false;
-                                sleeveBtn.GetComponent<Image>().color = color;
-                                break;
-                            case Cloth_State.shirts:
-                                break;
-                            case Cloth_State.pants:
-                                break;
-                            case Cloth_State.skirt:
-                                break;
-                        }
-                        break;
-                }
-                break;
-            case 3:
-                switch (Data.CS)
-                {
-                    case Cloth_State.t_shirts:
-                        var frontBtn = uiArrangement.AddImageButton(tshirts_btnSprite[0], rc, Tshirts_Front_Btn, UIBuilder.PANE_LEFT);   //티셔츠 앞면 버튼
-                        frontBtn.GetComponent<Button>().enabled = false;
-                        frontBtn.GetComponent<Image>().color = color;
-                        var backBtn = uiArrangement.AddImageButton(tshirts_btnSprite[1], rc, Tshirts_Back_Btn, UIBuilder.PANE_LEFT);    //티셔츠 뒷면 버튼
-                        backBtn.GetComponent<Button>().enabled = false;
-                        backBtn.GetComponent<Image>().color = color;
-                        var sleeveBtn = uiArrangement.AddImageButton(tshirts_btnSprite[2], rc, Tshirts_Sleeve_Btn, UIBuilder.PANE_LEFT);  //티셔트 소매 버튼
-                        sleeveBtn.GetComponent<Button>().enabled = false;
-                        sleeveBtn.GetComponent<Image>().color = color;
-                        break;
-                    case Cloth_State.shirts:
-                        break;
-                    case Cloth_State.pants:
-                        break;
-                    case Cloth_State.skirt:
-                        break;
-                }
-                uiArrangement.AddButton("다음으로", Next_Button, UIBuilder.PANE_LEFT);
-                break;
-        }
-        uiArrangement.Show();
-        TS = Tshirts_State.sleeve;
-    }
+	public void GoNext()
+	{
+		Destroy(uiArrangement.gameObject);
+	}
 
-    public void Show_Confirm()
-    {
-        uiArrangement.AddLabel("배치", TextAnchor.MiddleCenter, UIBuilder.PANE_LEFT);
-        uiArrangement.AddDivider(UIBuilder.PANE_LEFT);
-        uiArrangement.AddLabel("원단을 클릭하여 배치하세요.", TextAnchor.MiddleCenter, UIBuilder.PANE_LEFT);
-        switch (Data.CS)
-        {
-            case Cloth_State.t_shirts:               
-                uiArrangement.AddImageButton(tshirts_btnSprite[0], rc, Tshirts_Front_Btn, UIBuilder.PANE_LEFT);   //티셔츠 앞면 버튼
-                uiArrangement.AddImageButton(tshirts_btnSprite[1], rc, Tshirts_Back_Btn, UIBuilder.PANE_LEFT);    //티셔츠 뒷면 버튼
-                uiArrangement.AddImageButton(tshirts_btnSprite[2], rc, Tshirts_Sleeve_Btn, UIBuilder.PANE_LEFT);  //티셔트 소매 버튼
-                break;
-            case Cloth_State.shirts:
-                break;
-            case Cloth_State.pants:
-                break;
-            case Cloth_State.skirt:
-                break;
-        }
-        uiArrangement.Show();
-    }
+	public void OnArrangeFinished()
+	{
 
-    void Update()
-    {
-        if (Data.MS == Making_State.arrangement && Data.isCheck == true)
-        {
-            Data.isCheck = false;
-            Show_Confirm();
-        }
-    }
-}
+	}
+
+	public override void OnTutorialEnd()
+	{
+		uiArrangement.Hide();
+
+		// 뭔가 한 뒤 마지막에 base.OnAllDone() 호출
+		base.OnTutorialEnd();
+	}
+}    

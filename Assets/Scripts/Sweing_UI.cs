@@ -6,7 +6,7 @@ using UnityEngine.UI;
 using Fashion;
 using Fashion.UIManager;
 
-public class Sweing_UI : MonoBehaviour
+public class Sweing_UI : FashionController
 {
     [SerializeField]
     UIBuilder uiCanvasPrefab = null;
@@ -39,8 +39,13 @@ public class Sweing_UI : MonoBehaviour
             uiSweing_fabrication.AddDivider();
         }
     }
+	public override void StartTutorial()
+	{
+		base.StartTutorial();
+		// 일단 base.StartTutorial() 호출한 뒤에 작업 시작
+	}
 
-    public void Sweing_Sheet_Button()
+	public void Sweing_Sheet_Button()
     {
         uiSweing_sheet.Hide();
         Data.MS = Making_State.sweing_fabrication;
@@ -100,4 +105,10 @@ public class Sweing_UI : MonoBehaviour
             }
         }    
     }
+
+	public override void OnTutorialEnd()
+	{
+		// 뭔가 한 뒤 마지막에 base.OnAllDone() 호출
+		base.OnTutorialEnd();
+	}
 }
