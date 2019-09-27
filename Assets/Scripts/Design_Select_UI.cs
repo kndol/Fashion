@@ -20,7 +20,7 @@ public class Design_Select_UI : FashionController
 
 	RectTransform imgBtn;
 
-	private void Start()
+	void Start()
 	{
         uiClothes = Instantiate<UIBuilder>(uiCanvasPrefab);
         uiSelect = Instantiate<UIBuilder>(uiCanvasPrefab);
@@ -33,7 +33,7 @@ public class Design_Select_UI : FashionController
         uiClothes.StartHorizontalSection(5);
 		for (int i = 0; i< spriteClothes.Length; i++)
 		{
-			ClothType ct = (ClothType)i; // 위임하기 위해 루프의 변수를 지역 변수로 할당
+			ClothType ct = (ClothType)i;      // 위임하기 위해 루프의 변수를 지역 변수로 할당
 			uiClothes.AddImageButton(spriteClothes[i], rc, delegate { SelCloth(ct); });
 		}
 		uiClothes.EndHorizontalSection();

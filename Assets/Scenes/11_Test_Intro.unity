@@ -228,7 +228,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   styleObject: {fileID: 1869573349}
   stylePanel: {fileID: 746399911}
-  nextSceneName: 02_Start
+  nextSceneName: 12_Testmode
 --- !u!82 &159023083
 AudioSource:
   m_ObjectHideFlags: 0
@@ -565,6 +565,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 746399912}
     m_Modifications:
+    - target: {fileID: 1023997329816958, guid: 8b5e499f6f9530e4494faf83b28e4c1e, type: 3}
+      propertyPath: m_Name
+      value: Style
+      objectReference: {fileID: 0}
     - target: {fileID: 224959977710168114, guid: 8b5e499f6f9530e4494faf83b28e4c1e,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -654,10 +658,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Pivot.y
       value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 1023997329816958, guid: 8b5e499f6f9530e4494faf83b28e4c1e, type: 3}
-      propertyPath: m_Name
-      value: Style
       objectReference: {fileID: 0}
     - target: {fileID: 114335647123034326, guid: 8b5e499f6f9530e4494faf83b28e4c1e,
         type: 3}
