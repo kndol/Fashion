@@ -32,7 +32,7 @@ namespace Fashion.UIManager
 		// fix bug where it seems to appear at a random offset
 		// support remove
 
-		#region 패널 위치 상수 정의
+		#region 패널 이름 정의
 		// Convenience consts for clarity when using multiple panes. 
 		// But note that you can an arbitrary number of panes if you add them in the inspector.
 		public const int PANE_CENTER = 0;
@@ -128,6 +128,7 @@ namespace Fashion.UIManager
 		private List<ElementInfo>[] insertedElements;
 		private List<List<RectTransform>>[] insertedHorizontalElements;
 		private Vector3 menuOffset;
+		private bool useAbsolutePosition = false;
 		#endregion
 
 		#region 오큘러스 VR 관련 변수 정의
@@ -308,6 +309,14 @@ namespace Fashion.UIManager
 						}
 						r.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, maxHorizHeight);
 					}
+					else
+					{
+						AspectRatioFitter arf = r.GetComponent<AspectRatioFitter>();
+						if (arf != null)
+						{
+							r.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, maxWidth / arf.aspectRatio);
+						}
+					}
 					y -= (r.rect.height + elementSpacing);
 				}
 				panelWidth = maxWidth + 2 * marginH;
@@ -376,16 +385,26 @@ namespace Fashion.UIManager
 		/// <param name="distance">거리(m 단위)</param>
 		public void SetDistanceFromPlayer(float distance)
 		{
-			menuOffset.z = distance;
-			if (gameObject.activeInHierarchy)
+			if (!useAbsolutePosition)
 			{
-				Vector3 pos = rig.transform.TransformPoint(menuOffset);
-				// KnDol - 위치가 이상하게 낮아지면 기본 위치로 복구
-//				if (pos.y < menuOffset.y) pos.y = menuOffset.y;
-				float cameraY = worldCamera.transform.position.y;
-				if (pos.y < menuOffset.y) pos.y = cameraY > 0 ? cameraY : menuOffset.y;
-				transform.position = pos;
+				menuOffset.z = distance;
+				if (gameObject.activeInHierarchy)
+				{
+					Vector3 pos = rig.transform.TransformPoint(menuOffset);
+					// KnDol - 위치가 이상하게 낮아지면 기본 위치로 복구
+					//				if (pos.y < menuOffset.y) pos.y = menuOffset.y;
+					float cameraY = worldCamera.transform.position.y;
+					if (pos.y < menuOffset.y) pos.y = cameraY > 0 ? cameraY : menuOffset.y;
+					transform.position = pos;
+				}
 			}
+		}
+
+		public void SetPosition(Transform tr)
+		{
+			useAbsolutePosition = true;
+			this.transform.position = tr.position;
+			this.transform.rotation = tr.rotation;
 		}
 
 		/// <summary>
@@ -395,11 +414,15 @@ namespace Fashion.UIManager
 		{
 			Relayout();
 			gameObject.SetActive(true);
-			Vector3 pos = rig.transform.TransformPoint(menuOffset);
-			// KnDol - 위치가 이상하게 낮아지면 기본 위치로 복구
-			float cameraY = worldCamera.transform.position.y;
-			if (pos.y < menuOffset.y) pos.y = cameraY > 0 ? cameraY : menuOffset.y;
-			transform.position = pos;
+
+			if (!useAbsolutePosition)
+			{
+				Vector3 pos = rig.transform.TransformPoint(menuOffset);
+				// KnDol - 위치가 이상하게 낮아지면 기본 위치로 복구
+				float cameraY = worldCamera.transform.position.y;
+				if (pos.y < menuOffset.y) pos.y = cameraY > 0 ? cameraY : menuOffset.y;
+				transform.position = pos;
+			}
 			Vector3 newEulerRot = rig.transform.rotation.eulerAngles;
 			newEulerRot.x = 0.0f;
 			newEulerRot.z = 0.0f;
@@ -539,13 +562,13 @@ namespace Fashion.UIManager
 			Image img = buttonRT.GetComponentInChildren<Image>();
 			AspectRatioFitter arf = buttonRT.gameObject.AddComponent<AspectRatioFitter>();
 
+			img.sprite = sprite;
 			buttonRT.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, rect.width);
 			buttonRT.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, rect.height);
 			buttonRT.GetComponentInChildren<Text>().gameObject.SetActive(false);
 			arf.aspectMode = AspectRatioFitter.AspectMode.WidthControlsHeight;
 			arf.aspectRatio = rect.width / rect.height;
 
-			img.sprite = sprite;
 			button.onClick.AddListener(delegate { handler(); });
 			
             AddRect(buttonRT, targetCanvas);

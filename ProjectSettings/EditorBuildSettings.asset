@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/06_Tutorial_Arrange_and_Cut.unity
+    guid: cfb9fecb71b5a784c8ca3ce4670018e8
+  - enabled: 1
     path: Assets/Scenes/02_Start.unity
     guid: 5b3a777ba3cc750409bdbccd9fbf71c2
   - enabled: 1
@@ -17,9 +20,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/05_Tutorial_Dart.unity
     guid: 5d575e7acaf7bc6428cc18ed25bbc6a0
-  - enabled: 1
-    path: Assets/Scenes/06_Tutorial_Arrange_and_Cut.unity
-    guid: cfb9fecb71b5a784c8ca3ce4670018e8
   - enabled: 1
     path: Assets/Scenes/07_Tutorial_Sweing.unity
     guid: 2a21c88be1e574f4b8acabd995fa9f01
