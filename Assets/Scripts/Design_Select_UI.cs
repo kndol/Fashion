@@ -27,6 +27,7 @@ public class Design_Select_UI : FashionController
 
         Rect rc = new Rect(0, 0, 200, 350);
 
+        uiClothes.SetPosition(menuPosition);
         uiClothes.SetPaneWidth(1300);
         uiClothes.AddLabel("디자인을 선택하세요.");
         uiClothes.AddDivider();
@@ -39,7 +40,8 @@ public class Design_Select_UI : FashionController
 		uiClothes.EndHorizontalSection();
         uiClothes.Show();
 
-		uiSelect.AddLabel("선택한 옷을 만드시겠습니까?");
+        uiSelect.SetPosition(menuPosition);
+        uiSelect.AddLabel("선택한 옷을 만드시겠습니까?");
 		uiSelect.AddDivider();
 		imgBtn = uiSelect.AddImage(spriteClothes[0], new Rect(0, 0, 450, 350));
 		uiSelect.AddDivider();

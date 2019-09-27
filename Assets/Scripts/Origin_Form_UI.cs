@@ -38,7 +38,7 @@ public class Origin_Form_UI : FashionController
 	void Start()
     {
         uiOrigin = Instantiate<UIBuilder>(uiCanvasPrefab);
-
+        uiOrigin.SetPosition(menuPosition);
         StartTutorial();
     }
 
@@ -223,18 +223,19 @@ public class Origin_Form_UI : FashionController
 
     public void Bust_Size_Input(int i)    //몸판치수 계산
     {
-        inputText.text = string.Format("B = {0}", i);
-        firstValue.text = string.Format("B / 4 = {0}", i / 4);
-        secondValue.text = string.Format("(B / 2) + 3 = {0}", (i / 2) + 3);
-        thirdValue.text = string.Format("(B / 6) + 4 = {0}", (i / 6) + 4);
-        forthValue.text = string.Format("(B / 6) + 4 - 1 = {0}", (i / 6) + 4 - 1);
+        inputText.text = string.Format("가슴둘레(B) = {0}", i);
+        firstValue.text = string.Format("진동깊이(AC) = B / 4 = {0}", i / 4);
+        secondValue.text = string.Format("가슴둘레(C-C') = (B / 2) + 3 = {0}", (i / 2) + 3);
+        thirdValue.text = string.Format("뒤품선(A1-C1) = (B / 6) + 4 = {0}", (i / 6) + 4);
+        forthValue.text = string.Format("앞품선(A'1-C'1) =  뒤품선(A1-C1) - 1 = {0}", (i / 6) + 3);
     }
 
     public void Sleeve_Size_Input(int i)   //소매치수 계산
     {
-        inputText.text = string.Format("B = {0}", i);
+        inputText.text = string.Format("소매길이(AC) = {0}", i);
         firstValue.text = string.Format("(AH / 2) - 0.5 = {0}", (i / 2) - 0.5);
-        secondValue.text = string.Format("(AH / 4) + 3 = {0}",  (i / 4) + 3);
+        secondValue.text = string.Format("(AH / 4) + 3 = {0}", (i / 4) + 3);
+        thirdValue.text = string.Format("(AH / 2) - 0.5 = {0}", (i / 2) - 0.5);
     }
 
     public override void OnTutorialEnd()

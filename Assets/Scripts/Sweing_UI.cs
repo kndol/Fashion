@@ -41,7 +41,7 @@ public class Sweing_UI : FashionController
     {
         uiSweing = Instantiate<UIBuilder>(uiCanvasPrefab);
 
-        uiSweing.SetDistanceFromPlayer(1.2f);
+        uiSweing.SetPosition(menuPosition);
         uiSweing.AddLabel("<B>티셔츠 봉제_ 몸판/소매 봉제</B>");
         uiSweing.AddDivider();
         switch (Data.clothType)

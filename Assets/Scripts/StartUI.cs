@@ -13,7 +13,7 @@ public class StartUI : FashionController
 	string TutorialSceneName = null;
 	[SerializeField]
 	string TestSceneName = null;
-
+   
 	Design_Select_UI design_selectUI;
     UIBuilder uiMenu;
 	UIBuilder uiTerm;
@@ -24,6 +24,7 @@ public class StartUI : FashionController
         Init_Data();
         uiMenu = Instantiate<UIBuilder>(uiCanvasPrefab);
 
+        uiMenu.SetPosition(menuPosition);
         uiMenu.AddLabel("메뉴");
         uiMenu.AddDivider();
         uiMenu.AddButton("용어설명", ButtonTerms);
@@ -34,8 +35,9 @@ public class StartUI : FashionController
 
         uiTerm = Instantiate<UIBuilder>(uiCanvasPrefab);
 
+        uiTerm.SetPosition(menuPosition);
         uiTerm.SetPaneWidth(980);
-        uiTerm.AddLabel("<b용어 설명</b>");
+        uiTerm.AddLabel("<b>용어 설명</b>");
         uiTerm.AddDivider();
         uiTerm.AddLabel("항목\t\t내용", TextAnchor.MiddleLeft);
         uiTerm.AddScrollView("<b>완성선</b>\t\t패턴의 완성선\n" +
@@ -56,7 +58,7 @@ public class StartUI : FashionController
 
 	public void ButtonTerms()
     {
-		uiMenu.Hide();
+        uiMenu.Hide();
 		uiTerm.Show();
     }
 
@@ -70,7 +72,6 @@ public class StartUI : FashionController
 	public void ButtonTest()        //테스트 버튼
 	{
         uiMenu.Hide();
-		nextSceneName = TestSceneName;
         OnTutorialEnd();
     }
 

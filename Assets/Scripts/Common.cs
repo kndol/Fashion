@@ -9,7 +9,8 @@ namespace Fashion
 	public enum PlayType { tutorial, test }
 
 	public class Data                             // 클래스 자료형
-    {          
+    {
+        public static string UserName;
 		public static int Score = 100;            // 점수
 		public static int HighScore = 100;        // 최고 점수
 		public static ClothType clothType = ClothType.t_shirts;

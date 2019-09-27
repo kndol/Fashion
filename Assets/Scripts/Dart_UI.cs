@@ -25,6 +25,7 @@ public class Dart_UI : FashionController
     {
         uiDart = Instantiate<UIBuilder>(uiCanvasPrefab);
 
+        uiDart.SetPosition(menuPosition);
         uiDart.AddLabel("패턴완성", TextAnchor.MiddleCenter, UIBuilder.PANE_LEFT);
         uiDart.AddLabel("Description", TextAnchor.MiddleCenter, UIBuilder.PANE_RIGHT);
         uiDart.AddDivider(UIBuilder.PANE_LEFT);

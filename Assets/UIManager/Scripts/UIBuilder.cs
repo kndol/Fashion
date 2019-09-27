@@ -400,6 +400,10 @@ namespace Fashion.UIManager
 			}
 		}
 
+        /// <summary>
+        /// UI 위치지정
+        /// </summary>
+        /// <param name="tr"></param>
 		public void SetPosition(Transform tr)
 		{
 			useAbsolutePosition = true;
