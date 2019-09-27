@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -6,29 +7,49 @@ using UnityEngine.UI;
 using Fashion;
 using Fashion.UIManager;
 
+[Serializable]
+public class Sweing_Parts
+{
+    [Tooltip("재봉용 파츠 지정")]
+    public GameObject[] sweingParts = null;
+    [Tooltip("재봉 작업할 때 레이케스트를 감지하기 위한 콜라이더 객체들의 그룹(부모)객체")]
+    public GameObject[] pointGroup;
+}
+
 public class Sweing_UI : FashionController
 {
+    [Header("의상 종류")]
+    [Tooltip("작업에 사용할 의상의 종류 갯수와 파츠 지정")]
     [SerializeField]
-    Sprite[] s_sheetSpite = null;  //낱장재봉 이미지
-    [SerializeField]
-    Sprite[] s_fabSpite = null;  //합봉 이미지
+    Sweing_Parts[] parts = null;
 
-    UIBuilder uiSweing_sheet;
-    UIBuilder uiSweing_fabrication;
+    RectTransform[] imageBtns;
+    RectTransform btnOk;
+    Rect imgBtnRect = new Rect(0, 0, 150, 100);
+    int curCountPointSelected = 0;
 
-	void StartTutorial()
-	{
-        // 일단 base.StartTutorial() 호출한 뒤에 작업 시작
-        uiSweing_sheet = Instantiate<UIBuilder>(uiCanvasPrefab);
-        uiSweing_fabrication = Instantiate<UIBuilder>(uiCanvasPrefab);
+    List<bool>[] PointSelected;
+    int[] countPointSelected;
 
-        uiSweing_sheet.SetPaneWidth(900);
-        uiSweing_sheet.AddLabel("낱장 재봉");
-        uiSweing_sheet.AddDivider();
+    Fashion.UIManager.LaserPointer lp;
+
+    bool hasLaser = false;
+
+    UIBuilder uiSweing;
+
+    void Start()
+    {
+        uiSweing = Instantiate<UIBuilder>(uiCanvasPrefab);
+
+        uiSweing.SetDistanceFromPlayer(1.2f);
+        uiSweing.AddLabel("<B>티셔츠 봉제_ 몸판/소매 봉제</B>");
+        uiSweing.AddDivider();
         switch (Data.clothType)
         {
             case ClothType.t_shirts:
-                //uiSweing_sheet.AddImage(s_sheetSpite[0], new Rect(0, 0, 450, 350));
+                uiSweing.AddScrollView("티셔츠의 몸판과 소매의 앞과 뒤를 겉과 겉을 마주대고 몸판의\n" +
+                    "어깨점과 소매의 S.P 와 몸판의 겨드랑점과 소매의 겨드랑점을 맞추어 재봉한다.\n\n" +
+                    "점선을 따라 원단을 재봉하세요.");
                 break;
             case ClothType.shirts:
                 break;
@@ -37,36 +58,86 @@ public class Sweing_UI : FashionController
             case ClothType.skirt:
                 break;
         }
-        uiSweing_sheet.AddButton("확인", Sweing_Sheet_Button);
-        uiSweing_sheet.Show();
-    }
+        uiSweing.Show();
 
-	public void Sweing_Sheet_Button()
-    {
-        uiSweing_sheet.Hide();
-        uiSweing_fabrication.SetPaneWidth(900);
-        uiSweing_fabrication.AddLabel("합봉");
-        uiSweing_fabrication.AddDivider();
-        switch (Data.clothType)
+        int i, j;
+        for (i = 0; i < parts.Length; i++)
         {
-            case ClothType.t_shirts:
-                //uiSweing_fabrication.AddImage(s_fabSpite[0], new Rect(0, 0, 450, 350));
-                break;
-            case ClothType.shirts:
-                break;
-            case ClothType.pants:
-                break;
-            case ClothType.skirt:
-                break;
+            for (j = 1; j < parts[i].sweingParts.Length; j++)
+            {
+                parts[i].sweingParts[j].SetActive(false);
+            }                                 
         }
-        uiSweing_fabrication.AddButton("확인", Sweing_Fab_Button);
-        uiSweing_fabrication.Show();
+        DoSweing();
     }
 
-    public void Sweing_Fab_Button()
+    public void ShowCutDesc()
     {
-        uiSweing_fabrication.Hide();
-        OnTutorialEnd();
+        
+    }
+
+    public void DoSweing()
+    {
+        int clothType = (int)Data.clothType;
+        int groupCount = parts[clothType].pointGroup.Length;
+        PointSelected = new List<bool>[groupCount];
+        countPointSelected = new int[groupCount];
+
+        for (int group = 0; group < groupCount; group++)
+        {
+            int count = parts[clothType].pointGroup[group].transform.childCount;
+            PointerOverHandler[] handlers = parts[clothType].pointGroup[group].GetComponentsInChildren<PointerOverHandler>();
+            MeshRenderer[] rends = parts[clothType].pointGroup[group].GetComponentsInChildren<MeshRenderer>();
+            PointSelected[group] = new List<bool>();
+            countPointSelected[group] = 0;
+            for (int id = 0; id < count; id++)
+            {
+                rends[id].enabled = false;
+                handlers[id].group = group;
+                handlers[id].id = id;
+                handlers[id].OnPointerOver += OnOverHander;
+                PointSelected[group].Add(false);
+            }
+        }
+    }
+
+    public void OnOverHander(int group, int id)
+    {
+        if (!PointSelected[group][id])
+        {
+            PointSelected[group][id] = true;
+            ++countPointSelected[group];
+            //if (countPointSelected[group] > parts[(int)Data.clothType].pointGroup[group].transform.childCount * 9 / 10)
+            if (countPointSelected[group] > 3)   //테스트용
+            {
+                uiSweing.AddButton("재봉완료", OnTutorialEnd);
+                int i, j;
+                for (i = 0; i < parts.Length; i++)
+                {
+                    for (j = 0; j < parts[i].sweingParts.Length; j++)
+                    {
+                        if(i == 0 && j == 0)
+                        {
+                            parts[i].sweingParts[j].SetActive(false);
+                        }
+                        else parts[i].sweingParts[j].SetActive(true);
+                    }
+                }
+            }
+        }
+    }
+
+    void LateUpdate()
+    {
+        if (!hasLaser)
+        {
+            lp = FindObjectOfType<Fashion.UIManager.LaserPointer>();
+            if (lp)
+            {
+                GetComponent<OVRRaycaster>().pointer = lp.gameObject;
+                hasLaser = true;
+            }
+        }
     }
 
     public override void OnTutorialEnd()

@@ -105,12 +105,12 @@ public class Tutorial_Arrange_and_Cut : FashionController
 
 	void StartTutorial()
 	{
-		//base.StartTutorial();
 		// 일단 base.StartTutorial() 호출한 뒤에 작업 시작
 
 		background.SetActive(true);
 
 		uiArrangement = Instantiate<UIBuilder>(uiCanvasPrefab);
+        uiArrangement.SetDistanceFromPlayer(1.2f);
 		uiArrangement.AddLabel("<B>티셔츠 마름질 - 배치</B>");
 		uiArrangement.AddDivider();
 		uiArrangement.AddScrollView("식서방향과 골선의 위치와 뱡향에 따라 배치\n\n" +
@@ -242,11 +242,6 @@ public class Tutorial_Arrange_and_Cut : FashionController
 	public void GoNext()
 	{
 		Destroy(uiArrangement.gameObject);
-	}
-
-	public void OnArrangeFinished()
-	{
-
 	}
 
 	public override void OnTutorialEnd()

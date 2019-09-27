@@ -11,26 +11,25 @@ public class Wearing_UI : FashionController
 {
     UIBuilder uiWearing;
 
-    void StartTutorial()
+    void Start()
     {
-        StartTutorial();
-
         uiWearing = Instantiate<UIBuilder>(uiCanvasPrefab);
 
         uiWearing.AddLabel("착장");
         uiWearing.AddDivider();
         uiWearing.AddButton("확인", WearingButton);
-        uiWearing.AddButton("재시작", Restart_Button);
+        uiWearing.AddButton("재시작", RestartButton);
+        uiWearing.Show();
     }
 
     public void WearingButton()
     {
-        uiWearing.Hide();
+        
     }
 
-    public void Restart_Button()
+    public void RestartButton()
     {
-        SceneManager.LoadScene("Fashion_Shop");
+        OnTutorialEnd();
     }
 
     public override void OnTutorialEnd()

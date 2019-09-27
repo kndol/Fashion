@@ -21,7 +21,7 @@ public class Dart_UI : FashionController
 
     bool isCheck = true;
 
-    void StartTutorial()
+    void Start()
     {
         uiDart = Instantiate<UIBuilder>(uiCanvasPrefab);
 
@@ -33,10 +33,10 @@ public class Dart_UI : FashionController
         {
             case ClothType.t_shirts:
                 uiDart.AddImage(completionSpite[0], new Rect(0, 0, 450, 350), UIBuilder.PANE_LEFT);
-                uiDart.AddButton("앞/뒤 구분", FrontBackButton, UIBuilder.PANE_CENTER);
-                uiDart.AddButton("골선", FordButton, UIBuilder.PANE_CENTER);
-                uiDart.AddButton("식서방향", SelvageButton, UIBuilder.PANE_CENTER);
-                uiDart.AddButton("암홀위치", ArmHolePosButton, UIBuilder.PANE_CENTER);
+                uiDart.AddButton("앞/뒤 구분", FrontBackButton);
+                uiDart.AddButton("골선", FordButton);
+                uiDart.AddButton("식서방향", SelvageButton);
+                uiDart.AddButton("암홀위치", ArmHolePosButton);
                 break;
             case ClothType.shirts:
                 break;
@@ -45,8 +45,13 @@ public class Dart_UI : FashionController
             case ClothType.skirt:
                 break;
         }
-        uiDart.AddButton("다음으로", DartButton, UIBuilder.PANE_CENTER);
+        uiDart.AddButton("다음으로", DartButton);
         uiDart.Show();
+    }
+
+    public void DartButton()
+    {
+        OnTutorialEnd();
     }
 
     public void FrontBackButton()   //앞뒤구분 설명 버튼  //설명 추가 예정
@@ -109,17 +114,6 @@ public class Dart_UI : FashionController
     {
         Destroy(uiDart.gameObject);
         uiDart = Instantiate<UIBuilder>(uiCanvasPrefab);
-        StartTutorial();
-    }
-
-    public void DartButton()
-    {
-        uiDart.Hide();
-    }
-
-    public void Size_Input(int i)
-    {
-        
     }
 
     public override void OnTutorialEnd()

@@ -25,16 +25,26 @@ public class Rand_List   //난수생성
 
 public class SetQuestion
 {
-    Sprite sprite { get; set; }
-    bool rightCheck { get; set; }
+    public Sprite sprite { get; set; }
+    public bool rightCheck { get; set; }
+    public SetQuestion(Sprite sprite, bool rightCheck)
+    {
+        this.sprite = sprite;
+        this.rightCheck = rightCheck;
+    }
 }
 
+public class bodyQ1
+{
+    
+}
 
-
+//3지선다
+//몸판3문제   소매2문제   티셔츠5 + a문제
 public class Test_Mode_UI : FashionController
 {
     [SerializeField]
-    Sprite[] body_questionSprite = null;
+    Sprite[] body_questionSprite = null;  //
 
     UIBuilder uiTest;
     UIBuilder uiYesNo;
@@ -47,15 +57,31 @@ public class Test_Mode_UI : FashionController
     //int i = 0;
     //bool rightCheck = false;
     //bool randgetCheck = false;
+    Sprite[] bodySprite;
 
 	private void Start()
 	{
         uiTest = Instantiate<UIBuilder>(uiCanvasPrefab);
         uiYesNo = Instantiate<UIBuilder>(uiCanvasPrefab);
 
+        setQuestion.Add(new SetQuestion(bodySprite[0], false));
+        setQuestion.Add(new SetQuestion(bodySprite[1], false));
+        setQuestion.Add(new SetQuestion(bodySprite[2], true));
+
+
         //Question_Show();
     }
 
+    void BodyQuestion()   //몸판 3문제
+    {
+        uiTest.AddLabel("문제");
+        uiTest.AddDivider();
+        uiTest.StartHorizontalSection(10);
+        //uiTest.AddImageButton(body_questionSprite[0], );
+        //uiTest.AddImageButton(body_questionSprite[1], );
+        //uiTest.AddImageButton(body_questionSprite[2], );
+        //uiTest.EndHorizontalSection();
+    }
     /*public void Question_Show()
     {
         if (!randgetCheck)
