@@ -31,8 +31,6 @@ public class Tutorial_Arrange_and_Cut : FashionController
 	[Tooltip("작업에 사용할 의상의 종류 갯수와 파츠 지정")]
 	[SerializeField]
 	Parts[] parts = null;
-	[SerializeField]
-	Transform menuPosition;
 
 	UIBuilder uiMenu;
 	UIBuilder uiMsg;
