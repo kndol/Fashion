@@ -23,24 +23,6 @@ public class Rand_List   //난수생성
     }
 }
 
-public class SetQuestion
-{
-    public Sprite sprite { get; set; }
-    public bool rightCheck { get; set; }
-    public SetQuestion(Sprite sprite, bool rightCheck)
-    {
-        this.sprite = sprite;
-        this.rightCheck = rightCheck;
-    }
-}
-
-public class bodyQ1
-{
-    
-}
-
-//3지선다
-//몸판3문제   소매2문제   티셔츠5 + a문제
 public class Test_Mode_UI : FashionController
 {
     [SerializeField]
