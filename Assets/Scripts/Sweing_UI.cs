@@ -52,7 +52,7 @@ public class Sweing_UI : FashionController
                     "점선을 따라 원단을 재봉하세요.");
                 break;
             case ClothType.skirt:
-                //
+                //설명추가
                 break;
         }
         uiSweing.Show();
