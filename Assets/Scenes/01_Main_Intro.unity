@@ -226,7 +226,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 768ede1415af9a8478049694368991f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  styleObject: {fileID: 1869573349}
   stylePanel: {fileID: 746399911}
   nextSceneName: 02_Start
 --- !u!82 &159023083
@@ -687,12 +686,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8b5e499f6f9530e4494faf83b28e4c1e, type: 3}
---- !u!1 &1869573349 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1023997329816958, guid: 8b5e499f6f9530e4494faf83b28e4c1e,
-    type: 3}
-  m_PrefabInstance: {fileID: 1671258131}
-  m_PrefabAsset: {fileID: 0}
 --- !u!224 &1869573350 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 224959977710168114, guid: 8b5e499f6f9530e4494faf83b28e4c1e,
