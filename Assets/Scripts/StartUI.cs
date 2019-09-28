@@ -6,11 +6,8 @@ using UnityEngine.UI;
 using Fashion;
 using Fashion.UIManager;
 
-// Show off all the Debug UI components.
 public class StartUI : FashionController
 {
-	[SerializeField]
-	string TutorialSceneName = null;
 	[SerializeField]
 	string TestSceneName = null;
    
@@ -65,7 +62,6 @@ public class StartUI : FashionController
 	public void ButtonTutorial()    //튜토리얼 버튼
 	{
         uiMenu.Hide();
-		nextSceneName = TutorialSceneName;
         OnTutorialEnd();
     }
 
