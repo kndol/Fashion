@@ -13,20 +13,15 @@ public class LogoManager : MonoBehaviour {
 	[SerializeField]
 	string nextSceneName = null;
 	[Tooltip("지정한 시간 뒤에 다음 씬으로 이동")]
-	[SerializeField]
-	float sceneTime = 4f;
 
-	// [Header("PANEL ANIMS")]
 	private string panelFadeIn = "Panel Open";
     private string panelFadeOut = "Panel Close";
     private string styleExpand = "Expand";
 
     private Animator panelAnimator;
-//    private Animator styleAnimator;
+	bool isAnimationCompleted = false;
 
-	float timer = 0;
-
-    void Start ()
+	void Start ()
     {
         panelAnimator = stylePanel.GetComponent<Animator>();
         panelAnimator.Play(panelFadeIn);
@@ -35,13 +30,17 @@ public class LogoManager : MonoBehaviour {
 		panelAnimator.Play(styleExpand);
     }
 
-	private void Update()
+	void LateUpdate()
 	{
-		timer += Time.deltaTime;
-		if (timer > sceneTime)
+		if (isAnimationCompleted)
 		{
-			timer = 0;
 			SceneManager.LoadScene(nextSceneName);
 		}
+	}
+
+	//Called via animation event
+	public void AnimationComplete()
+	{
+		isAnimationCompleted = true;
 	}
 }
