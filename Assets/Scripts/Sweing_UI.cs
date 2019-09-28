@@ -51,11 +51,8 @@ public class Sweing_UI : FashionController
                     "어깨점과 소매의 S.P 와 몸판의 겨드랑점과 소매의 겨드랑점을 맞추어 재봉한다.\n\n" +
                     "점선을 따라 원단을 재봉하세요.");
                 break;
-            case ClothType.shirts:
-                break;
-            case ClothType.pants:
-                break;
             case ClothType.skirt:
+                //
                 break;
         }
         uiSweing.Show();
@@ -69,11 +66,6 @@ public class Sweing_UI : FashionController
             }                                 
         }
         DoSweing();
-    }
-
-    public void ShowCutDesc()
-    {
-        
     }
 
     public void DoSweing()

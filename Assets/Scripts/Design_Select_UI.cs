@@ -25,10 +25,10 @@ public class Design_Select_UI : FashionController
         uiClothes = Instantiate<UIBuilder>(uiCanvasPrefab);
         uiSelect = Instantiate<UIBuilder>(uiCanvasPrefab);
 
-        Rect rc = new Rect(0, 0, 200, 350);
+        Rect rc = new Rect(0, 0, 200, 300);
 
         uiClothes.SetPosition(menuPosition);
-        uiClothes.SetPaneWidth(1300);
+        uiClothes.SetPaneWidth(830);
         uiClothes.AddLabel("디자인을 선택하세요.");
         uiClothes.AddDivider();
         uiClothes.StartHorizontalSection(5);

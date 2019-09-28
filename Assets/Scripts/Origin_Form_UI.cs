@@ -24,6 +24,8 @@ public class Origin_Form_UI : FashionController
     Sprite []SleeveSprite = null;
     [SerializeField]
     Sprite []tshirtsSpite = null;
+    [SerializeField]
+    Sprite[] skirtSpite = null;
 
     UIBuilder uiOrigin;
 
@@ -52,7 +54,7 @@ public class Origin_Form_UI : FashionController
                 uiOrigin.AddImage(tshirtsSpite[0], new Rect(0, 0, 450, 350), UIBuilder.PANE_LEFT);  //기초선
                 uiOrigin.AddLabel("치수입력", TextAnchor.MiddleCenter);
                 uiOrigin.AddDivider();
-                uiOrigin.AddInputNumberField(0, "치수를 입력하세요.", Bust_Size_Input, null);
+                uiOrigin.AddInputNumberField(0, "치수를 입력하세요.", SizeCalculate, null);
                 var size_tshirts_B_Text = uiOrigin.AddLabel("", TextAnchor.MiddleCenter);
                 inputText = size_tshirts_B_Text.GetComponentInChildren<Text>();
                 var calculate_tshirts_B_1 = uiOrigin.AddLabel("", TextAnchor.MiddleCenter);
@@ -64,11 +66,23 @@ public class Origin_Form_UI : FashionController
                 var calculate_tshirts_B_4 = uiOrigin.AddLabel("", TextAnchor.MiddleCenter);
                 forthValue = calculate_tshirts_B_4.GetComponentInChildren<Text>();
                 break;
-            case ClothType.shirts:
-                break;
-            case ClothType.pants:
-                break;
             case ClothType.skirt:
+                uiOrigin.AddLabel("치마 기초선", TextAnchor.MiddleCenter, UIBuilder.PANE_LEFT);
+                uiOrigin.AddDivider(UIBuilder.PANE_LEFT);
+                uiOrigin.AddImage(skirtSpite[0], new Rect(0, 0, 450, 350), UIBuilder.PANE_LEFT);  //기초선
+                uiOrigin.AddLabel("치수입력", TextAnchor.MiddleCenter);
+                uiOrigin.AddDivider();
+                uiOrigin.AddInputNumberField(0, "치수를 입력하세요.", SizeCalculate, null);
+                var size_skirt_Text = uiOrigin.AddLabel("", TextAnchor.MiddleCenter);
+                inputText = size_skirt_Text.GetComponentInChildren<Text>();
+                var calculate_skirt_1 = uiOrigin.AddLabel("", TextAnchor.MiddleCenter);
+                firstValue = calculate_skirt_1.GetComponentInChildren<Text>();
+                var calculate_skirt_2 = uiOrigin.AddLabel("", TextAnchor.MiddleCenter);
+                secondValue = calculate_skirt_2.GetComponentInChildren<Text>();
+                var calculate_skirt_3 = uiOrigin.AddLabel("", TextAnchor.MiddleCenter);
+                thirdValue = calculate_skirt_3.GetComponentInChildren<Text>();
+                var calculate_skirt_4 = uiOrigin.AddLabel("", TextAnchor.MiddleCenter);
+                forthValue = calculate_skirt_4.GetComponentInChildren<Text>();
                 break;
             case ClothType.body:
                 uiOrigin.AddLabel("몸판 기초선", TextAnchor.MiddleCenter, UIBuilder.PANE_LEFT);
@@ -76,7 +90,7 @@ public class Origin_Form_UI : FashionController
                 uiOrigin.AddDivider(UIBuilder.PANE_LEFT);
                 uiOrigin.AddDivider();
                 uiOrigin.AddImage(tshirtsSpite[0], new Rect(0, 0, 450, 350), UIBuilder.PANE_LEFT);
-                uiOrigin.AddInputNumberField(0, "B를 입력하세요.", Bust_Size_Input, null);
+                uiOrigin.AddInputNumberField(0, "B를 입력하세요.", SizeCalculate, null);
                 var size_B_Text = uiOrigin.AddLabel("", TextAnchor.MiddleCenter);
                 inputText = size_B_Text.GetComponentInChildren<Text>();
                 var calculate_B_1 = uiOrigin.AddLabel("", TextAnchor.MiddleCenter);
@@ -92,7 +106,7 @@ public class Origin_Form_UI : FashionController
                 uiOrigin.AddLabel("소매 기초선", TextAnchor.MiddleCenter, UIBuilder.PANE_LEFT);
                 uiOrigin.AddDivider(UIBuilder.PANE_LEFT);
                 uiOrigin.AddImage(SleeveSprite[0], new Rect(0, 0, 450, 350), UIBuilder.PANE_LEFT);
-                uiOrigin.AddInputNumberField(0, "소매치수를 입력하세요.", Sleeve_Size_Input, null);
+                uiOrigin.AddInputNumberField(0, "소매치수를 입력하세요.", SizeCalculate, null);
                 var size_S_Text = uiOrigin.AddLabel("", TextAnchor.MiddleCenter);
                 inputText = size_S_Text.GetComponentInChildren<Text>();
                 var calculate_S_1 = uiOrigin.AddLabel("", TextAnchor.MiddleCenter);
@@ -115,7 +129,11 @@ public class Origin_Form_UI : FashionController
                 uiOrigin.AddLabel("패턴제도");
                 uiOrigin.AddDivider();
                 uiOrigin.AddImage(tshirtsSpite[1], new Rect(0, 0, 350, 350));
-                uiOrigin.AddButton("다음으로", OriginButton);
+                break;
+            case ClothType.skirt:
+                uiOrigin.AddLabel("패턴제도");
+                uiOrigin.AddDivider();
+                uiOrigin.AddImage(skirtSpite[1], new Rect(0, 0, 350, 350));
                 break;
             case ClothType.body:
                 uiOrigin.AddLabel("Description", TextAnchor.MiddleCenter, UIBuilder.PANE_RIGHT);
@@ -124,7 +142,6 @@ public class Origin_Form_UI : FashionController
                 uiOrigin.AddButton("무다트", MudartPattern);
                 uiOrigin.AddButton("반다트", BandartPattern);
                 uiOrigin.AddButton("반무다트", BanmudartPattern);
-                uiOrigin.AddButton("소매만들기", SleeveButton);
                 break;
             case ClothType.sleeve:  //가로 배치 및 폭수정
                 uiOrigin.AddLabel("Description");
@@ -133,15 +150,15 @@ public class Origin_Form_UI : FashionController
                 uiOrigin.AddLabel("티셔츠 소매 설명");
                 uiOrigin.AddImage(SleeveSprite[2], new Rect(0, 0, 450, 350));
                 uiOrigin.AddLabel("블라우스 소매 설명");
-                uiOrigin.AddButton("확인", OriginButton);
                 break;
         }
+        uiOrigin.AddButton("다음으로", OriginButton);
         uiOrigin.Show();
     }
 
     public void OriginButton()
     {
-        nextSceneName = Data.clothType == ClothType.t_shirts ? dartSceneName : designselectSceneName;
+        nextSceneName = (Data.clothType == ClothType.t_shirts) || (Data.clothType == ClothType.skirt) ? dartSceneName : designselectSceneName;
         OnTutorialEnd();
     }
 
@@ -221,21 +238,37 @@ public class Origin_Form_UI : FashionController
         Next_Button();
     }
 
-    public void Bust_Size_Input(int i)    //몸판치수 계산
+    public void SizeCalculate(int i)    //몸판치수 계산
     {
-        inputText.text = string.Format("가슴둘레(B) = {0}", i);
-        firstValue.text = string.Format("진동깊이(AC) = B / 4 = {0}", i / 4);
-        secondValue.text = string.Format("가슴둘레(C-C') = (B / 2) + 3 = {0}", (i / 2) + 3);
-        thirdValue.text = string.Format("뒤품선(A1-C1) = (B / 6) + 4 = {0}", (i / 6) + 4);
-        forthValue.text = string.Format("앞품선(A'1-C'1) =  뒤품선(A1-C1) - 1 = {0}", (i / 6) + 3);
-    }
-
-    public void Sleeve_Size_Input(int i)   //소매치수 계산
-    {
-        inputText.text = string.Format("소매길이(AC) = {0}", i);
-        firstValue.text = string.Format("(AH / 2) - 0.5 = {0}", (i / 2) - 0.5);
-        secondValue.text = string.Format("(AH / 4) + 3 = {0}", (i / 4) + 3);
-        thirdValue.text = string.Format("(AH / 2) - 0.5 = {0}", (i / 2) - 0.5);
+        switch (Data.clothType)
+        {
+            case ClothType.t_shirts:
+                inputText.text = string.Format("가슴둘레(B) = {0}", i);
+                firstValue.text = string.Format("진동깊이(AC) = B / 4 = {0}", i / 4);
+                secondValue.text = string.Format("가슴둘레(C-C') = (B / 2) + 3 = {0}", (i / 2) + 3);
+                thirdValue.text = string.Format("뒤품선(A1-C1) = (B / 6) + 4 = {0}", (i / 6) + 4);
+                forthValue.text = string.Format("앞품선(A'1-C'1) =  뒤품선(A1-C1) - 1 = {0}", (i / 6) + 3);
+                break;
+            case ClothType.skirt:
+                inputText.text = string.Format("엉덩이둘레(H) = {0}", i);
+                firstValue.text = string.Format("스커트폭(AA') = (H / 2) + 2 = {0}", (i / 2) + 2);
+                secondValue.text = string.Format("스커트길이(AB) = 60");
+                thirdValue.text = string.Format("엉덩이길이(AC) = 18");
+                break;
+            case ClothType.body:
+                inputText.text = string.Format("가슴둘레(B) = {0}", i);
+                firstValue.text = string.Format("진동깊이(AC) = B / 4 = {0}", i / 4);
+                secondValue.text = string.Format("가슴둘레(C-C') = (B / 2) + 3 = {0}", (i / 2) + 3);
+                thirdValue.text = string.Format("뒤품선(A1-C1) = (B / 6) + 4 = {0}", (i / 6) + 4);
+                forthValue.text = string.Format("앞품선(A'1-C'1) =  뒤품선(A1-C1) - 1 = {0}", (i / 6) + 3);
+                break;
+            case ClothType.sleeve:
+                inputText.text = string.Format("소매길이(AC) = {0}", i);
+                firstValue.text = string.Format("(AH / 2) - 0.5 = {0}", (i / 2) - 0.5);
+                secondValue.text = string.Format("(AH / 4) + 3 = {0}", (i / 4) + 3);
+                thirdValue.text = string.Format("(AH / 2) - 0.5 = {0}", (i / 2) - 0.5);
+                break;
+        }
     }
 
     public override void OnTutorialEnd()
