@@ -52,7 +52,9 @@ public class Sweing_UI : FashionController
                     "점선을 따라 원단을 재봉하세요.");
                 break;
             case ClothType.skirt:
-                //설명추가
+                uiSweing.AddScrollView("티셔츠의 몸판과 소매의 앞과 뒤를 겉과 겉을 마주대고 몸판의\n" +//
+                    "어깨점과 소매의 S.P 와 몸판의 겨드랑점과 소매의 겨드랑점을 맞추어 재봉한다.\n\n" +//
+                    "점선을 따라 원단을 재봉하세요.");
                 break;
         }
         uiSweing.Show();

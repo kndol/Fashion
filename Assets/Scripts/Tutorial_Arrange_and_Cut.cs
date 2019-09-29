@@ -141,7 +141,21 @@ public class Tutorial_Arrange_and_Cut : FashionController
         uiMenu.SetPaneWidth(900);
         uiMenu.AddLabel("<B>티셔츠 마름질 - 배치</B>");
         uiMenu.AddDivider();
-        uiMenu.AddScrollView("식서방향과 골선의 위치와 뱡향에 따라 배치\n\n" +
+        switch (Data.clothType)
+        {
+            case ClothType.t_shirts:
+                uiMenu.AddScrollView("식서방향과 골선의 위치와 뱡향에 따라 배치\n\n" +
+                "<b>*</b> <i>식서방향</i> : 원단 가장자리의 구멍이 뚫려있는 부분.원단이 제일 늘어나지 않는 방향.\n" +
+            "			 식서방향에 맞추는 이유: 옷의 늘어짐과 뒤틀림이 최대한 없게 하기 위해서.\n" +
+            "<b>*</b> 골선이라고 표시된 부분의 선을 중심축으로 하여 본을 바로 해서 올려 놓고 1장 그리고, 중심축에서 본을 넘기듯" +
+            " 뒤집어서 좌, 우 대칭이 되도록 패턴을 한번 더 그려주는 것.\n" +
+            "  원단이 접히는 위치에 배치를 하며 이때, 원단의 시접방향과도 맞아야 한다.\n" +
+            "  원단의 시접방향과 다른 경우에는 옷이 늘어지며 틀어지는 경우가 있다.\n" +
+            "<b>*</b> 배치할 때 시접량에 유의해서 위치를 옮긴다.\n" +
+            "  시접량이 많아 원단의 끝에 닿아 면적이 좁거나, 시접량이 서로 맞물리는 경우에는 시접량이 부족하여 재봉 시 어려움이 있다.", TextAnchor.UpperLeft, 500);
+                break;
+                case ClothType.skirt:
+                uiMenu.AddScrollView("식서방향과 골선의 위치와 뱡향에 따라 배치\n\n" +
             "<b>*</b> <i>식서방향</i> : 원단 가장자리의 구멍이 뚫려있는 부분.원단이 제일 늘어나지 않는 방향.\n" +
             "			 식서방향에 맞추는 이유: 옷의 늘어짐과 뒤틀림이 최대한 없게 하기 위해서.\n" +
             "<b>*</b> 골선이라고 표시된 부분의 선을 중심축으로 하여 본을 바로 해서 올려 놓고 1장 그리고, 중심축에서 본을 넘기듯" +
@@ -150,6 +164,9 @@ public class Tutorial_Arrange_and_Cut : FashionController
             "  원단의 시접방향과 다른 경우에는 옷이 늘어지며 틀어지는 경우가 있다.\n" +
             "<b>*</b> 배치할 때 시접량에 유의해서 위치를 옮긴다.\n" +
             "  시접량이 많아 원단의 끝에 닿아 면적이 좁거나, 시접량이 서로 맞물리는 경우에는 시접량이 부족하여 재봉 시 어려움이 있다.", TextAnchor.UpperLeft, 500);
+                break;
+        }
+        
         btnOk = uiMenu.AddButton("확인", DoArrange);
         uiMenu.Show();
     }
