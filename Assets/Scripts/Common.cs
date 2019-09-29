@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Fashion
 {
     // 옷                     티셔츠      셔츠    바지   치마   소매    몸판
-    public enum ClothType { t_shirts, shirts, pants, skirt, sleeve, body};
+    public enum ClothType { t_shirts, skirt, sleeve, body};
 	public enum PlayType { tutorial, test }
 
 	public class Data                             // 클래스 자료형

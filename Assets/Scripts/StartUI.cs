@@ -8,13 +8,12 @@ using Fashion.UIManager;
 
 public class StartUI : FashionController
 {
-	[SerializeField]
-	string TestSceneName = null;
+    [SerializeField]
+	string testSceneName = null;
    
 	Design_Select_UI design_selectUI;
     UIBuilder uiMenu;
 	UIBuilder uiTerm;
-
 
     void Start ()
     {
@@ -66,8 +65,8 @@ public class StartUI : FashionController
 
 	public void ButtonTest()        //테스트 버튼
 	{
-		nextSceneName = TestSceneName;
-		OnTutorialEnd();
+        nextSceneName = testSceneName;
+        OnTutorialEnd();
     }
 
 	public void ButtonExit()
@@ -81,11 +80,7 @@ public class StartUI : FashionController
 
     public override void OnTutorialEnd()
     {
-		Destroy(uiMenu.gameObject);
-		Destroy(uiTerm.gameObject);
-		print(nextSceneName);
-		UnityEngine.SceneManagement.SceneManager.LoadScene(nextSceneName);
-		//base.OnTutorialEnd();
+		base.OnTutorialEnd();
     }
 
     void Init_Data()    //초기화 함수
