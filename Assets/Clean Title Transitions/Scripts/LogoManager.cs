@@ -25,8 +25,6 @@ public class LogoManager : MonoBehaviour {
     {
         panelAnimator = stylePanel.GetComponent<Animator>();
         panelAnimator.Play(panelFadeIn);
-
-		//	styleAnimator = styleObject.GetComponent<Animator>();
 		panelAnimator.Play(styleExpand);
     }
 
@@ -41,6 +39,7 @@ public class LogoManager : MonoBehaviour {
 	//Called via animation event
 	public void AnimationComplete()
 	{
+		panelAnimator.Play(panelFadeIn);
 		isAnimationCompleted = true;
 	}
 }

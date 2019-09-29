@@ -10,6 +10,9 @@ using Fashion.UIManager;
 [Serializable]
 public class Parts
 {
+	[Header("배경 이미지")]
+	[Tooltip("작업에 사용할 배경 이미지")]
+	public GameObject background = null;
 	[Tooltip("배열용 파츠 지정")]
 	public GameObject[] arrangeParts = null;
 	[Tooltip("점선 재단선 파츠 지정")]
@@ -23,10 +26,6 @@ public class Parts
 
 public class Tutorial_Arrange_and_Cut : FashionController
 {
-	[Header("배경 이미지")]
-	[Tooltip("작업에 사용할 배경 이미지")]
-	[SerializeField]
-	GameObject background = null;
 	[Header("의상 종류")]
 	[Tooltip("작업에 사용할 의상의 종류 갯수와 파츠 지정")]
 	[SerializeField]
@@ -68,8 +67,8 @@ public class Tutorial_Arrange_and_Cut : FashionController
 			{
 				parts[i].pointGroup[j].SetActive(false);
 			}
+			parts[i].background.SetActive(false);
 		}
-		background.SetActive(false);
 		StartTutorial();
 	}
 
@@ -132,7 +131,7 @@ public class Tutorial_Arrange_and_Cut : FashionController
 	{
 		// 일단 base.StartTutorial() 호출한 뒤에 작업 시작
 
-		background.SetActive(true);
+		parts[(int)Data.clothType].background.SetActive(true);
 
 		uiMenu = Instantiate<UIBuilder>(uiCanvasPrefab);
 		uiMenu.SetPosition(menuPosition);
@@ -297,7 +296,7 @@ public class Tutorial_Arrange_and_Cut : FashionController
 	IEnumerator FadeOutBackground()
 	{
 		float alpha = 1;
-		Image img = background.GetComponent<Image>();
+		Image img = parts[(int)Data.clothType].background.GetComponent<Image>();
 		Color color = img.color;
 		while (alpha > 0)
 		{

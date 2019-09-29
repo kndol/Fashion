@@ -145,10 +145,11 @@ namespace Fashion.UIManager
 		{
 			menuOffset = transform.position; // TODO: this is unpredictable/busted
 			gameObject.SetActive(false);
-			rig = FindObjectOfType<OVRCameraRig>();
-			worldCamera = rig.centerEyeAnchor.gameObject.GetComponent<Camera>();
+ 			rig = FindObjectOfType<OVRCameraRig>();
+// 			worldCamera = rig.centerEyeAnchor.gameObject.GetComponent<Camera>();
+			worldCamera = Camera.main;
 
-			for (int i = 0; i < toEnable.Count; ++i)
+			for (int i = 0; i < toEnable.Count; i++)
 			{
 				toEnable[i].SetActive(false);
 			}
@@ -158,7 +159,7 @@ namespace Fashion.UIManager
 			horizontalSections = new List<RectTransform>[targetContentPanels.Length];
 			insertedHorizontalElements = new List<List<RectTransform>>[targetContentPanels.Length];
 			numOfHorizSect = new int[targetContentPanels.Length];
-			for (int i = 0; i < targetContentPanels.Length; ++i)
+			for (int i = 0; i < targetContentPanels.Length; i++)
 			{
 				insertPositions[i].x = marginH;
 				insertPositions[i].y = -marginV;
@@ -276,7 +277,7 @@ namespace Fashion.UIManager
 			float centerPanelWidth = 0, panelWidth;
 			float centerPanelX = targetContentPanels[0].GetComponent<RectTransform>().anchoredPosition.x;
 			float leftmost = 0, rightmost = 0;
-			for (int panelIdx = 0; panelIdx < targetContentPanels.Length; ++panelIdx)
+			for (int panelIdx = 0; panelIdx < targetContentPanels.Length; panelIdx++)
 			{
 				int horizSectIdx = 0;
 				RectTransform canvasRect = targetContentPanels[panelIdx].GetComponent<RectTransform>();
@@ -285,39 +286,41 @@ namespace Fashion.UIManager
 				float x = marginH;
 				float y = -marginV;
 				float maxWidth = canvasRect.offsetMax.x - canvasRect.offsetMin.x - marginH * 2f;
-				for (int elemIdx = 0; elemIdx < elemCount; ++elemIdx)
+				for (int elemIdx = 0; elemIdx < elemCount; elemIdx++)
 				{
-					RectTransform r = elems[elemIdx].rt;
-					r.anchoredPosition = new Vector2(x, y);
+					RectTransform elemRT = elems[elemIdx].rt;
+					elemRT.anchoredPosition = new Vector2(x, y);
 					if (maxWidth < 20)
 					{
-						maxWidth = Mathf.Max(r.rect.width + 2 * marginH, maxWidth);
+						maxWidth = Mathf.Max(elemRT.rect.width + 2 * marginH, maxWidth);
 					}
-					r.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, maxWidth);
+					elemRT.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, maxWidth);
 					if (elems[elemIdx].isHorizontalSection)
 					{
 						List<RectTransform> listRT = insertedHorizontalElements[panelIdx][horizSectIdx++];
 						float space = elems[elemIdx].rt.GetComponent<HorizontalLayoutGroup>().spacing;
 						int horizElemCount = listRT.Count;
-						float width = (r.rect.width - space * (horizElemCount-1)) / (float)horizElemCount;
+						float width = (elemRT.rect.width - space * (horizElemCount-1)) / (float)horizElemCount;
 						float maxHorizHeight = 0;
-						for(int horizIdx =0; horizIdx<horizElemCount; ++horizIdx)
+						for (int horizIdx = 0; horizIdx < horizElemCount; horizIdx++)
 						{
-							RectTransform hr = listRT[horizIdx];
-							hr.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, width);
-							maxHorizHeight = Mathf.Max(maxHorizHeight, hr.rect.height);
+							RectTransform hElemRT = listRT[horizIdx];
+							hElemRT.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, width);
+							AspectRatioFitter arf = hElemRT.GetComponent<AspectRatioFitter>();
+							maxHorizHeight = Mathf.Max(maxHorizHeight,
+								arf != null ? width / arf.aspectRatio : hElemRT.rect.height);
 						}
-						r.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, maxHorizHeight);
+						elemRT.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, maxHorizHeight);
 					}
 					else
 					{
-						AspectRatioFitter arf = r.GetComponent<AspectRatioFitter>();
+						AspectRatioFitter arf = elemRT.GetComponent<AspectRatioFitter>();
 						if (arf != null)
 						{
-							r.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, maxWidth / arf.aspectRatio);
+							elemRT.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, maxWidth / arf.aspectRatio);
 						}
 					}
-					y -= (r.rect.height + elementSpacing);
+					y -= (elemRT.rect.height + elementSpacing);
 				}
 				panelWidth = maxWidth + 2 * marginH;
 				// 패널 위치 재조정
@@ -435,7 +438,7 @@ namespace Fashion.UIManager
 			if (reEnable == null || reEnable.Length < toDisable.Count) reEnable = new bool[toDisable.Count];
 			reEnable.Initialize();
 			int len = toDisable.Count;
-			for (int i = 0; i < len; ++i)
+			for (int i = 0; i < len; i++)
 			{
 				if (toDisable[i])
 				{
@@ -444,13 +447,13 @@ namespace Fashion.UIManager
 				}
 			}
 			len = toEnable.Count;
-			for (int i = 0; i < len; ++i)
+			for (int i = 0; i < len; i++)
 			{
 				toEnable[i].SetActive(true);
 			}
 
 			int numPanels = targetContentPanels.Length;
-			for (int i = 0; i < numPanels; ++i)
+			for (int i = 0; i < numPanels; i++)
 			{
 				targetContentPanels[i].gameObject.SetActive(insertedElements[i].Count > 0);
 			}
@@ -463,7 +466,7 @@ namespace Fashion.UIManager
 		{
 			gameObject.SetActive(false);
 
-			for (int i = 0; i < reEnable.Length; ++i)
+			for (int i = 0; i < reEnable.Length; i++)
 			{
 				if (toDisable[i] && reEnable[i])
 				{
@@ -472,7 +475,7 @@ namespace Fashion.UIManager
 			}
 
 			int len = toEnable.Count;
-			for (int i = 0; i < len; ++i)
+			for (int i = 0; i < len; i++)
 			{
 				toEnable[i].SetActive(false);
 			}
@@ -643,6 +646,27 @@ namespace Fashion.UIManager
 		}
 
 		/// <summary>
+		/// 예, 아니오 가로 버튼 만들기
+		/// </summary>
+		/// <param name="labelYes">표시할 '예' 텍스트</param>
+		/// /// <param name="labelNo">표시할 '아니오' 텍스트</param>
+		/// <param name="handlerYes">'예' 버튼을 클릭했을 때 호출할 콜백 함수</param>
+		/// <param name="handlerNo">'아니오' 버튼을 클릭했을 때 호출할 콜백 함수</param>
+		/// <param name="spacing">버튼 사이의 간격, 기본값은 0</param>
+		/// <param name="targetCanvas">표시할 패널의 ID, 기본값은 PANE_CENTER</param>
+		/// <returns>생성된 가로 섹션의 RectTransform</returns>
+		public RectTransform AddYesNoButtons(string labelYes, string labelNo, OnClick handlerYes, OnClick handlerNo, float spacing = 30, int targetCanvas = PANE_CENTER)
+		{
+			RectTransform rt = StartHorizontalSection(spacing, targetCanvas);
+			if (string.IsNullOrEmpty(labelYes)) labelYes = "예";
+			if (string.IsNullOrEmpty(labelNo)) labelNo = "아니오";
+			AddButton(labelYes, delegate { handlerYes(); }, targetCanvas);
+			AddButton(labelNo, delegate { handlerNo(); }, targetCanvas);
+			EndHorizontalSection(targetCanvas);
+			return rt;
+		}
+
+		/// <summary>
 		/// 예, 아니오, 취소 가로 버튼 만들기
 		/// </summary>
 		/// <param name="labelYes">표시할 '예' 텍스트</param>
@@ -661,6 +685,33 @@ namespace Fashion.UIManager
 			AddButton(labelYes, delegate { handler(Reply.Yes); }, targetCanvas);
 			AddButton(labelNo, delegate { handler(Reply.No); }, targetCanvas);
 			AddButton(labelCancel, delegate { handler(Reply.Cancel); }, targetCanvas);
+			EndHorizontalSection(targetCanvas);
+			return rt;
+		}
+
+		/// <summary>
+		/// 예, 아니오, 취소 가로 버튼 만들기
+		/// </summary>
+		/// <param name="labelYes">표시할 '예' 텍스트</param>
+		/// <param name="labelNo">표시할 '아니오' 텍스트</param>
+		/// <param name="labelCancel">표시할 '취소' 텍스트</param>
+		/// <param name="handlerYes">'예' 버튼을 클릭했을 때 호출할 콜백 함수</param>
+		/// <param name="handlerNo">'아니오' 버튼을 클릭했을 때 호출할 콜백 함수</param>
+		/// <param name="handlerCancel">'취소' 버튼을 클릭했을 때 호출할 콜백 함수</param>
+		/// <param name="spacing">버튼 사이의 간격, 기본값은 30</param>
+		/// <param name="targetCanvas">표시할 패널의 ID, 기본값은 PANE_CENTER</param>
+		/// <returns>생성된 가로 섹션의 RectTransform</returns>
+		public RectTransform AddYesNoCancelButtons(string labelYes, string labelNo, string labelCancel, 
+			OnClick handlerYes, OnClick handlerNo, OnClick handlerCancel, 
+			float spacing = 30, int targetCanvas = PANE_CENTER)
+		{
+			RectTransform rt = StartHorizontalSection(spacing, targetCanvas);
+			if (string.IsNullOrEmpty(labelYes)) labelYes = "예";
+			if (string.IsNullOrEmpty(labelNo)) labelNo = "아니오";
+			if (string.IsNullOrEmpty(labelCancel)) labelCancel = "취소";
+			AddButton(labelYes, delegate { handlerYes(); }, targetCanvas);
+			AddButton(labelNo, delegate { handlerNo(); }, targetCanvas);
+			AddButton(labelCancel, delegate { handlerCancel(); }, targetCanvas);
 			EndHorizontalSection(targetCanvas);
 			return rt;
 		}

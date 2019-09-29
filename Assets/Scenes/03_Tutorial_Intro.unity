@@ -88,7 +88,8 @@ LightmapSettings:
     m_PVRFilteringAtrousPositionSigmaIndirect: 2
     m_PVRFilteringAtrousPositionSigmaAO: 1
     m_ShowResolutionOverlay: 1
-  m_LightingDataAsset: {fileID: 0}
+  m_LightingDataAsset: {fileID: 112000000, guid: e0ee8f50759f8a94d9af761d61f7c57d,
+    type: 2}
   m_UseShadowmask: 0
 --- !u!196 &4
 NavMeshSettings:
@@ -228,7 +229,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stylePanel: {fileID: 885187081}
   nextSceneName: 04_Tutorial_Select_Design
-  sceneTime: 4
 --- !u!82 &159023083
 AudioSource:
   m_ObjectHideFlags: 0

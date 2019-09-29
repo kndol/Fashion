@@ -22,6 +22,7 @@ namespace Fashion
 		public virtual void OnTutorialEnd()
 		{
 			Assert.IsFalse(string.IsNullOrEmpty(nextSceneName));
+			print(nextSceneName);
 			SceneManager.LoadScene(nextSceneName);
 		}
 	}
