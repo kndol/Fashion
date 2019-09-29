@@ -7,47 +7,33 @@ using Fashion;
 using Fashion.UIManager;
 using UnityEngine.SceneManagement;
 
-public class Wearing_UI : MonoBehaviour
+public class Wearing_UI : FashionController
 {
-    [SerializeField]
-    UIBuilder uiCanvasPrefab = null;
-    [SerializeField]
-    Transform player = null;
-    //[SerializeField]
-    //Sprite dd;
-
     UIBuilder uiWearing;
 
     void Start()
     {
-        if (Data.MS == Making_State.start)
-        {
-            uiWearing = Instantiate<UIBuilder>(uiCanvasPrefab);
+        uiWearing = Instantiate<UIBuilder>(uiCanvasPrefab);
 
-            uiWearing.AddLabel("착장");
-            uiWearing.AddDivider();
-            uiWearing.AddButton("확인", WearingButton);
-            uiWearing.AddButton("재시작", Restart_Button);
-        }
+        uiWearing.AddLabel("착장");
+        uiWearing.AddDivider();
+        uiWearing.AddButton("확인", WearingButton);
+        uiWearing.AddButton("재시작", RestartButton);
+        uiWearing.Show();
     }
 
     public void WearingButton()
     {
-        uiWearing.Hide();
-        Data.isCheck = true;
+        
     }
 
-    public void Restart_Button()
+    public void RestartButton()
     {
-        SceneManager.LoadScene("Fashion_Shop");
+        OnTutorialEnd();
     }
 
-    void Update()
+    public override void OnTutorialEnd()
     {
-        if (Data.MS == Making_State.wearing && Data.isCheck == true)
-        {
-            uiWearing.Show();
-            Data.isCheck = false;
-        }
+        base.OnTutorialEnd();
     }
 }

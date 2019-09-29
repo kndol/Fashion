@@ -16,6 +16,7 @@ namespace Fashion.UIManager
 			base.OnSelect(eventData);
 			keyboardManager.gameObject.SetActive(true);
 			keyboardManager.inputField = this;
+			EventSystem.current.firstSelectedGameObject = keyboardManager.gameObject;
 		}
 
 		public override void OnDeselect(BaseEventData eventData)
