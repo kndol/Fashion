@@ -37,6 +37,7 @@ public class Test_Mode_UI : FashionController
 		QuestionSet quest = null;
 		foreach (string line in lines)
 		{
+			print(line);
 			if (!line.StartsWith("- "))
 			{
 				// 문제
@@ -72,8 +73,9 @@ public class Test_Mode_UI : FashionController
 	void Solve(int examNum)
 	{
 		QuestionSet quest = questions[examNum];
-		selectedNum = -1;
+		selectedNum = 0;
 
+		print((examNum + 1) + "번 문제");
 		// 보기 섞기
 		Shuffle(quest.exams);
 
@@ -90,6 +92,7 @@ public class Test_Mode_UI : FashionController
 		{
 			var sprite = Resources.Load<Sprite>(PATH + exam);
 			uiTest.AddImage(sprite);
+			print("이미지 " + PATH + exam);
 		}
 		uiTest.EndHorizontalSection();
 		uiTest.StartHorizontalSection(5);
@@ -108,18 +111,23 @@ public class Test_Mode_UI : FashionController
 		if (examNum == questions.Count - 1)
 		{
 			// 마지막 문제
-			uiTest.AddButton("정답 제출", SubmitAnswer);
+			uiTest.AddButton("정답 제출", delegate 
+			{
+				answer[examNum] = quest.exams[selectedNum][4] == 'O';
+				SubmitAnswer();
+			});
 		}
 		else
 		{
 			uiTest.AddButton("다음 문제", delegate
 			{
-				answer[examNum] = quest.exams[selectedNum][6] == 'O';
+				answer[examNum] = quest.exams[selectedNum][4] == 'O';
 				Solve(examNum + 1);
 			});
 		}
 		uiTest.EndHorizontalSection();
 		uiTest.Show();
+		print("uiTest.Show()");
 	}
 
 	void SubmitAnswer()

@@ -60,14 +60,12 @@ public class StartUI : FashionController
 
 	public void ButtonTutorial()    //튜토리얼 버튼
 	{
-        uiMenu.Hide();
         OnTutorialEnd();
     }
 
 	public void ButtonTest()        //테스트 버튼
 	{
         nextSceneName = testSceneName;
-        uiMenu.Hide();
         OnTutorialEnd();
     }
 
@@ -82,10 +80,10 @@ public class StartUI : FashionController
 
     public override void OnTutorialEnd()
     {
-        base.OnTutorialEnd();
+		base.OnTutorialEnd();
     }
 
-    public void Init_Data()    //초기화 함수
+    void Init_Data()    //초기화 함수
 	{
         Data.Score = 100;
         Data.clothType = ClothType.t_shirts;
