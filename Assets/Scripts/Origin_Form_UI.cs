@@ -131,12 +131,12 @@ public class Origin_Form_UI : FashionController
             case ClothType.t_shirts:
                 uiOrigin.AddLabel("패턴제도");
                 uiOrigin.AddDivider();
-                uiOrigin.AddImage(tshirtsSpite[1], new Rect(0, 0, 350, 350));
+                uiOrigin.AddImage(tshirtsSpite[1], new Rect(0, 0, 350, 300));
                 break;
             case ClothType.skirt:
                 uiOrigin.AddLabel("패턴제도");
                 uiOrigin.AddDivider();
-                uiOrigin.AddImage(skirtSpite[1], new Rect(0, 0, 350, 350));
+                uiOrigin.AddImage(skirtSpite[1], new Rect(0, 0, 350, 300));
                 break;
             case ClothType.body:
                 uiOrigin.AddLabel("Description", TextAnchor.MiddleCenter, UIBuilder.PANE_RIGHT);
@@ -149,10 +149,8 @@ public class Origin_Form_UI : FashionController
             case ClothType.sleeve:  //가로 배치 및 폭수정
                 uiOrigin.AddLabel("Description");
                 uiOrigin.AddDivider();
-                uiOrigin.AddImage(SleeveSprite[1], new Rect(0, 0, 450, 350));
+                uiOrigin.AddImage(SleeveSprite[1], new Rect(0, 0, 450, 300));
                 uiOrigin.AddLabel("티셔츠 소매 설명");
-                uiOrigin.AddImage(SleeveSprite[2], new Rect(0, 0, 450, 350));
-                uiOrigin.AddLabel("블라우스 소매 설명");
                 break;
         }
         uiOrigin.AddButton("다음으로", OriginButton);

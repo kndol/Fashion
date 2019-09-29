@@ -26,10 +26,10 @@ public class Design_Select_UI : FashionController
 		Rect rc = new Rect(0, 0, 200, 300);
 
 		uiClothes.SetPosition(menuPosition);
-		uiClothes.SetPaneWidth(830);
+        uiClothes.SetPaneWidth(920);
 		uiClothes.AddLabel("디자인을 선택하세요.");
 		uiClothes.AddDivider();
-		uiClothes.StartHorizontalSection(5);
+		uiClothes.StartHorizontalSection(30);
 		for (int i = 0; i < spriteClothes.Length; i++)
 		{
 			ClothType ct = (ClothType)i;      // 위임하기 위해 루프의 변수를 지역 변수로 할당
