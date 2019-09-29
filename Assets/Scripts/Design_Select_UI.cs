@@ -9,10 +9,6 @@ using Fashion.UIManager;
 public class Design_Select_UI : FashionController
 {
 	[SerializeField]
-	string tutorialSceneName = null;
-	[SerializeField]
-	string testSceneName = null;
-	[SerializeField]
 	Sprite[] spriteClothes = null;
 
 	UIBuilder uiClothes;
@@ -61,7 +57,6 @@ public class Design_Select_UI : FashionController
     {
 		if (reply == Reply.Yes)
 		{
-			nextSceneName = Data.playType == PlayType.tutorial ? tutorialSceneName : testSceneName;
 			OnTutorialEnd();
 		}
 		else

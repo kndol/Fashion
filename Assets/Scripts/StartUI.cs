@@ -8,13 +8,12 @@ using Fashion.UIManager;
 
 public class StartUI : FashionController
 {
-	[SerializeField]
-	string TestSceneName = null;
+    [SerializeField]
+	string testSceneName = null;
    
 	Design_Select_UI design_selectUI;
     UIBuilder uiMenu;
 	UIBuilder uiTerm;
-
 
     void Start ()
     {
@@ -67,6 +66,7 @@ public class StartUI : FashionController
 
 	public void ButtonTest()        //테스트 버튼
 	{
+        nextSceneName = testSceneName;
         uiMenu.Hide();
         OnTutorialEnd();
     }

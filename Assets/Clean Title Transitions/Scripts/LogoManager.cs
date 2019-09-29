@@ -27,7 +27,7 @@ public class LogoManager : MonoBehaviour {
         panelAnimator.Play(panelFadeIn);
 
 		//	styleAnimator = styleObject.GetComponent<Animator>();
-		panelAnimator.Play(styleExpand);
+		//panelAnimator.Play(styleExpand);
     }
 
 	void LateUpdate()
