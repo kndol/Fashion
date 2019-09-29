@@ -42,41 +42,39 @@ namespace Fashion.UIManager
 
 		#region SerializeField 변수 정의
 		[SerializeField]
-		private RectTransform buttonPrefab;
+		private RectTransform buttonPrefab = null;
 		[SerializeField]
-		private RectTransform labelPrefab;
+		private RectTransform labelPrefab = null;
 		[SerializeField]
-		private RectTransform scrollViewPrefab;
+		private RectTransform scrollViewPrefab = null;
 		[SerializeField]
-		private RectTransform sliderPrefab;
+		private RectTransform sliderPrefab = null;
 		[SerializeField]
-		private RectTransform dividerPrefab;
+		private RectTransform dividerPrefab = null;
 		[SerializeField]
-		private RectTransform togglePrefab;
+		private RectTransform togglePrefab = null;
 		[SerializeField]
-		private RectTransform radioPrefab;
+		private RectTransform radioPrefab = null;
 		[SerializeField]
-		private RectTransform imagePrefab;
+		private RectTransform imagePrefab = null;
 		[SerializeField]
-		private RectTransform inputFieldPrefab;
+		private RectTransform inputFieldPrefab = null;
 		[SerializeField]
-		private RectTransform inputNumberFieldPrefab;
+		private RectTransform inputNumberFieldPrefab = null;
 		[SerializeField]
-		private RectTransform keyboardPrefab;
+		private RectTransform keyboardPrefab = null;
 		[SerializeField]
-		private RectTransform numberKeyboardPrefab;
+		private RectTransform numberKeyboardPrefab = null;
 		[SerializeField]
-		private RectTransform HorizontalSectionPrefab;
+		private RectTransform HorizontalSectionPrefab = null;
 		[SerializeField]
-		private GameObject uiHelpersToInstantiate;
+		private GameObject uiHelpersToInstantiate = null;
 		[SerializeField]
-		private Transform[] targetContentPanels;
+		private Transform[] targetContentPanels = null;
 		[SerializeField]
-		private bool manuallyResizeContentPanels;
+		private List<GameObject> toEnable = null;
 		[SerializeField]
-		private List<GameObject> toEnable;
-		[SerializeField]
-		private List<GameObject> toDisable;
+		private List<GameObject> toDisable = null;
 		#endregion
 
 		#region 객체 관련 변수 정의
@@ -227,7 +225,7 @@ namespace Fashion.UIManager
 				keyboardRT.transform.SetParent(this.transform);
 				keyboardRT.localScale = Vector3.one * 2;
 				keyboardRT.localEulerAngles = new Vector3(30, 0, 0);
-				keyboardRT.localPosition = new Vector3(0, -500, -500);
+				keyboardRT.localPosition = new Vector3(0, -500, -350);
 			}
 		}
 
@@ -241,7 +239,7 @@ namespace Fashion.UIManager
 				numberKeyboardRT.transform.SetParent(this.transform);
 				numberKeyboardRT.localScale = Vector3.one * 2;
 				numberKeyboardRT.localEulerAngles = new Vector3(30, 0, 0);
-				numberKeyboardRT.localPosition = new Vector3(0, -500, -500);
+				numberKeyboardRT.localPosition = new Vector3(0, -500, -350);
 			}
 		}
 

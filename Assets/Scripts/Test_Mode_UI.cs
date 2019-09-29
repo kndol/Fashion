@@ -31,6 +31,11 @@ public class Test_Mode_UI : FashionController
 
 	void LoadExams()
 	{
+		uiTest = Instantiate<UIBuilder>(uiCanvasPrefab);
+		uiTest.SetPosition(menuPosition);
+		uiTest.AddLabel("<color=darkgreen>시험 문제를 출제 중입니다.</color>");
+		uiTest.Show();
+
 		TextAsset textAsset = Resources.Load<TextAsset>(PATH + "examination");
 		string[] lines = textAsset.text.Split(Environment.NewLine.ToCharArray(),
 			StringSplitOptions.RemoveEmptyEntries);
@@ -44,7 +49,6 @@ public class Test_Mode_UI : FashionController
 				if (quest != null)
 					questions.Add(quest);
 				quest = new QuestionSet();
-				quest.exams = new List<string>();
 				quest.question = line;
 			}
 			else
@@ -55,6 +59,7 @@ public class Test_Mode_UI : FashionController
 		}
 		if (quest != null)
 			questions.Add(quest);
+		print(questions);
 		answer = new bool[questions.Count];
 	}
 
@@ -78,23 +83,33 @@ public class Test_Mode_UI : FashionController
 		print((examNum + 1) + "번 문제");
 		// 보기 섞기
 		Shuffle(quest.exams);
+		print(quest.exams);
 
-		if (uiTest) Destroy(uiTest.gameObject);
+		if (uiTest)
+		{
+			print("uiTest 제거");
+			Destroy(uiTest.gameObject);
+		}
 
+		print("uiTest 생성");
 		uiTest = Instantiate<UIBuilder>(uiCanvasPrefab);
 		uiTest.SetPosition(menuPosition);
 		uiTest.SetPaneWidth(800);
 		uiTest.AddLabel("<B>문제 #" + (examNum + 1) + "</B>");
 		uiTest.AddDivider();
-		uiTest.AddLabel(questions[examNum].question);
+		uiTest.AddLabel(quest.question);
+		print(quest.question);
 		uiTest.StartHorizontalSection(5);
 		foreach (string exam in quest.exams)
 		{
-			var sprite = Resources.Load<Sprite>(PATH + exam);
+			print("이미지 " + exam);
+			Sprite sprite = Resources.Load<Sprite>(PATH + exam);
+			print("로딩 " + PATH + exam);
 			uiTest.AddImage(sprite);
-			print("이미지 " + PATH + exam);
+			print("추가 완료");
 		}
 		uiTest.EndHorizontalSection();
+		print("이미지 끝");
 		uiTest.StartHorizontalSection(5);
 		for (int i = 0; i< quest.exams.Count; i++)
 		{
@@ -102,6 +117,7 @@ public class Test_Mode_UI : FashionController
 			uiTest.AddRadio((i + 1).ToString(), "quest" + examNum, delegate { selectedNum = sel; });
 		}
 		uiTest.EndHorizontalSection();
+		print("라디오버튼 끝");
 		uiTest.StartHorizontalSection(30);
 		RectTransform btn = uiTest.AddButton("이전 문제", delegate { Solve(examNum - 1); });
 		if (examNum == 0)
@@ -126,6 +142,7 @@ public class Test_Mode_UI : FashionController
 			});
 		}
 		uiTest.EndHorizontalSection();
+		print("버튼 끝");
 		uiTest.Show();
 		print("uiTest.Show()");
 	}
@@ -138,11 +155,35 @@ public class Test_Mode_UI : FashionController
 		{
 			if (!ans) score -= subtract;
 		}
+		Data.Score = score;
+
 		Destroy(uiTest.gameObject);
 		uiTest = Instantiate<UIBuilder>(uiCanvasPrefab);
-		uiTest.AddLabel("<B>" + /*Data.UserName*/"회원" + "님의 점수는</B>");
+		uiTest.SetPosition(menuPosition);
+		uiTest.AddLabel("<B>이름을 입력해 주세요.</B>");
 		uiTest.AddDivider();
-		uiTest.AddLabel(score + "/100 점입니다.");
+		uiTest.AddInputField("", "이름", InputName, InputName);
+		uiTest.AddButton("확인", showScore);
+		uiTest.Show();
+	}
+
+	void InputName(string name) {
+		Data.UserName = name;
+	}
+
+	void showScore()
+	{
+		// 이름을 입력하지 않았으면 [확인] 버튼 무시
+		if (string.IsNullOrEmpty(Data.UserName))
+			return;
+
+		Destroy(uiTest.gameObject);
+
+		uiTest = Instantiate<UIBuilder>(uiCanvasPrefab);
+		uiTest.SetPosition(menuPosition);
+		uiTest.AddLabel("<B>" + Data.UserName + " 님의 점수는</B>");
+		uiTest.AddDivider();
+		uiTest.AddLabel(Data.Score + "/100 점입니다.");
 		uiTest.AddButton("확인", OnTutorialEnd);
 		uiTest.Show();
 	}

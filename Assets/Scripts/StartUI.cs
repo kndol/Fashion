@@ -15,9 +15,13 @@ public class StartUI : FashionController
     UIBuilder uiMenu;
 	UIBuilder uiTerm;
 
-    void Start ()
+	private void Awake()
+	{
+		Init_Data();
+	}
+
+	void Start ()
     {
-        Init_Data();
         uiMenu = Instantiate<UIBuilder>(uiCanvasPrefab);
 
         uiMenu.SetPosition(menuPosition);
@@ -85,7 +89,6 @@ public class StartUI : FashionController
 
     void Init_Data()    //초기화 함수
 	{
-        Data.Score = 100;
         Data.clothType = ClothType.t_shirts;
     }
 }

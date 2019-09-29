@@ -26,7 +26,6 @@ public class Sweing_UI : FashionController
     RectTransform[] imageBtns;
     RectTransform btnOk;
     Rect imgBtnRect = new Rect(0, 0, 150, 100);
-    int curCountPointSelected = 0;
 
     List<bool>[] PointSelected;
     int[] countPointSelected;
