@@ -42,18 +42,20 @@ public class Sweing_UI : FashionController
         uiSweing = Instantiate<UIBuilder>(uiCanvasPrefab);
 
         uiSweing.SetPosition(menuPosition);
-        uiSweing.AddLabel("<B>티셔츠 봉제_ 몸판/소매 봉제</B>");
-        uiSweing.AddDivider();
+
         switch (Data.clothType)
         {
             case ClothType.t_shirts:
+                uiSweing.AddLabel("<B>티셔츠 봉제_ 몸판/소매 봉제</B>");
+                uiSweing.AddDivider();
                 uiSweing.AddScrollView("티셔츠의 몸판과 소매의 앞과 뒤를 겉과 겉을 마주대고 몸판의\n" +
                     "어깨점과 소매의 S.P 와 몸판의 겨드랑점과 소매의 겨드랑점을 맞추어 재봉한다.\n\n" +
                     "점선을 따라 원단을 재봉하세요.");
                 break;
             case ClothType.skirt:
-                uiSweing.AddScrollView("티셔츠의 몸판과 소매의 앞과 뒤를 겉과 겉을 마주대고 몸판의\n" +//
-                    "어깨점과 소매의 S.P 와 몸판의 겨드랑점과 소매의 겨드랑점을 맞추어 재봉한다.\n\n" +//
+                uiSweing.AddLabel("<B>치마 봉제_ 몸판/허리띠 봉제</B>");
+                uiSweing.AddDivider();
+                uiSweing.AddScrollView("겉과겉을 마주대어 앞판과 뒤판의 옆선을 재봉한다.\n\n" +
                     "점선을 따라 원단을 재봉하세요.");
                 break;
         }
@@ -62,37 +64,45 @@ public class Sweing_UI : FashionController
         int i, j;
         for (i = 0; i < parts.Length; i++)
         {
-            for (j = 1; j < parts[i].sweingParts.Length; j++)
+            for (j = 0; j < parts[i].sweingParts.Length; j++)
             {
                 parts[i].sweingParts[j].SetActive(false);
-            }                                 
+            }
+            for (j = 0; j < parts[i].pointGroup.Length; j++)
+            {
+                parts[i].pointGroup[j].SetActive(false);
+            }
         }
         DoSweing();
     }
 
     public void DoSweing()
     {
-        int clothType = (int)Data.clothType;
-        int groupCount = parts[clothType].pointGroup.Length;
-        PointSelected = new List<bool>[groupCount];
-        countPointSelected = new int[groupCount];
+        PointSelected = new List<bool>[parts[(int)Data.clothType].pointGroup.Length];
+        countPointSelected = new int[parts[(int)Data.clothType].pointGroup.Length];
 
-        for (int group = 0; group < groupCount; group++)
+        for(int i = 0; i < 1; i++)
         {
-            int count = parts[clothType].pointGroup[group].transform.childCount;
-            PointerOverHandler[] handlers = parts[clothType].pointGroup[group].GetComponentsInChildren<PointerOverHandler>();
-            MeshRenderer[] rends = parts[clothType].pointGroup[group].GetComponentsInChildren<MeshRenderer>();
+            parts[(int)Data.clothType].sweingParts[i].SetActive(true);
+            parts[(int)Data.clothType].pointGroup[i].SetActive(true);
+        }
+
+        for (int group = 0; group < parts[(int)Data.clothType].pointGroup.Length; group++)
+        {
+            int count = parts[(int)Data.clothType].pointGroup[group].transform.childCount;
+            PointerOverHandler[] handlers = parts[(int)Data.clothType].pointGroup[group].GetComponentsInChildren<PointerOverHandler>();
+            //MeshRenderer[] rends = parts[i].pointGroup[group].GetComponentsInChildren<MeshRenderer>();
             PointSelected[group] = new List<bool>();
             countPointSelected[group] = 0;
             for (int id = 0; id < count; id++)
             {
-                rends[id].enabled = false;
+                //rends[id].enabled = false;
                 handlers[id].group = group;
                 handlers[id].id = id;
                 handlers[id].OnPointerOver += OnOverHander;
                 PointSelected[group].Add(false);
             }
-        }
+        }     
     }
 
     public void OnOverHander(int group, int id)
@@ -108,13 +118,15 @@ public class Sweing_UI : FashionController
                 int i, j;
                 for (i = 0; i < parts.Length; i++)
                 {
-                    for (j = 0; j < parts[i].sweingParts.Length; j++)
+                    for (j = 0; j < parts[(int)Data.clothType].sweingParts.Length; j++)
                     {
-                        if(i == 0 && j == 0)
-                        {
-                            parts[i].sweingParts[j].SetActive(false);
-                        }
-                        else parts[i].sweingParts[j].SetActive(true);
+                        if (j == 0)  parts[(int)Data.clothType].sweingParts[0].SetActive(false);
+                        else  parts[(int)Data.clothType].sweingParts[1].SetActive(true);
+                    }
+                    for (j = 0; j < parts[(int)Data.clothType].pointGroup.Length; j++)
+                    {
+                        if (j == 0) parts[(int)Data.clothType].pointGroup[0].SetActive(false);
+                        else parts[(int)Data.clothType].pointGroup[1].SetActive(true);
                     }
                 }
             }
