@@ -39,7 +39,7 @@ public class LogoManager : MonoBehaviour {
 	//Called via animation event
 	public void AnimationComplete()
 	{
-		panelAnimator.Play(panelFadeIn);
+		panelAnimator.Play(panelFadeOut);
 		isAnimationCompleted = true;
 	}
 }

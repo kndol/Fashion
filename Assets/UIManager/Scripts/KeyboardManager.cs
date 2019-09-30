@@ -15,22 +15,26 @@ namespace VRKeyboard.Utils
         #region Public Variables
         [Header("User defined")]
         [Tooltip("If the character is uppercase at the initialization")]
-        public bool isUppercase = false;
-		public bool isNumeric = false;
-        public int maxInputLength;
+		[SerializeField]
+		bool isUppercase = false;
+		[SerializeField]
+		bool isNumeric = false;
+		[SerializeField]
+		int maxInputLength = 30;
 
         [Header("UI Elements")]
-        public InputFieldVR inputField;
 		[SerializeField]
-		Image backspaceKey;
+		public InputFieldVR inputField = null;
 		[SerializeField]
-		Image capsLockKey;
+		Image backspaceKey = null;
 		[SerializeField]
-		Image shiftKey;
+		Image capsLockKey = null;
 		[SerializeField]
-		Image clearKey;
+		Image shiftKey = null;
 		[SerializeField]
-		Image enterKey;
+		Image clearKey = null;
+		[SerializeField]
+		Image enterKey = null;
 
         [Header("Essentials")]
         public Transform keys;
