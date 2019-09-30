@@ -308,7 +308,7 @@ public class Tutorial_Arrange_and_Cut : FashionController
         uiMenu.SetPosition(menuPosition);
         uiMenu.AddLabel("재단");
         uiMenu.AddDivider();
-        uiMenu.AddLabel("시접선이 그려졌습니다.\n시전선을 따라 재단을 합니다.");
+        uiMenu.AddLabel("시접선이 그려졌습니다.\n시접선을 따라 재단을 합니다.");
         uiMenu.Show();
         StartCoroutine(FadeOutBackground());
     }

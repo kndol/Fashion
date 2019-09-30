@@ -110,8 +110,8 @@ public class Sweing_UI : FashionController
         {
             PointSelected[group][id] = true;
             ++countPointSelected[group];
-            //if (countPointSelected[group] > parts[(int)Data.clothType].pointGroup[group].transform.childCount * 9 / 10)
-            if (countPointSelected[group] > 3)   //테스트용
+            if (countPointSelected[group] > parts[(int)Data.clothType].pointGroup[group].transform.childCount * 9 / 10)
+            //if (countPointSelected[group] > 3)   //테스트용
             {
                 uiSweing.AddButton("재봉완료", OnTutorialEnd);
                 int i, j;

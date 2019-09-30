@@ -97,6 +97,7 @@ public class Dart_UI : FashionController
     {
         Destroy(uiDart.gameObject);
         uiDart = Instantiate<UIBuilder>(uiCanvasPrefab);
+        uiDart.SetPosition(menuPosition);
         StartTutorial();
     }
     public override void OnTutorialEnd()
