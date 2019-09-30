@@ -150,7 +150,6 @@ public class Origin_Form_UI : FashionController
                 uiOrigin.AddLabel("Description");
                 uiOrigin.AddDivider();
                 uiOrigin.AddImage(SleeveSprite[1], new Rect(0, 0, 450, 300));
-                uiOrigin.AddLabel("티셔츠 소매 설명");
                 break;
         }
         uiOrigin.AddButton("다음으로", OriginButton);
@@ -169,14 +168,28 @@ public class Origin_Form_UI : FashionController
         { 
             for (int i = 0; i < 4; i++)
             {
-                uiOrigin.AddImage(bodyoriginSprite[i], new Rect(0, 0, 300, 150), UIBuilder.PANE_RIGHT);
+                uiOrigin.StartHorizontalSection(10);
+                uiOrigin.AddImage(bodyoriginSprite[i], new Rect(0, 0, 150, 100), UIBuilder.PANE_RIGHT);
+                uiOrigin.EndHorizontalSection();
             }
-            uiOrigin.AddLabel("길원형 설명", TextAnchor.MiddleCenter, UIBuilder.PANE_RIGHT);
+            uiOrigin.AddScrollView("(1) 뒤판" +
+                "① 뒷목둘레: A에서 뒤중심에 직각을 유지하며 곡선을 그린다.\n" +
+                "② 어깨경사: 목옆점(N)에서 수평으로 18cm, 수직으로 6cm 내린 점을 N과 연결하여 어깨경사를 그린다.\n" +
+                "③ 뒤어깨다트: 목옆점(N)에서 5cm 나간 점과 뒤품선(A₁-C₁)의 1 / 2점에서 1cm 중심쪽으로 이동한 점과 연결한다.\n" +
+                "다트길이는 8cm, 다트폭은 1cm로 한다.뒤어깨다트폭 1cm를 어깨점에서 나가 암홀선을 다시 그린다.\n" +
+                "④ 맞춤표시(Bn) : 진동깊이의 1 / 4위치를 뒤소매둘레선에 가져와서 맞춤표시를 넣는다.\n\n" +
+                "(2) 앞판" +
+                "① 앞네크라인 그리기 : (A'N' = N'₂N'₁)하여 N'₂-N'₁을 3등분하여 1/3선과 N'를 연결한 안내선을 기본으로 하여 앞네크라인을 그린다.\n" +
+                "② 어깨점 : N'S' = NS\n" +
+                "③ 맞춤표시(Fn) : 앞몸판과 앞소매쪽의 진동둘레를 일치시키는 점. 앞품선에서 3cm 위치의 진동둘레선\n" +
+                "④ 앞처짐 : B'-B₂=B'' - D₂= 앞길이와 등길이의 차이(3cm)\n" +
+                "⑤ A'-C'₁ : 유장(24cm),C'₁-B.P : 유폭/2(9cm) \n" +
+                "⑥ C''₁-C''₂ : 다트의 앞 처짐은 BP점에서 시작하며 분량은 3cm 이며 MP 라고 한다.", TextAnchor.MiddleCenter, UIBuilder.PANE_RIGHT);
             isCheck = false;
         }
         else
         {
-            Description_Back();
+            Next_Button();
             isCheck = true;
         }
     }
@@ -186,12 +199,21 @@ public class Origin_Form_UI : FashionController
         if (isCheck)
         {
             uiOrigin.AddImage(mudartSprite, new Rect(0, 0, 300, 150), UIBuilder.PANE_RIGHT);
-            uiOrigin.AddLabel("무다트 설명", TextAnchor.MiddleCenter, UIBuilder.PANE_RIGHT);
+            uiOrigin.AddScrollView("(1) 뒤판" +
+                "① 뒷목너비(B / 12) 에서 뒷못둘레는 뒤중심에서 직각을 유지하며 곡선을 그린다.\n" +
+                "② 어깨경사는 목옆점(N)에서 수평으로 18cm, 수직으로 6cm 내린 점을 N과 연결하여 어깨경사로 하고 어깨끝점은 품선에서 1.5cm나간 점이다.\n" +
+                "③ 암홀선그리기, Bn(맞춤표시)는 뒷몸판과 뒷소매쪽의 진동둘레를 일치시키는 점으로 뒤품선에서 5cm 위치의 진동둘레선\n\n" +
+                "(2) 앞판" +
+                "① 옆목점에서 3cm  올린 곳에서  B/12를 내려간곳이 앞목깊이, 앞목너비는 B/12-0.5cm\n" +
+                "② 앞어깨경사 : N'에서 수평으로 18cm, 수직으로 6cm 점을 잡아서 N'와 연결하여 어깨경사를 그린다.\n" +
+                "③ 앞 어깨점과 뒤 어깨점의 간격은 동일\n" +
+                "④ 암홀선 그리기, Fn(맞춤표시)는 앞몸판과 앞소매쪽의 진동둘레를 일치시키는 점으로 앞품선에서 3cm 위치의 진동둘레선\n" +
+                "⑤ 앞 뒤의 옆선길이를 맞춘다.\n", TextAnchor.MiddleCenter, UIBuilder.PANE_RIGHT);
             isCheck = false;
         }
         else
         {
-            Description_Back();
+            Next_Button();
             isCheck = true;
         }
     }
@@ -200,13 +222,23 @@ public class Origin_Form_UI : FashionController
     {
         if (isCheck)
         {
-            uiOrigin.AddImage(bandartSprite, new Rect(0, 0, 300, 150), UIBuilder.PANE_RIGHT);
-            uiOrigin.AddLabel("반다트 설명", TextAnchor.MiddleCenter, UIBuilder.PANE_RIGHT);
+            uiOrigin.AddImage(mudartSprite, new Rect(0, 0, 300, 150), UIBuilder.PANE_RIGHT);
+            uiOrigin.AddScrollView("(1) 뒤판" +
+                "① 어깨경사는 목옆점(N)에서 수평으로 18cm, 수직으로 6cm 내린 점을 N과 연결하여 어깨경사로 하고 어깨끝점은 품선에서 1.5cm나간 점이다.\n" +
+                "② 암홀선그리기, Bn(맞춤표시)는 뒷몸판과 뒷소매쪽의 진동둘레를 일치시키는 점으로 뒤품선에서 5cm 위치의 진동둘레선\n\n" +
+                "(2) 앞판" +
+                "① 옆목점에서 1.5cm  올린 곳에서  B/12를 내려간곳이 앞목깊이, 앞목너비는 B/12-0.5cm\n" +
+                "② 암홀선 그리기, Fn(맞춤표시)는 앞몸판과 앞소매쪽의 진동둘레를 일치시키는 점으로 앞품선에서 3cm 위치의 진동둘레선\n" +
+                "③ 유장은 24cm 를 내려오며 유폭/2 지점을 BP점이라고 한다.\n" +
+                "④ 앞 처짐은 BP점에서 시작하며 분량은 1.5cm 이며 MP라고 한다. \n" +
+                "⑤ 앞 뒤의 옆선길이를 맞춘다.\n" +
+                "Fn : 앞몸판과 앞소매쪽의 진동둘레를 일치시키는 점\n" +
+                "Bn : 뒤몸판과 뒤소매쪽의 진동둘레를 일치시키는 점", TextAnchor.MiddleCenter, UIBuilder.PANE_RIGHT);
             isCheck = false;
         }
         else
         {
-            Description_Back();
+            Next_Button();
             isCheck = true;
         }
     }
@@ -215,13 +247,25 @@ public class Origin_Form_UI : FashionController
     {
         if (isCheck)
         {
-            uiOrigin.AddImage(banmudartSprite, new Rect(0, 0, 300, 150), UIBuilder.PANE_RIGHT);
-            uiOrigin.AddLabel("반무다트 설명", TextAnchor.MiddleCenter, UIBuilder.PANE_RIGHT);
+            uiOrigin.AddImage(mudartSprite, new Rect(0, 0, 300, 150), UIBuilder.PANE_RIGHT);
+            uiOrigin.AddScrollView("(1) 뒤판" +
+                "① 뒷목너비( B/12) 에서 뒷못둘레는 뒤중심에서 직각을 유지하며 곡선으로 그린다.\n" +
+                "② 어깨경사는 목옆점(N)에서 수평으로 18cm, 수직으로 6cm 내린 점을 N과 연결하여 어깨경사로 하고 어깨끝점은 품선에서 1.5cm나간 점이다.\n" +
+                "③ 암홀선그리기, Bn(맞춤표시)는 뒷몸판과 뒷소매쪽의 진동둘레를 일치시키는 점으로 뒤품선에서 5cm 위치의 진동둘레선\n\n" +
+                "(2) 앞판" +
+                "① 앞목깊이( B/12)에서 앞목너비는 B/12-0.5cm\n" +
+                "② 앞어깨경사 : N'에서 수평으로 18cm, 수직으로 6cm 점을 잡아서 N'와 연결하여 어깨경사로 한다.\n" +
+                "③ 앞 어깨점과 뒤 어깨점의 간격은 동일하다.\n" +
+                "④ 암홀선 그리기, Fn(맞춤표시)는 앞몸판과 앞소매쪽의 진동둘레를 일치시키는 점으로 앞품선에서 3cm 위치의 진동둘레선\n" +
+                "⑤ 앞 처짐은 BP점에서 시작하며 분량은 1.5cm 이며 MP 라고 한다.\n" +
+                "⑥ 앞 뒤의 옆선길이를 맞춘다.\n" +
+                "Fn : 앞몸판과 앞소매쪽의 진동둘레를 일치시키는 점\n" +
+                "Bn : 뒤몸판과 뒤소매쪽의 진동둘레를 일치시키는 점", TextAnchor.MiddleCenter, UIBuilder.PANE_RIGHT);
             isCheck = false;
         }
         else
         {
-            Description_Back();
+            Next_Button();
             isCheck = true;
         }
     }
@@ -230,7 +274,8 @@ public class Origin_Form_UI : FashionController
     {
         Destroy(uiOrigin.gameObject);
         uiOrigin = Instantiate<UIBuilder>(uiCanvasPrefab);
-        StartTutorial();
+        uiOrigin.SetPosition(menuPosition);
+        Next_Button();
     }
 
     public void SizeCalculate(int i)    //몸판치수 계산
