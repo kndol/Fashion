@@ -110,6 +110,7 @@ public class Sweing_UI : FashionController
         {
             PointSelected[group][id] = true;
             ++countPointSelected[group];
+            this.parts[(int)Data.clothType].pointGroup[group].transform.GetChild(id).gameObject.SetActive(false);
             if (countPointSelected[group] > parts[(int)Data.clothType].pointGroup[group].transform.childCount * 9 / 10)
             //if (countPointSelected[group] > 3)   //테스트용
             {

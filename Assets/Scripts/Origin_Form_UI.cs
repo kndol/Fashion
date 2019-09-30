@@ -126,6 +126,10 @@ public class Origin_Form_UI : FashionController
         Destroy(uiOrigin.gameObject);
         uiOrigin = Instantiate<UIBuilder>(uiCanvasPrefab);
         uiOrigin.SetPosition(menuPosition);
+        uiOrigin.AddLabel("Description", TextAnchor.MiddleCenter, UIBuilder.PANE_RIGHT);
+        uiOrigin.AddDivider(UIBuilder.PANE_RIGHT);
+        uiOrigin.AddLabel("도면", TextAnchor.MiddleCenter, UIBuilder.PANE_LEFT);
+        uiOrigin.AddDivider(UIBuilder.PANE_LEFT);
         switch (Data.clothType)
         {
             case ClothType.t_shirts:
@@ -139,20 +143,18 @@ public class Origin_Form_UI : FashionController
                 uiOrigin.AddImage(skirtSpite[1], new Rect(0, 0, 350, 300));
                 break;
             case ClothType.body:
-                uiOrigin.AddLabel("Description", TextAnchor.MiddleCenter, UIBuilder.PANE_RIGHT);
-                uiOrigin.AddDivider(UIBuilder.PANE_RIGHT);
-                uiOrigin.AddButton("길원형", BodyoriginPattern);
-                uiOrigin.AddButton("무다트", MudartPattern);
-                uiOrigin.AddButton("반다트", BandartPattern);
-                uiOrigin.AddButton("반무다트", BanmudartPattern);
+                uiOrigin.AddButton("길원형", BodyoriginPattern, UIBuilder.PANE_CENTER);
+                uiOrigin.AddButton("무다트", MudartPattern, UIBuilder.PANE_CENTER);
+                uiOrigin.AddButton("반다트", BandartPattern, UIBuilder.PANE_CENTER);
+                uiOrigin.AddButton("반무다트", BanmudartPattern, UIBuilder.PANE_CENTER);
                 break;
-            case ClothType.sleeve:  //가로 배치 및 폭수정
-                uiOrigin.AddLabel("Description");
+            case ClothType.sleeve:
+                uiOrigin.AddLabel("소매도면");
                 uiOrigin.AddDivider();
                 uiOrigin.AddImage(SleeveSprite[1], new Rect(0, 0, 450, 300));
                 break;
         }
-        uiOrigin.AddButton("다음으로", OriginButton);
+        uiOrigin.AddButton("다음으로", OriginButton, UIBuilder.PANE_CENTER);
         uiOrigin.Show();
     }
 
@@ -165,12 +167,10 @@ public class Origin_Form_UI : FashionController
     public void BodyoriginPattern()
     {
         if (isCheck)
-        { 
-            for (int i = 0; i < 4; i++)
+        {
+            for(int i =0;i < 4; i++)
             {
-                uiOrigin.StartHorizontalSection(10);
-                uiOrigin.AddImage(bodyoriginSprite[i], new Rect(0, 0, 150, 100), UIBuilder.PANE_RIGHT);
-                uiOrigin.EndHorizontalSection();
+                uiOrigin.AddImage(bodyoriginSprite[i], new Rect(0, 0, 120, 50), UIBuilder.PANE_LEFT);
             }
             uiOrigin.AddScrollView("(1) 뒤판" +
                 "① 뒷목둘레: A에서 뒤중심에 직각을 유지하며 곡선을 그린다.\n" +
@@ -184,7 +184,7 @@ public class Origin_Form_UI : FashionController
                 "③ 맞춤표시(Fn) : 앞몸판과 앞소매쪽의 진동둘레를 일치시키는 점. 앞품선에서 3cm 위치의 진동둘레선\n" +
                 "④ 앞처짐 : B'-B₂=B'' - D₂= 앞길이와 등길이의 차이(3cm)\n" +
                 "⑤ A'-C'₁ : 유장(24cm),C'₁-B.P : 유폭/2(9cm) \n" +
-                "⑥ C''₁-C''₂ : 다트의 앞 처짐은 BP점에서 시작하며 분량은 3cm 이며 MP 라고 한다.", TextAnchor.MiddleCenter, UIBuilder.PANE_RIGHT);
+                "⑥ C''₁-C''₂ : 다트의 앞 처짐은 BP점에서 시작하며 분량은 3cm 이며 MP 라고 한다.", TextAnchor.MiddleCenter, 300, UIBuilder.PANE_RIGHT);
             isCheck = false;
         }
         else
@@ -198,7 +198,7 @@ public class Origin_Form_UI : FashionController
     {
         if (isCheck)
         {
-            uiOrigin.AddImage(mudartSprite, new Rect(0, 0, 300, 150), UIBuilder.PANE_RIGHT);
+            uiOrigin.AddImage(mudartSprite, new Rect(0, 0, 300, 150), UIBuilder.PANE_LEFT);
             uiOrigin.AddScrollView("(1) 뒤판" +
                 "① 뒷목너비(B / 12) 에서 뒷못둘레는 뒤중심에서 직각을 유지하며 곡선을 그린다.\n" +
                 "② 어깨경사는 목옆점(N)에서 수평으로 18cm, 수직으로 6cm 내린 점을 N과 연결하여 어깨경사로 하고 어깨끝점은 품선에서 1.5cm나간 점이다.\n" +
@@ -208,7 +208,7 @@ public class Origin_Form_UI : FashionController
                 "② 앞어깨경사 : N'에서 수평으로 18cm, 수직으로 6cm 점을 잡아서 N'와 연결하여 어깨경사를 그린다.\n" +
                 "③ 앞 어깨점과 뒤 어깨점의 간격은 동일\n" +
                 "④ 암홀선 그리기, Fn(맞춤표시)는 앞몸판과 앞소매쪽의 진동둘레를 일치시키는 점으로 앞품선에서 3cm 위치의 진동둘레선\n" +
-                "⑤ 앞 뒤의 옆선길이를 맞춘다.\n", TextAnchor.MiddleCenter, UIBuilder.PANE_RIGHT);
+                "⑤ 앞 뒤의 옆선길이를 맞춘다.\n", TextAnchor.MiddleCenter, 300, UIBuilder.PANE_RIGHT);
             isCheck = false;
         }
         else
@@ -222,7 +222,7 @@ public class Origin_Form_UI : FashionController
     {
         if (isCheck)
         {
-            uiOrigin.AddImage(mudartSprite, new Rect(0, 0, 300, 150), UIBuilder.PANE_RIGHT);
+            uiOrigin.AddImage(mudartSprite, new Rect(0, 0, 300, 150), UIBuilder.PANE_LEFT);
             uiOrigin.AddScrollView("(1) 뒤판" +
                 "① 어깨경사는 목옆점(N)에서 수평으로 18cm, 수직으로 6cm 내린 점을 N과 연결하여 어깨경사로 하고 어깨끝점은 품선에서 1.5cm나간 점이다.\n" +
                 "② 암홀선그리기, Bn(맞춤표시)는 뒷몸판과 뒷소매쪽의 진동둘레를 일치시키는 점으로 뒤품선에서 5cm 위치의 진동둘레선\n\n" +
@@ -233,7 +233,7 @@ public class Origin_Form_UI : FashionController
                 "④ 앞 처짐은 BP점에서 시작하며 분량은 1.5cm 이며 MP라고 한다. \n" +
                 "⑤ 앞 뒤의 옆선길이를 맞춘다.\n" +
                 "Fn : 앞몸판과 앞소매쪽의 진동둘레를 일치시키는 점\n" +
-                "Bn : 뒤몸판과 뒤소매쪽의 진동둘레를 일치시키는 점", TextAnchor.MiddleCenter, UIBuilder.PANE_RIGHT);
+                "Bn : 뒤몸판과 뒤소매쪽의 진동둘레를 일치시키는 점", TextAnchor.MiddleCenter, 300, UIBuilder.PANE_RIGHT);
             isCheck = false;
         }
         else
@@ -247,7 +247,7 @@ public class Origin_Form_UI : FashionController
     {
         if (isCheck)
         {
-            uiOrigin.AddImage(mudartSprite, new Rect(0, 0, 300, 150), UIBuilder.PANE_RIGHT);
+            uiOrigin.AddImage(mudartSprite, new Rect(0, 0, 300, 150), UIBuilder.PANE_LEFT);
             uiOrigin.AddScrollView("(1) 뒤판" +
                 "① 뒷목너비( B/12) 에서 뒷못둘레는 뒤중심에서 직각을 유지하며 곡선으로 그린다.\n" +
                 "② 어깨경사는 목옆점(N)에서 수평으로 18cm, 수직으로 6cm 내린 점을 N과 연결하여 어깨경사로 하고 어깨끝점은 품선에서 1.5cm나간 점이다.\n" +
@@ -260,7 +260,7 @@ public class Origin_Form_UI : FashionController
                 "⑤ 앞 처짐은 BP점에서 시작하며 분량은 1.5cm 이며 MP 라고 한다.\n" +
                 "⑥ 앞 뒤의 옆선길이를 맞춘다.\n" +
                 "Fn : 앞몸판과 앞소매쪽의 진동둘레를 일치시키는 점\n" +
-                "Bn : 뒤몸판과 뒤소매쪽의 진동둘레를 일치시키는 점", TextAnchor.MiddleCenter, UIBuilder.PANE_RIGHT);
+                "Bn : 뒤몸판과 뒤소매쪽의 진동둘레를 일치시키는 점", TextAnchor.MiddleCenter, 300, UIBuilder.PANE_RIGHT);
             isCheck = false;
         }
         else
@@ -268,14 +268,6 @@ public class Origin_Form_UI : FashionController
             Next_Button();
             isCheck = true;
         }
-    }
-
-    public void Description_Back()
-    {
-        Destroy(uiOrigin.gameObject);
-        uiOrigin = Instantiate<UIBuilder>(uiCanvasPrefab);
-        uiOrigin.SetPosition(menuPosition);
-        Next_Button();
     }
 
     public void SizeCalculate(int i)    //몸판치수 계산
