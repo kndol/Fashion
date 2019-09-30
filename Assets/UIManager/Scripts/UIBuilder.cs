@@ -41,6 +41,7 @@ namespace Fashion.UIManager
 		#endregion
 
 		#region SerializeField 변수 정의
+		[Header("UI Elements")]
 		[SerializeField]
 		private RectTransform buttonPrefab = null;
 		[SerializeField]
@@ -75,6 +76,11 @@ namespace Fashion.UIManager
 		private List<GameObject> toEnable = null;
 		[SerializeField]
 		private List<GameObject> toDisable = null;
+		[Header("효과음")]
+		[SerializeField]
+		private AudioSource audioSource = null;
+		[SerializeField]
+		private AudioClip audioButton = null;
 		#endregion
 
 		#region 객체 관련 변수 정의
@@ -529,7 +535,7 @@ namespace Fashion.UIManager
 		{
 			RectTransform buttonRT = GameObject.Instantiate(buttonPrefab).GetComponent<RectTransform>();
 			Button button = buttonRT.GetComponentInChildren<Button>();
-			button.onClick.AddListener(delegate { handler(); });
+			button.onClick.AddListener(delegate { audioSource.PlayOneShot(audioButton); handler(); });
 			((Text)(buttonRT.GetComponentsInChildren(typeof(Text), true)[0])).text = label;
 			AddRect(buttonRT, targetCanvas);
 			return buttonRT;
@@ -571,30 +577,21 @@ namespace Fashion.UIManager
 		public RectTransform AddImageButton(Sprite sprite, Rect rect, OnClick handler, int targetCanvas = PANE_CENTER)
 		{
 			RectTransform buttonRT = GameObject.Instantiate(buttonPrefab).GetComponent<RectTransform>();
-			print("Instantiate");
 			Button button = buttonRT.GetComponentInChildren<Button>();
-			print("GetComponentInChildren<Button>()");
 			Image img = buttonRT.GetComponentInChildren<Image>();
-			print("GetComponentInChildren<Image>()");
 			AspectRatioFitter arf = buttonRT.gameObject.AddComponent<AspectRatioFitter>();
-			print("AddComponent<AspectRatioFitter>()");
 
 			img.sprite = sprite;
-			print("set sprite");
 			buttonRT.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, rect.width);
 			buttonRT.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, rect.height);
-			print("SetSizeWithCurrentAnchors");
 			buttonRT.GetComponentInChildren<Text>().gameObject.SetActive(false);
-			print("Text disabled");
 			arf.aspectMode = AspectRatioFitter.AspectMode.WidthControlsHeight;
 			arf.aspectRatio = rect.width / rect.height;
-			print("aspectRatio");
 
-			button.onClick.AddListener(delegate { handler(); });
-			print("AddListener");
+			button.onClick.AddListener(delegate { audioSource.PlayOneShot(audioButton); handler(); });
 
 			AddRect(buttonRT, targetCanvas);
-			print("AddRect");
+
 			return buttonRT;
         }
 
@@ -823,7 +820,7 @@ namespace Fashion.UIManager
 			Text buttonText = rt.GetComponentInChildren<Text>();
 			buttonText.text = label;
 			Toggle t = rt.GetComponentInChildren<Toggle>();
-			t.onValueChanged.AddListener(delegate { onValueChanged(t); });
+			t.onValueChanged.AddListener(delegate { audioSource.PlayOneShot(audioButton); onValueChanged(t); });
 			return rt;
 		}
 
@@ -843,7 +840,7 @@ namespace Fashion.UIManager
 			buttonText.text = label;
 			Toggle t = rt.GetComponentInChildren<Toggle>();
 			t.isOn = defaultValue;
-			t.onValueChanged.AddListener(delegate { onValueChanged(t); });
+			t.onValueChanged.AddListener(delegate { audioSource.PlayOneShot(audioButton); onValueChanged(t); });
 			return rt;
 		}
 
@@ -877,7 +874,7 @@ namespace Fashion.UIManager
 			}
 			tb.group = tg;
 			tb.isOn = isFirst;
-			tb.onValueChanged.AddListener(delegate { handler(tb); });
+			tb.onValueChanged.AddListener(delegate { audioSource.PlayOneShot(audioButton); handler(tb); });
 			return rt;
 		}
 

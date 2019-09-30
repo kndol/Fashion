@@ -56,7 +56,7 @@ public class Test_Mode_UI : FashionController
 			else
 			{
 				// 보기
-				quest.exams.Add(line.Substring(2), sprites[idxSprite]);
+				quest.exams.Add(line.Substring(2), sprites[idxSprite++]);
 			}
 		}
 		if (quest != null)
@@ -87,18 +87,16 @@ public class Test_Mode_UI : FashionController
 		List<string> list = new List<string>(quest.exams.Keys);
 
 		Shuffle(list);
-		print(list);
 
 		if (uiTest)
 		{
-			print("uiTest 제거");
 			Destroy(uiTest.gameObject);
 		}
 
 		print("uiTest 생성");
 		uiTest = Instantiate<UIBuilder>(uiCanvasPrefab);
 		uiTest.SetPosition(menuPosition);
-		uiTest.SetPaneWidth(800);
+		uiTest.SetPaneWidth(1200);
 		uiTest.AddLabel("<B>문제 #" + (examNum + 1) + "</B>");
 		uiTest.AddDivider();
 		uiTest.AddLabel(quest.question);

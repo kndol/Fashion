@@ -39,6 +39,12 @@ namespace VRKeyboard.Utils
         [Header("Essentials")]
         public Transform keys;
 
+		[Header("효과음")]
+		[SerializeField]
+		private AudioSource audioSource = null;
+		[SerializeField]
+		private AudioClip audioKeyboard = null;
+
 		[Header("디버그용")]
 		public Text debugText;
 		#endregion
@@ -92,6 +98,7 @@ namespace VRKeyboard.Utils
 		#region Private Method
 		IEnumerator SetClickColor(Image image, Color color)
 		{
+			audioSource.PlayOneShot(audioKeyboard);
 			image.color = onColor;
 			yield return new WaitForSeconds(0.2f);
 			image.color = color;
@@ -122,7 +129,8 @@ namespace VRKeyboard.Utils
 
         public void CapsLock()
         {
-            foreach (var key in keyList)
+			audioSource.PlayOneShot(audioKeyboard);
+			foreach (var key in keyList)
             {
                 if (key is Alphabet)
                 {
@@ -135,7 +143,8 @@ namespace VRKeyboard.Utils
 
         public void Shift()
         {
-            foreach (var key in keyList)
+			audioSource.PlayOneShot(audioKeyboard);
+			foreach (var key in keyList)
             {
                 if (key is Shift)
                 {
@@ -167,6 +176,7 @@ namespace VRKeyboard.Utils
 
 		public void GenerateInput(string s)
         {
+			audioSource.PlayOneShot(audioKeyboard);
 			if (Input.Length > maxInputLength) { return; }
 			Input += s;
         }
