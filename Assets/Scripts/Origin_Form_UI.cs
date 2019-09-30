@@ -126,10 +126,6 @@ public class Origin_Form_UI : FashionController
         Destroy(uiOrigin.gameObject);
         uiOrigin = Instantiate<UIBuilder>(uiCanvasPrefab);
         uiOrigin.SetPosition(menuPosition);
-        uiOrigin.AddLabel("Description", TextAnchor.MiddleCenter, UIBuilder.PANE_RIGHT);
-        uiOrigin.AddDivider(UIBuilder.PANE_RIGHT);
-        uiOrigin.AddLabel("도면", TextAnchor.MiddleCenter, UIBuilder.PANE_LEFT);
-        uiOrigin.AddDivider(UIBuilder.PANE_LEFT);
         switch (Data.clothType)
         {
             case ClothType.t_shirts:
@@ -143,6 +139,10 @@ public class Origin_Form_UI : FashionController
                 uiOrigin.AddImage(skirtSpite[1], new Rect(0, 0, 350, 300));
                 break;
             case ClothType.body:
+                uiOrigin.AddLabel("도면", TextAnchor.MiddleCenter, UIBuilder.PANE_LEFT);
+                uiOrigin.AddDivider(UIBuilder.PANE_LEFT);
+                uiOrigin.AddLabel("Description", TextAnchor.MiddleCenter, UIBuilder.PANE_RIGHT);
+                uiOrigin.AddDivider(UIBuilder.PANE_RIGHT);
                 uiOrigin.AddButton("길원형", BodyoriginPattern, UIBuilder.PANE_CENTER);
                 uiOrigin.AddButton("무다트", MudartPattern, UIBuilder.PANE_CENTER);
                 uiOrigin.AddButton("반다트", BandartPattern, UIBuilder.PANE_CENTER);
