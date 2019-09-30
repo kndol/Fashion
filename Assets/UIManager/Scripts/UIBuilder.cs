@@ -126,6 +126,7 @@ namespace Fashion.UIManager
 		private List<ElementInfo>[] insertedElements;
 		private List<List<RectTransform>>[] insertedHorizontalElements;
 		private Vector3 menuOffset;
+		private Transform menuPosition;
 		private bool useAbsolutePosition = false;
 		#endregion
 
@@ -225,7 +226,7 @@ namespace Fashion.UIManager
 				keyboardRT.transform.SetParent(this.transform);
 				keyboardRT.localScale = Vector3.one * 2;
 				keyboardRT.localEulerAngles = new Vector3(30, 0, 0);
-				keyboardRT.localPosition = new Vector3(0, -500, -350);
+				keyboardRT.localPosition = new Vector3(0, -300, -250);
 			}
 		}
 
@@ -239,7 +240,7 @@ namespace Fashion.UIManager
 				numberKeyboardRT.transform.SetParent(this.transform);
 				numberKeyboardRT.localScale = Vector3.one * 2;
 				numberKeyboardRT.localEulerAngles = new Vector3(30, 0, 0);
-				numberKeyboardRT.localPosition = new Vector3(0, -500, -350);
+				numberKeyboardRT.localPosition = new Vector3(0, -300, -250);
 			}
 		}
 
@@ -408,8 +409,10 @@ namespace Fashion.UIManager
 		public void SetPosition(Transform tr)
 		{
 			useAbsolutePosition = true;
-			this.transform.position = tr.position;
-			this.transform.rotation = tr.rotation;
+			menuPosition = tr;
+			this.transform.position = menuPosition.position;
+			this.transform.rotation = menuPosition.rotation;
+			print(menuPosition.position + "@" + menuPosition.rotation +" / " +this.transform.position + "@" + this.transform.rotation);
 		}
 
 		/// <summary>
@@ -420,7 +423,12 @@ namespace Fashion.UIManager
 			Relayout();
 			gameObject.SetActive(true);
 
-			if (!useAbsolutePosition)
+			if (useAbsolutePosition)
+			{
+				this.transform.position = menuPosition.position;
+				this.transform.rotation = menuPosition.rotation;
+			}
+			else
 			{
 				Vector3 pos = rig.transform.TransformPoint(menuOffset);
 				// KnDol - 위치가 이상하게 낮아지면 기본 위치로 복구
@@ -563,21 +571,31 @@ namespace Fashion.UIManager
 		public RectTransform AddImageButton(Sprite sprite, Rect rect, OnClick handler, int targetCanvas = PANE_CENTER)
 		{
 			RectTransform buttonRT = GameObject.Instantiate(buttonPrefab).GetComponent<RectTransform>();
+			print("Instantiate");
 			Button button = buttonRT.GetComponentInChildren<Button>();
+			print("GetComponentInChildren<Button>()");
 			Image img = buttonRT.GetComponentInChildren<Image>();
+			print("GetComponentInChildren<Image>()");
 			AspectRatioFitter arf = buttonRT.gameObject.AddComponent<AspectRatioFitter>();
+			print("AddComponent<AspectRatioFitter>()");
 
 			img.sprite = sprite;
+			print("set sprite");
 			buttonRT.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, rect.width);
 			buttonRT.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, rect.height);
+			print("SetSizeWithCurrentAnchors");
 			buttonRT.GetComponentInChildren<Text>().gameObject.SetActive(false);
+			print("Text disabled");
 			arf.aspectMode = AspectRatioFitter.AspectMode.WidthControlsHeight;
 			arf.aspectRatio = rect.width / rect.height;
+			print("aspectRatio");
 
 			button.onClick.AddListener(delegate { handler(); });
-			
-            AddRect(buttonRT, targetCanvas);
-            return buttonRT;
+			print("AddListener");
+
+			AddRect(buttonRT, targetCanvas);
+			print("AddRect");
+			return buttonRT;
         }
 
 		/// <summary>

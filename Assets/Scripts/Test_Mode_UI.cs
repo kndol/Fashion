@@ -17,7 +17,7 @@ public class Test_Mode_UI : FashionController
 	public class QuestionSet
 	{
 		public string question;
-		public List<string> exams = new List<string>();
+		public Dictionary<string, Sprite> exams = new Dictionary<string, Sprite>();
 	}
 	List<QuestionSet> questions = new List<QuestionSet>();
 	bool[] answer;
@@ -40,6 +40,8 @@ public class Test_Mode_UI : FashionController
 		string[] lines = textAsset.text.Split(Environment.NewLine.ToCharArray(),
 			StringSplitOptions.RemoveEmptyEntries);
 		QuestionSet quest = null;
+		Sprite[] sprites = Resources.LoadAll<Sprite>("Sprites/");
+		int idxSprite = 0;
 		foreach (string line in lines)
 		{
 			print(line);
@@ -54,7 +56,7 @@ public class Test_Mode_UI : FashionController
 			else
 			{
 				// 보기
-				quest.exams.Add(line.Substring(2));
+				quest.exams.Add(line.Substring(2), sprites[idxSprite]);
 			}
 		}
 		if (quest != null)
@@ -82,8 +84,10 @@ public class Test_Mode_UI : FashionController
 
 		print((examNum + 1) + "번 문제");
 		// 보기 섞기
-		Shuffle(quest.exams);
-		print(quest.exams);
+		List<string> list = new List<string>(quest.exams.Keys);
+
+		Shuffle(list);
+		print(list);
 
 		if (uiTest)
 		{
@@ -100,13 +104,20 @@ public class Test_Mode_UI : FashionController
 		uiTest.AddLabel(quest.question);
 		print(quest.question);
 		uiTest.StartHorizontalSection(5);
-		foreach (string exam in quest.exams)
+		try
 		{
-			print("이미지 " + exam);
-			Sprite sprite = Resources.Load<Sprite>(PATH + exam);
-			print("로딩 " + PATH + exam);
-			uiTest.AddImage(sprite);
-			print("추가 완료");
+			foreach (string key in list)
+			{
+				print("이미지 " + key);
+//				Sprite sprite = Resources.Load<Sprite>("Sprites/" + exam);
+//				print("로딩 " + PATH + exam + " = " + (sprite != null));
+				uiTest.AddImage(quest.exams[key]);
+				print("추가 완료");
+			}
+		}
+		catch(Exception e)
+		{
+			print(e.Message);
 		}
 		uiTest.EndHorizontalSection();
 		print("이미지 끝");
@@ -129,7 +140,7 @@ public class Test_Mode_UI : FashionController
 			// 마지막 문제
 			uiTest.AddButton("정답 제출", delegate 
 			{
-				answer[examNum] = quest.exams[selectedNum][4] == 'O';
+				answer[examNum] = list[selectedNum][4] == 'O';
 				SubmitAnswer();
 			});
 		}
@@ -137,7 +148,7 @@ public class Test_Mode_UI : FashionController
 		{
 			uiTest.AddButton("다음 문제", delegate
 			{
-				answer[examNum] = quest.exams[selectedNum][4] == 'O';
+				answer[examNum] = list[selectedNum][4] == 'O';
 				Solve(examNum + 1);
 			});
 		}
